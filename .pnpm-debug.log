@@ -1,0 +1,312 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "svelekit-sample",
+      "version": "0.0.1",
+      "scripts": {
+        "dev": "vite dev",
+        "build": "vite build",
+        "preview": "vite preview",
+        "test": "playwright test",
+        "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+        "test:unit": "vitest",
+        "lint": "prettier --plugin-search-dir . --check . && eslint .",
+        "format": "prettier --plugin-search-dir . --write ."
+      },
+      "devDependencies": {
+        "@fontsource/fira-mono": "^4.5.10",
+        "@neoconfetti/svelte": "^1.0.0",
+        "@playwright/test": "^1.28.1",
+        "@sveltejs/adapter-auto": "^1.0.0",
+        "@sveltejs/kit": "^1.0.0",
+        "@types/cookie": "^0.5.1",
+        "@typescript-eslint/eslint-plugin": "^5.45.0",
+        "@typescript-eslint/parser": "^5.45.0",
+        "eslint": "^8.28.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-svelte3": "^4.0.0",
+        "prettier": "^2.8.0",
+        "prettier-plugin-svelte": "^2.8.1",
+        "svelte": "^3.54.0",
+        "svelte-check": "^2.9.2",
+        "tslib": "^2.4.1",
+        "typescript": "^4.9.3",
+        "vite": "^4.0.0",
+        "vitest": "^0.25.3"
+      },
+      "type": "module"
+    },
+    "prefix": "/Users/dmitrijmalahov/code/samples/svelekit-sample"
+  },
+  "2 debug pnpm:context": {
+    "currentLockfileExists": false,
+    "storeDir": "/Users/dmitrijmalahov/.pnpm-store/v3",
+    "virtualStoreDir": "/Users/dmitrijmalahov/code/samples/svelekit-sample/node_modules/.pnpm"
+  },
+  "3 debug pnpm:stage": {
+    "prefix": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "stage": "resolution_started"
+  },
+  "4 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/@types/cookie/0.5.1",
+    "wanted": {
+      "dependentId": ".",
+      "name": "@types/cookie",
+      "rawSpec": "^0.5.1"
+    }
+  },
+  "5 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@types/cookie/0.5.1",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "6 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@types/cookie/0.5.1",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "7 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/eslint-config-prettier/8.6.0",
+    "wanted": {
+      "dependentId": ".",
+      "name": "eslint-config-prettier",
+      "rawSpec": "^8.5.0"
+    }
+  },
+  "8 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/eslint-config-prettier/8.6.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "9 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/eslint-plugin-svelte3/4.0.0",
+    "wanted": {
+      "dependentId": ".",
+      "name": "eslint-plugin-svelte3",
+      "rawSpec": "^4.0.0"
+    }
+  },
+  "10 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/eslint-plugin-svelte3/4.0.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "11 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/eslint-config-prettier/8.6.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "12 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/eslint-plugin-svelte3/4.0.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "13 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/@fontsource/fira-mono/4.5.10",
+    "wanted": {
+      "dependentId": ".",
+      "name": "@fontsource/fira-mono",
+      "rawSpec": "^4.5.10"
+    }
+  },
+  "14 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@fontsource/fira-mono/4.5.10",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "15 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@fontsource/fira-mono/4.5.10",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "16 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/@neoconfetti/svelte/1.0.0",
+    "wanted": {
+      "dependentId": ".",
+      "name": "@neoconfetti/svelte",
+      "rawSpec": "^1.0.0"
+    }
+  },
+  "17 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@neoconfetti/svelte/1.0.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "18 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@neoconfetti/svelte/1.0.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "19 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/prettier-plugin-svelte/2.9.0",
+    "wanted": {
+      "dependentId": ".",
+      "name": "prettier-plugin-svelte",
+      "rawSpec": "^2.8.1"
+    }
+  },
+  "20 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/prettier-plugin-svelte/2.9.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "21 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/tslib/2.4.1",
+    "wanted": {
+      "dependentId": ".",
+      "name": "tslib",
+      "rawSpec": "^2.4.1"
+    }
+  },
+  "22 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/tslib/2.4.1",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "23 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/prettier-plugin-svelte/2.9.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "24 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/tslib/2.4.1",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "25 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/prettier/2.8.1",
+    "wanted": {
+      "dependentId": ".",
+      "name": "prettier",
+      "rawSpec": "^2.8.0"
+    }
+  },
+  "26 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/prettier/2.8.1",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "27 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/@sveltejs/adapter-auto/1.0.0",
+    "wanted": {
+      "dependentId": ".",
+      "name": "@sveltejs/adapter-auto",
+      "rawSpec": "^1.0.0"
+    }
+  },
+  "28 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@sveltejs/adapter-auto/1.0.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "29 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@sveltejs/adapter-auto/1.0.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "30 debug pnpm:fetching-progress": {
+    "attempt": 1,
+    "packageId": "registry.npmjs.org/prettier/2.8.1",
+    "size": 2815050,
+    "status": "started"
+  },
+  "31 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/svelte-check/2.10.3",
+    "wanted": {
+      "dependentId": ".",
+      "name": "svelte-check",
+      "rawSpec": "^2.9.2"
+    }
+  },
+  "32 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/svelte-check/2.10.3",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "33 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/svelte-check/2.10.3",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "34 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/vitest/0.25.8",
+    "wanted": {
+      "dependentId": ".",
+      "name": "vitest",
+      "rawSpec": "^0.25.3"
+    }
+  },
+  "35 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/vitest/0.25.8",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "36 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/eslint/8.31.0",
+    "wanted": {
+      "dependentId": ".",
+      "name": "eslint",
+      "rawSpec": "^8.28.0"
+    }
+  },
+  "37 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/eslint/8.31.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "38 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/vitest/0.25.8",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "39 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/svelte/3.55.0",
+    "wanted": {
+      "dependentId": ".",
+      "name": "svelte",
+      "rawSpec": "^3.54.0"
+    }
+  },
+  "40 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/svelte/3.55.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "resolved"
+  },
+  "41 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/eslint/8.31.0",
+    "requester": "/Users/dmitrijmalahov/code/samples/svelekit-sample",
+    "status": "found_in_store"
+  },
+  "42 debug pnpm:fetching-progress": {
+    "attempt": 1,
+    "packageId": "registry.npmjs.org/svelte/3.55.0",
+    "size": 1776077,
+    "status": "started"
+  },
+  "43 warn pnpm:install-check": {
+    "message": "Unsupported engine for registry.npmjs.org/vite/4.0.4: wanted: {\"node\":\"^14.18.0 || >=16.0.0\"} (current: {\"node\":\"v14.17.0\",\"pnpm\":\"6.17.0\"})",
+    "prefix": "/Users/dmitrijmalahov/code/samples/svelekit-sample"
+  },
+  "44 error pnpm": {
+    "code": "ERR_PNPM_UNSUPPORTED_ENGINE",
+    "packageId": "registry.npmjs.org/vite/4.0.4",
+    "wanted": {
+      "node": "^14.18.0 || >=16.0.0"
+    },
+    "current": {
+      "node": "v14.17.0",
+      "pnpm": "6.17.0"
+    },
+    "pkgsStack": [],
+    "err": {
+      "name": "pnpm",
+      "message": "Unsupported engine for registry.npmjs.org/vite/4.0.4: wanted: {\"node\":\"^14.18.0 || >=16.0.0\"} (current: {\"node\":\"v14.17.0\",\"pnpm\":\"6.17.0\"})",
+      "code": "ERR_PNPM_UNSUPPORTED_ENGINE",
+      "stack": "pnpm: Unsupported engine for registry.npmjs.org/vite/4.0.4: wanted: {\"node\":\"^14.18.0 || >=16.0.0\"} (current: {\"node\":\"v14.17.0\",\"pnpm\":\"6.17.0\"})\n    at Object.checkEngine [as default] (/snapshot/dist/pnpm.cjs)\n    at checkPackage (/snapshot/dist/pnpm.cjs)\n    at Object.packageIsInstallable [as default] (/snapshot/dist/pnpm.cjs)\n    at resolveAndFetch (/snapshot/dist/pnpm.cjs)\n    at runMicrotasks (<anonymous>)\n    at processTicksAndRejections (internal/process/task_queues.js:95:5)\n    at async resolveDependency (/snapshot/dist/pnpm.cjs)\n    at async resolveDependenciesOfDependency (/snapshot/dist/pnpm.cjs)\n    at async Promise.all (index 17)\n    at async Object.resolveDependencies [as default] (/snapshot/dist/pnpm.cjs)"
+    }
+  }
+}
