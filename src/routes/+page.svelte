@@ -1,63 +1,42 @@
 <script lang="ts">
-	import type { ActionData, PageData } from './$types';
-	import { Label, Input, Button, Helper, Checkbox } from 'flowbite-svelte';
-	import { enhance } from '$app/forms';
+	import { Hr } from 'flowbite-svelte';
+	import { entries, pick } from 'lodash';
+	import { listSounds } from '$lib/utils';
+	import sounds from '$lib/sounds';
+	import SoundCard from '@/components/SoundCard.svelte';
+	import Playlists from '@/components/Playlists.svelte';
 
-	export let data: PageData;
-	export let form: ActionData;
-	let value = form?.title ?? '';
-
-	export function handleSubmit() {
-		console.log('submit', value);
-	}
-
-	$: {
-		console.log('data', data.users);
-	}
+	const soundsEntries = entries(
+		pick(listSounds(sounds), 'Locations', 'Background', 'Tweak', 'Color noise', 'Others', 'ASMR')
+	);
 </script>
 
 <svelte:head>
-	<title>SvelteKit ToDo App</title>
+	<title>Noizer One</title>
 	<meta name="description" content="Todo app" />
 </svelte:head>
 
-<main class="px-4 m-auto py-12 max-w-4xl prose">
-	<h1>Todo app</h1>
-
-	<form
-		action="?/submitTodo"
-		method="post"
-		use:enhance={() => {
-			// prevent default callback from resetting the form
-			return ({ update }) => {
-				update({ reset: false });
-			};
-		}}
-	>
-		<div class="mb-6">
-			<Label for="default-input" class="block mb-2">New todo item</Label>
-			<Input id="default-input" name="title" placeholder="Enter here..." bind:value />
-			{#if form?.message}
-				<Helper color="red">
-					{form.message}
-				</Helper>
-			{/if}
+<main class="flex flex-col justify-center min-h-screen">
+	<div class="relative w-full max-w-4xl px-4 m-auto lg:px-0">
+		<div class="mt-4">
+			<Playlists />
 		</div>
 
-		<Button on:click={handleSubmit} type="submit" disabled={!value.trim()}>Submit</Button>
-	</form>
+		<Hr />
 
-	{#if !!data?.data.length}
-		<h2>Todo list</h2>
-		<div class="space-y-4">
-			{#each data.data as todo}
-				<div class="flex space-x-2 items-center">
-					<Checkbox name="todo" value={todo.id} checked={todo.completed} />
-					<p class={`my-0 ${todo.completed ? 'line-through' : ''}`}>
-						{todo.title}
-					</p>
+		{#each soundsEntries as [group, items]}
+			{@const sounds = entries(items)}
+			<div>
+				<h2 class="mt-8 mb-4 text-3xl font-medium">{group}</h2>
+
+				<div
+					class="grid w-full grid-flow-row grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-x-3 gap-y-3"
+				>
+					{#each sounds as [title, variants]}
+						<SoundCard {title} {variants} />
+					{/each}
 				</div>
-			{/each}
-		</div>
-	{/if}
+			</div>
+		{/each}
+	</div>
 </main>
