@@ -18,7 +18,7 @@
 
 	import img from '$lib/images/noizer-logo.png';
 	import { playback, playRandom, selectedVariantPerSound, stop } from '@/stores/playback';
-	import { keys } from 'lodash';
+	import _ from 'lodash';
 	import { auth } from '@/stores/auth';
 	import SignIn from '@/components/SignIn.svelte';
 	import SavePlaylist from '@/components/SavePlaylist.svelte';
@@ -83,7 +83,7 @@
 					size="sm"
 					gradient
 					on:click={stop}
-					disabled={!keys($selectedVariantPerSound).length}
+					disabled={!_.keys($selectedVariantPerSound).length}
 				>
 					<i class="text-lg text-gray-700 fa-solid fa-stop" />
 				</Button>

@@ -8,9 +8,7 @@
 	import axios from 'axios';
 
 	import { Button, Helper, Input, Label, Modal } from 'flowbite-svelte';
-	import { entries } from 'lodash';
-	import { keys } from 'lodash';
-	import { uniqBy } from 'lodash';
+	import _ from 'lodash';
 	import { get } from 'svelte/store';
 
 	let savePlaylistModal = false;
@@ -20,7 +18,7 @@
 	export let playlists: Playlist[] = [];
 
 	async function handleSavePlaylist() {
-		const data = entries($selectedVariantPerSound).map(([key, value]) => {
+		const data = _.entries($selectedVariantPerSound).map(([key, value]) => {
 			return {
 				volume: value?.howler?.volume() ?? 1,
 				path: key
@@ -51,7 +49,7 @@
 </script>
 
 <Button
-	disabled={!keys($selectedVariantPerSound).length}
+	disabled={!_.keys($selectedVariantPerSound).length}
 	outline
 	size="sm"
 	gradient
@@ -82,7 +80,7 @@
 			<span>Group</span>
 			<Input name="savePlaylistGroup" bind:value={savePlaylistGroup} placeholder="Relax" required />
 
-			{#if uniqBy(playlists, 'group')
+			{#if _.uniqBy(playlists, 'group')
 				.map((i) => i.group?.toLowerCase())
 				.includes(savePlaylistGroup.toLowerCase())}
 				<Helper>Existing group will be used</Helper>

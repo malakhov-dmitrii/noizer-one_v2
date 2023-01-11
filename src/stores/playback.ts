@@ -1,7 +1,7 @@
 import { get, writable } from 'svelte/store';
 import { Howl, Howler } from 'howler';
 import sounds from '@/lib/sounds';
-import { random } from 'lodash';
+import _ from 'lodash';
 import type { PlaylistSound } from '@/lib/playlists';
 import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 import type { Playlist } from '@prisma/client';
@@ -125,7 +125,7 @@ export const playRandom = () => {
 	)[0].path;
 	const bg = randomSlice(
 		sounds.filter((i) => i.group === 'Background'),
-		random(1, 2, false)
+		_.random(1, 2, false)
 	).map((i) => i.path);
 	const tweak = randomSlice(
 		sounds.filter((i) => i.group === 'Tweak'),

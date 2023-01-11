@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button, Hr } from 'flowbite-svelte';
-	import { entries, pick } from 'lodash';
+	import _ from 'lodash';
 	import { listSounds } from '$lib/utils';
 	import sounds from '$lib/sounds';
 	import SoundCard from '@/components/SoundCard.svelte';
@@ -15,8 +15,8 @@
 	import { page } from '$app/stores';
 	import { toast } from '@/stores/toasts';
 
-	const soundsEntries = entries(
-		pick(listSounds(sounds), 'Locations', 'Background', 'Tweak', 'Color noise', 'Others', 'ASMR')
+	const soundsEntries = _.entries(
+		_.pick(listSounds(sounds), 'Locations', 'Background', 'Tweak', 'Color noise', 'Others', 'ASMR')
 	);
 
 	onMount(() => {
@@ -51,7 +51,7 @@
 		<Hr />
 
 		{#each soundsEntries as [group, items]}
-			{@const sounds = entries(items)}
+			{@const sounds = _.entries(items)}
 			<div>
 				<h2 class="mt-8 mb-4 text-3xl font-medium">{group}</h2>
 
