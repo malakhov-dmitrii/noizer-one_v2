@@ -3,6 +3,7 @@
 	import axios from 'axios';
 	import { signIn } from '@auth/sveltekit/client';
 	import { Button, Checkbox, Helper, Hr, Input, Label, Modal } from 'flowbite-svelte';
+	import mixpanel from 'mixpanel-browser';
 
 	$: email = '';
 	let code = '';
@@ -28,7 +29,10 @@
 				codeSentFor = '';
 				error = data.url.split('error=')[1];
 			} else {
+				mixpanel.identify(email);
+				mixpanel.people.set({ email, last_login: new Date().toISOString() });
 				$auth.modal = false;
+				email = '';
 			}
 		}
 	}

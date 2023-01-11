@@ -26,6 +26,7 @@
 		"@types/cookie": "^0.5.1",
 		"@types/howler": "^2.2.7",
 		"@types/lodash": "^4.14.191",
+		"@types/mixpanel-browser": "^2.38.0",
 		"@types/mousetrap": "^1.6.11",
 		"@types/nodemailer": "^6.4.7",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
@@ -61,6 +62,7 @@
 		"daisyui": "^2.46.1",
 		"howler": "^2.2.3",
 		"lodash": "^4.17.21",
+		"mixpanel-browser": "^2.45.0",
 		"mousetrap": "^1.6.5"
 	}
 }

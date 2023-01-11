@@ -2,6 +2,8 @@
 	import HandleOutsideClick from '@/components/HandleOutsideClick.svelte';
 	import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 	import { toggleSound, type FileItem } from '@/stores/playback';
+	import mixpanel from 'mixpanel-browser';
+	import { track } from 'mixpanel-browser';
 	import { get } from 'svelte/store';
 
 	export let variants: FileItem[];
@@ -47,6 +49,13 @@
 							open = !open;
 							// toggleSound(selectedVariantPath, false);
 							toggleSound(variant.path, true);
+
+							mixpanel.track('Sound Variant Selected', {
+								variant: variant.variantName,
+								sound: variant.sound,
+								group: variant.group,
+								free: variant.free
+							});
 
 							const onboarding = get(onboardingStep);
 							if (onboarding === 3) incrementOnboardingStep();
