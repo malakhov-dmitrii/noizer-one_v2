@@ -1,8 +1,15 @@
 import { SvelteKitAuth } from '@auth/sveltekit';
 
 import GitHub from '@auth/core/providers/github';
+import Google from '@auth/core/providers/google';
 import Credentials from '@auth/core/providers/credentials';
-import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, JWT_SECRET } from '$env/static/private';
+import {
+	GITHUB_CLIENT_ID,
+	GITHUB_CLIENT_SECRET,
+	GOOGLE_ID,
+	GOOGLE_SECRET,
+	JWT_SECRET
+} from '$env/static/private';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/lib/prisma';
 
