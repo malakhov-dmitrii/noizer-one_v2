@@ -1,18 +1,25 @@
-export interface PlaylistItem {
-	group: string;
-	title: string;
-	uid: string;
-	sounds: {
-		path: string;
-		volume: number;
-	}[];
+// export interface PlaylistItem {
+// 	group: string;
+// 	title: string;
+// 	uid: string;
+// 	sounds: {
+// 		path: string;
+// 		volume: number;
+// 	}[];
+// }
+
+import type { Playlist } from '@prisma/client';
+
+export interface PlaylistSound {
+	path: string;
+	volume: number;
 }
 
-const playlists: PlaylistItem[] = [
+const playlists: Pick<Playlist, 'group' | 'id' | 'sounds' | 'title'>[] = [
 	{
 		group: 'Focus',
 		title: 'Cafe work',
-		uid: 'initial1',
+		id: 'initial1',
 		sounds: [
 			{
 				path: '/audio/Locations/Cafe_fa-mug-saucer/Cafe (English speech)',
@@ -31,7 +38,7 @@ const playlists: PlaylistItem[] = [
 	{
 		group: 'Focus',
 		title: 'Cafe on the stormed beach',
-		uid: 'initial12',
+		id: 'initial12',
 		sounds: [
 			{
 				path: '/audio/Locations/Cafe_fa-mug-saucer/Cafe (English speech)',
@@ -50,7 +57,7 @@ const playlists: PlaylistItem[] = [
 	{
 		group: 'Relax',
 		title: 'Forest campfire',
-		uid: 'initial13',
+		id: 'initial13',
 		sounds: [
 			{
 				path: '/audio/Background/Bonfire_fa-fire/Bonfire 1',

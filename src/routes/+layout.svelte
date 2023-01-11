@@ -1,34 +1,29 @@
 <script lang="ts">
 	import '../global.css';
+	import { Howler } from 'howler';
 	import {
 		Avatar,
 		Button,
-		ButtonGroup,
-		Helper,
-		Input,
-		Label,
-		Modal,
 		Navbar,
 		NavBrand,
 		NavHamburger,
 		NavLi,
 		NavUl,
-		P,
 		Popover,
-		Range,
-		Select
+		Range
 	} from 'flowbite-svelte';
 
 	import { page } from '$app/stores';
-	import { signIn, signOut } from '@auth/sveltekit/client';
+	import { signOut } from '@auth/sveltekit/client';
 
 	import img from '$lib/images/noizer-logo.png';
 	import { playback, playRandom, selectedVariantPerSound, stop } from '@/stores/playback';
 	import { keys } from 'lodash';
-	import { entries } from 'lodash';
+	import { auth } from '@/stores/auth';
+	import SignIn from '@/components/SignIn.svelte';
+	import SavePlaylist from '@/components/SavePlaylist.svelte';
+	import Toasts from '@/components/Toasts/Toasts.svelte';
 	import playlists from '@/lib/playlists';
-	import { uniqBy } from 'lodash';
-	import { lowerCase } from 'lodash';
 
 	$: savedVolume = 1;
 
@@ -44,31 +39,6 @@
 		playback.set({
 			...$playback,
 			muted: !$playback.muted
-		});
-	}
-
-	let savePlaylistModal = false;
-	let savePlaylistTitle = '';
-	let savePlaylistGroup = '';
-
-	function handleSavePlaylist() {
-		const data = entries($selectedVariantPerSound).map(([key, value]) => {
-			return {
-				volume: value?.howler?.volume() ?? 1,
-				path: key
-			};
-		});
-
-		fetch('/api/playlists', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				title: savePlaylistTitle,
-				group: savePlaylistGroup,
-				data
-			})
 		});
 	}
 </script>
@@ -97,7 +67,11 @@
 
 			<Button size="xs" outline on:click={() => signOut()} class="button">Sign out</Button>
 		{:else}
-			<Button size="xs" on:click={() => signIn('github')}>Sign In with GitHub</Button>
+			<Button
+				on:click={() => {
+					$auth.modal = true;
+				}}>Sign In</Button
+			>
 		{/if}
 		<NavHamburger on:click={toggle} />
 	</div>
@@ -123,15 +97,8 @@
 				<Button outline size="sm" gradient on:click={playRandom}>
 					<i class="text-lg fa-solid fa-shuffle" />
 				</Button>
-				<Button
-					disabled={!keys($selectedVariantPerSound).length}
-					outline
-					size="sm"
-					gradient
-					on:click={() => (savePlaylistModal = true)}
-				>
-					<i class="text-lg fa-solid fa-save" />
-				</Button>
+
+				<SavePlaylist playlists={[...playlists, ...($page?.data?.playlists ?? [])]} />
 			</div>
 		</NavLi>
 	</NavUl>
@@ -158,35 +125,6 @@
 	<slot />
 </main>
 
-<form class="flex flex-col space-y-6" action="#">
-	<Modal title="Save new playlist" bind:open={savePlaylistModal} autoclose>
-		<h3 class="p-0 text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
-		<Label class="space-y-2">
-			<span>Title</span>
-			<Input
-				name="savePlaylistTitle"
-				bind:value={savePlaylistTitle}
-				placeholder="Beach campfire with fan"
-				required
-			/>
-		</Label>
-		<Label class="space-y-2">
-			<span>Group</span>
-			<Input name="savePlaylistGroup" bind:value={savePlaylistGroup} placeholder="Relax" required />
+<SignIn />
 
-			{#if uniqBy(playlists, 'group')
-				.map((i) => i.group.toLowerCase())
-				.includes(savePlaylistGroup.toLowerCase())}
-				<Helper>Existing group will be used</Helper>
-			{:else if savePlaylistGroup.trim().length > 0}
-				<Helper>New group will be created</Helper>
-			{:else}
-				<Helper>Its not necessary, but will help you to navigate your saved playlists</Helper>
-			{/if}
-		</Label>
-		<svelte:fragment slot="footer">
-			<Button on:click={handleSavePlaylist}>Save</Button>
-			<Button color="alternative">Cancel</Button>
-		</svelte:fragment>
-	</Modal>
-</form>
+<Toasts />

@@ -1,15 +1,29 @@
-import { json, type RequestHandler } from '@sveltejs/kit';
+import { prisma } from '@/lib/prisma';
+import { fail, json, type RequestHandler } from '@sveltejs/kit';
 
 /**
  * Handler for POST requests to /api/playlist
  * Adds a new playlist to the user's playlists
  */
-export const POST = (async ({ request }) => {
+export const POST = (async ({ request, locals }) => {
 	const { title, group, data } = await request.json();
+	const session = await locals.getSession();
+	if (!session?.user?.email) return json({ error: 'Not logged in', status: 401 });
 
-	console.log({ title, group, data });
+	const playlist = await prisma.playlist.create({
+		data: {
+			sounds: data,
+			title,
+			group,
+			user: {
+				connect: {
+					email: session.user.email
+				}
+			}
+		}
+	});
 
-	return json({});
+	return json({ playlist });
 }) satisfies RequestHandler;
 
 /**
@@ -17,15 +31,6 @@ export const POST = (async ({ request }) => {
  * Allow to update a playlist, mark as favorite, etc
  */
 export const PUT = (async ({ request }) => {
-	const { a, b } = await request.json();
-	return json(a + b);
-}) satisfies RequestHandler;
-
-/**
- * Handler for DELETE requests to /api/playlist
- * Deletes a playlist from the user's playlists
- */
-export const DELETE = (async ({ request }) => {
 	const { a, b } = await request.json();
 	return json(a + b);
 }) satisfies RequestHandler;

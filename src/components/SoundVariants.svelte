@@ -1,6 +1,8 @@
 <script lang="ts">
 	import HandleOutsideClick from '@/components/HandleOutsideClick.svelte';
+	import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 	import { toggleSound, type FileItem } from '@/stores/playback';
+	import { get } from 'svelte/store';
 
 	export let variants: FileItem[];
 	export let selectedVariantPath: string;
@@ -45,6 +47,9 @@
 							open = !open;
 							// toggleSound(selectedVariantPath, false);
 							toggleSound(variant.path, true);
+
+							const onboarding = get(onboardingStep);
+							if (onboarding === 3) incrementOnboardingStep();
 						}}
 					>
 						{#if !variant.free}

@@ -65,7 +65,9 @@
 
 		<div class="mt-0" on:click={(e) => e.stopPropagation()}>
 			<Range
-				class={`${!playingVariant ? 'opacity-50' : 'opacity-100'} transition-opacity`}
+				class={`${
+					!playingVariant ? 'opacity-50 filter grayscale' : 'opacity-100'
+				} transition-opacity`}
 				size="sm"
 				color="red"
 				min={0}

@@ -1,9 +1,10 @@
 import { get, writable } from 'svelte/store';
 import { Howl, Howler } from 'howler';
 import sounds from '@/lib/sounds';
-import { listSounds } from '@/lib/utils';
 import { random } from 'lodash';
-import type { PlaylistItem } from '@/lib/playlists';
+import type { PlaylistSound } from '@/lib/playlists';
+import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
+import type { Playlist } from '@prisma/client';
 
 export const randomSlice = <T>(arr: T[], n: number): T[] =>
 	[...arr].sort(() => Math.random() - Math.random()).slice(0, n);
@@ -30,6 +31,9 @@ export const toggleSound = (path: string, play?: boolean) => {
 	// if its playing, stop it
 	// if its not playing, load it and play it
 	const activeVariant = get(selectedVariantPerSound)[path];
+
+	const onboarding = get(onboardingStep);
+	if (onboarding === 0 || onboarding === 1) incrementOnboardingStep();
 
 	/**
 	 * If a playlist is active, reset it, but dont interrupt the sound that is playing
@@ -111,6 +115,7 @@ export const toggleSound = (path: string, play?: boolean) => {
 export const stop = () => {
 	Howler.stop();
 	selectedVariantPerSound.set({});
+	playback.set({ ...get(playback), playlist: null });
 };
 
 export const playRandom = () => {
@@ -151,7 +156,8 @@ export const playback = writable({
 	playlist: null as string | null
 });
 
-export const playPlaylist = (playlist: PlaylistItem) => {
+export const playPlaylist = (playlist: Playlist) => {
 	stop();
-	for (const item of playlist.sounds) toggleSound(item.path);
+	for (const item of playlist.sounds as unknown as PlaylistSound[]) toggleSound(item.path);
+	playback.set({ ...get(playback), playlist: playlist.id });
 };

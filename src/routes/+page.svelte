@@ -1,14 +1,36 @@
 <script lang="ts">
-	import { Hr } from 'flowbite-svelte';
+	import { Button, Hr } from 'flowbite-svelte';
 	import { entries, pick } from 'lodash';
 	import { listSounds } from '$lib/utils';
 	import sounds from '$lib/sounds';
 	import SoundCard from '@/components/SoundCard.svelte';
 	import Playlists from '@/components/Playlists.svelte';
+	import { onMount } from 'svelte';
+	import shortcuts from '@/lib/shortcuts';
+	import Mousetrap from 'mousetrap';
+	import playlists from '@/lib/playlists';
+	import { playPlaylist } from '@/stores/playback';
+	import Onboarding from '@/components/Onboarding.svelte';
+	import ShortcutsGuide from '@/components/ShortcutsGuide.svelte';
+	import { page } from '$app/stores';
+	import { toast } from '@/stores/toasts';
 
 	const soundsEntries = entries(
 		pick(listSounds(sounds), 'Locations', 'Background', 'Tweak', 'Color noise', 'Others', 'ASMR')
 	);
+
+	onMount(() => {
+		for (const item of shortcuts) {
+			Mousetrap.bind(`${item.keys.join('+')}`, item.callback);
+		}
+		Mousetrap.bind(['1', '2', '3', '4', '5', '6', '7', '8', '9'], (e: KeyboardEvent) => {
+			const list = [...playlists, ...$page.data.playlists];
+			if (+e.key <= list.length) {
+				const selectedListItem = list[+e.key - 1];
+				playPlaylist(selectedListItem);
+			}
+		});
+	});
 </script>
 
 <svelte:head>
@@ -17,7 +39,11 @@
 </svelte:head>
 
 <main class="flex flex-col justify-center min-h-screen">
-	<div class="relative w-full max-w-4xl px-4 m-auto lg:px-0">
+	<div class="relative w-full max-w-4xl px-4 pb-24 m-auto lg:px-0">
+		<Onboarding />
+
+		<ShortcutsGuide />
+
 		<div class="mt-4">
 			<Playlists />
 		</div>

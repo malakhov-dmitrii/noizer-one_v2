@@ -1,4 +1,4 @@
-import PrismaClient from '$lib/prisma';
+import { prisma } from '$lib/prisma';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -9,22 +9,30 @@ export interface Todo {
 	userId: number;
 }
 
-export const load = (async ({ params, cookies, fetch }) => {
-	const data = (await fetch('https://jsonplaceholder.typicode.com/todos').then((r) =>
-		r.json()
-	)) as Todo[];
+export const load = (async ({ locals }) => {
+	const session = await locals.getSession();
+	const email = session?.user?.email;
 
-	const prisma = new PrismaClient();
-	const users = await prisma.user.findMany();
-	// try {
-	// 	const users = [];
-	// } catch (error) {
-	// 	console.log(error);
-	// }
+	if (email) {
+		const user = await prisma.user.findUnique({
+			where: {
+				email
+			}
+		});
+
+		const playlists = await prisma.playlist.findMany({
+			where: {
+				userId: user?.id
+			}
+		});
+
+		return {
+			playlists
+		};
+	}
 
 	return {
-		data,
-		users
+		playlists: []
 	};
 }) satisfies PageServerLoad;
 
