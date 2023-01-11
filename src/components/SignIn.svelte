@@ -72,13 +72,13 @@
 
 	<Hr />
 
-	<Button class="w-full" size="xs" outline>
+	<Button class="w-full" size="xs" outline on:click={() => signIn('google')}>
 		<i class="text-lg fa-brands fa-google" />
 		<span class="ml-2">Sign in with Google</span>
 	</Button>
 
 	<!-- Sign In with GitHub -->
-	<Button class="w-full" size="xs" outline>
+	<Button class="w-full" size="xs" outline on:click={() => signIn('github')}>
 		<i class="text-lg fa-brands fa-github" />
 		<span class="ml-2">Sign in with GitHub</span>
 	</Button>
