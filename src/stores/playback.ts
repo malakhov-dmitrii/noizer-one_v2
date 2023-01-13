@@ -5,7 +5,7 @@ import _ from 'lodash';
 import type { PlaylistSound } from '@/lib/playlists';
 import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 import type { Playlist } from '@prisma/client';
-import mixpanel from 'mixpanel-browser';
+// import mixpanel from 'mixpanel-browser';
 
 export const randomSlice = <T>(arr: T[], n: number): T[] =>
 	[...arr].sort(() => Math.random() - Math.random()).slice(0, n);
@@ -113,13 +113,13 @@ export const toggleSound = (path: string, play?: boolean) => {
 	}
 
 	const sound = sounds.find((i) => i.path === path);
-	mixpanel.track('toggle_sound', {
-		sound: sound?.sound,
-		variant: sound?.variantName,
-		group: sound?.group,
-		free: sound?.free
-	});
-	mixpanel.people.increment('toggle_sound');
+	// mixpanel.track('toggle_sound', {
+	// 	sound: sound?.sound,
+	// 	variant: sound?.variantName,
+	// 	group: sound?.group,
+	// 	free: sound?.free
+	// });
+	// mixpanel.people.increment('toggle_sound');
 };
 
 export const stop = () => {
@@ -127,7 +127,7 @@ export const stop = () => {
 	selectedVariantPerSound.set({});
 	playback.set({ ...get(playback), playlist: null });
 
-	mixpanel.track('stop');
+	// mixpanel.track('stop');
 };
 
 export const playRandom = () => {
@@ -149,7 +149,7 @@ export const playRandom = () => {
 		toggleSound(path);
 	}
 
-	mixpanel.track('play_random');
+	// mixpanel.track('play_random');
 };
 
 export const selectedVariantPerSound = writable(
@@ -174,6 +174,6 @@ export const playPlaylist = (playlist: Playlist) => {
 	stop();
 	for (const item of playlist.sounds as unknown as PlaylistSound[]) toggleSound(item.path);
 	playback.set({ ...get(playback), playlist: playlist.id });
-	mixpanel.track('play_playlist', { playlist: playlist.id });
-	mixpanel.people.increment('playlists_played');
+	// mixpanel.track('play_playlist', { playlist: playlist.id });
+	// mixpanel.people.increment('playlists_played');
 };

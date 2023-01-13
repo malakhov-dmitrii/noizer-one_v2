@@ -13,14 +13,14 @@
 	import Onboarding from '@/components/Onboarding.svelte';
 	import ShortcutsGuide from '@/components/ShortcutsGuide.svelte';
 	import { page } from '$app/stores';
-	import mixpanel from 'mixpanel-browser';
+	// import mixpanel from 'mixpanel-browser';
 
 	const soundsEntries = _.entries(
 		_.pick(listSounds(sounds), 'Locations', 'Background', 'Tweak', 'Color noise', 'Others', 'ASMR')
 	);
 
 	onMount(() => {
-		mixpanel.init('8a8df07ff26685036e0f8571414fa894', { debug: true });
+		// mixpanel.init('8a8df07ff26685036e0f8571414fa894', { debug: true });
 
 		for (const item of shortcuts) {
 			Mousetrap.bind(`${item.keys.join('+')}`, item.callback);

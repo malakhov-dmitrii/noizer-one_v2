@@ -1,6 +1,6 @@
 import { playback, playRandom, stop } from '@/stores/playback';
 import { get } from 'svelte/store';
-import mixpanel from 'mixpanel-browser';
+// import mixpanel from 'mixpanel-browser';
 
 const shortcuts = [
 	{
@@ -13,7 +13,7 @@ const shortcuts = [
 				...pb,
 				muted: !pb.muted
 			});
-			mixpanel.track('kbd_toggle_mute');
+			// mixpanel.track('kbd_toggle_mute');
 		}
 	},
 	{
@@ -32,7 +32,7 @@ const shortcuts = [
 					volume
 				};
 			});
-			mixpanel.track('kbd_volume_up');
+			// mixpanel.track('kbd_volume_up');
 		}
 	},
 	{
@@ -51,7 +51,7 @@ const shortcuts = [
 					volume
 				};
 			});
-			mixpanel.track('kbd_volume_down');
+			// mixpanel.track('kbd_volume_down');
 		}
 	},
 	{
@@ -59,7 +59,7 @@ const shortcuts = [
 		title: 'Stop All',
 		callback: () => {
 			stop();
-			mixpanel.track('kbd_stop');
+			// mixpanel.track('kbd_stop');
 		}
 	},
 	{
@@ -67,7 +67,7 @@ const shortcuts = [
 		title: 'Play random set',
 		callback: () => {
 			playRandom();
-			mixpanel.track('kbd_play_random');
+			// mixpanel.track('kbd_play_random');
 		}
 	}
 ];
