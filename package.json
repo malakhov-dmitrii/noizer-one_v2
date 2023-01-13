@@ -63,6 +63,7 @@
 		"howler": "^2.2.3",
 		"lodash": "^4.17.21",
 		"mixpanel-browser": "^2.45.0",
-		"mousetrap": "^1.6.5"
+		"mousetrap": "^1.6.5",
+		"stripe": "^11.6.0"
 	}
 }

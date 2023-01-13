@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import type { PageData } from '.svelte-kit/types/src/routes/(app)/$types';
 	import { signIn } from '@auth/sveltekit/client';
 	import { Button } from 'flowbite-svelte';
-	import type { PageData } from './$types';
+	// import type { PageData } from '../../profile/$types';
 
 	export let data: PageData;
 </script>

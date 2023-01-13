@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../global.css';
+	import '../../global.css';
 	import { Howler } from 'howler';
 	import {
 		Avatar,
@@ -16,7 +16,7 @@
 	import { page } from '$app/stores';
 	import { signOut } from '@auth/sveltekit/client';
 
-	import img from '$lib/images/noizer-logo.png';
+	import img from '$lib/images/logo-2.png';
 	import { playback, playRandom, selectedVariantPerSound, stop } from '@/stores/playback';
 	import _ from 'lodash';
 	import { auth } from '@/stores/auth';
@@ -45,10 +45,11 @@
 
 <Navbar let:hidden let:toggle>
 	<NavBrand href="/">
-		<img src={img} class="h-6 mr-3 sm:h-9" alt="Logo" />
-		<span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-			Noizer One
-		</span>
+		<img src={img} class="h-6 mr-3 sm:h-14" alt="Logo" />
+		<div>
+			<h3 class="text-xl md:text-3xl font-bold">Noizer One</h3>
+			<p>Live soundscapes right for you</p>
+		</div>
 	</NavBrand>
 	<!-- <NavHamburger on:click={toggle} /> -->
 	<div class="flex items-center gap-2 mt-4 md:order-2 sm:mt-0">

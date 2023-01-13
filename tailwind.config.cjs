@@ -12,8 +12,8 @@ module.exports = {
 		require('@tailwindcss/forms'),
 		require('@tailwindcss/line-clamp'),
 		require('@tailwindcss/aspect-ratio'),
-		require('flowbite/plugin')
-		// require('daisyui')
+		require('flowbite/plugin'),
+		require('daisyui')
 	],
 	darkMode: 'class'
 };

@@ -44,7 +44,27 @@
 	<div class="relative w-full max-w-4xl px-4 pb-24 m-auto lg:px-0">
 		<Onboarding />
 
-		<ShortcutsGuide />
+		<div
+			class="absolute hidden text-gray-600 w-56 px-4 py-2 border-gray-400 rounded-md -right-64 top-12 xl:block"
+		>
+			<ShortcutsGuide />
+
+			<div class="mt-12 flex-col space-y-2">
+				<h3 class="font-mono text-lg">Explore</h3>
+				<div class="flex gap-2 underline mt-4 items-center">
+					<a class="" href="/">YouTube playlists </a>
+					<i class="fa-solid fa-arrow-up-right-from-square" />
+				</div>
+				<div class="flex gap-2 underline items-center">
+					<a class="" href="/">View project roadmap </a>
+					<i class="fa-solid fa-arrow-up-right-from-square" />
+				</div>
+				<div class="flex gap-2 underline items-center">
+					<a class="" href="/">Join community </a>
+					<i class="fa-solid fa-arrow-up-right-from-square" />
+				</div>
+			</div>
+		</div>
 
 		<div class="mt-4">
 			<Playlists />
