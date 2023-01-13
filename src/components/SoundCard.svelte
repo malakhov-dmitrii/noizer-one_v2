@@ -18,7 +18,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-	class={`p-4 rounded-md bg-slate-200 hover:bg-opacity-80 transition-all group cursor-pointer relative ${
+	class={`p-4 rounded-md dark:bg-gray-800 bg-slate-200 hover:bg-opacity-80 transition-all group cursor-pointer relative ${
 		!!playingVariant
 			? 'outline-2 outline-offset-2 outline-blue-500 bg-opacity-100 outline'
 			: 'bg-opacity-60'

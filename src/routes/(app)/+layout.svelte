@@ -62,7 +62,9 @@
 					<span class="text-sm">
 						{$page.data.session.user?.name ?? 'User'}
 					</span>
-					<span class="text-xs font-light text-gray-400">User</span>
+					<span class="text-xs font-light text-gray-400">
+						{$page.data.subscription?.status === 'active' ? 'Premium' : 'Free'}
+					</span>
 				</div>
 			</a>
 

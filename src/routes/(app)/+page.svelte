@@ -52,15 +52,29 @@
 			<div class="mt-12 flex-col space-y-2">
 				<h3 class="font-mono text-lg">Explore</h3>
 				<div class="flex gap-2 underline mt-4 items-center">
-					<a class="" href="/">YouTube playlists </a>
+					<a
+						class=""
+						href="https://www.youtube.com/channel/UConHj2LF39cQ_rrnvNWi4lw"
+						rel="noopener noreferrer"
+						target="_blank"
+						>YouTube playlists
+					</a>
 					<i class="fa-solid fa-arrow-up-right-from-square" />
 				</div>
 				<div class="flex gap-2 underline items-center">
-					<a class="" href="/">View project roadmap </a>
+					<a
+						class=""
+						href="https://noizer-one.canny.io/feature-requests"
+						rel="noopener noreferrer"
+						target="_blank"
+						>Vote for new features
+					</a>
 					<i class="fa-solid fa-arrow-up-right-from-square" />
 				</div>
 				<div class="flex gap-2 underline items-center">
-					<a class="" href="/">Join community </a>
+					<a class="" href="https://discord.gg/mZdxNGp8GW" rel="noopener noreferrer" target="_blank"
+						>Join community
+					</a>
 					<i class="fa-solid fa-arrow-up-right-from-square" />
 				</div>
 			</div>
