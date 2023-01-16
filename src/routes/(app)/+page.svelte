@@ -13,6 +13,7 @@
 	import Onboarding from '@/components/Onboarding.svelte';
 	import ShortcutsGuide from '@/components/ShortcutsGuide.svelte';
 	import { page } from '$app/stores';
+	import ExploreSection from '@/components/ExploreSection.svelte';
 	// import mixpanel from 'mixpanel-browser';
 
 	const soundsEntries = _.entries(
@@ -48,37 +49,9 @@
 			class="absolute hidden text-gray-600 w-56 px-4 py-2 border-gray-400 rounded-md -right-64 top-12 xl:block"
 		>
 			<ShortcutsGuide />
-
-			<div class="mt-12 flex-col space-y-2">
-				<h3 class="font-mono text-lg">Explore</h3>
-				<div class="flex gap-2 underline mt-4 items-center">
-					<a
-						class=""
-						href="https://www.youtube.com/channel/UConHj2LF39cQ_rrnvNWi4lw"
-						rel="noopener noreferrer"
-						target="_blank"
-						>YouTube playlists
-					</a>
-					<i class="fa-solid fa-arrow-up-right-from-square" />
-				</div>
-				<div class="flex gap-2 underline items-center">
-					<a
-						class=""
-						href="https://noizer-one.canny.io/feature-requests"
-						rel="noopener noreferrer"
-						target="_blank"
-						>Vote for new features
-					</a>
-					<i class="fa-solid fa-arrow-up-right-from-square" />
-				</div>
-				<div class="flex gap-2 underline items-center">
-					<a class="" href="https://discord.gg/mZdxNGp8GW" rel="noopener noreferrer" target="_blank"
-						>Join community
-					</a>
-					<i class="fa-solid fa-arrow-up-right-from-square" />
-				</div>
-			</div>
 		</div>
+
+		<ExploreSection />
 
 		<div class="mt-4">
 			<Playlists />

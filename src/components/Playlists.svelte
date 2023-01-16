@@ -41,7 +41,7 @@
 </script>
 
 <h2 class="mt-10 text-2xl font-medium">Playlists</h2>
-<div class="flex items-center gap-2 text-sm text-gray-600">
+<div class="items-center gap-2 text-sm text-gray-600 hidden lg:flex">
 	<p>Use keyboard numbers for quick select: from</p>
 
 	<Kbd class="px-2 py-1">1</Kbd>
