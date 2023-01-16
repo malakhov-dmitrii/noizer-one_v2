@@ -11,7 +11,7 @@
 	export let selectedVariantPath: string;
 
 	let open = false;
-	$: subscriptionActive = $page.data.subscription.status === 'active';
+	$: subscriptionActive = $page.data?.subscription?.status === 'active';
 </script>
 
 {#if variants.length > 1}
