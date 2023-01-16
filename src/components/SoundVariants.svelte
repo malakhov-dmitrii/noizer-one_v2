@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import HandleOutsideClick from '@/components/HandleOutsideClick.svelte';
+	import { auth } from '@/stores/auth';
 	import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 	import { toggleSound, type FileItem } from '@/stores/playback';
 	// import mixpanel from 'mixpanel-browser';
@@ -9,6 +11,7 @@
 	export let selectedVariantPath: string;
 
 	let open = false;
+	$: subscriptionActive = $page.data.subscription.status === 'active';
 </script>
 
 {#if variants.length > 1}
@@ -46,8 +49,13 @@
 						class="flex items-center justify-between px-2 py-1.5 text-xs text-gray-700 transition-all rounded-md hover:bg-gray-100"
 						on:click|stopPropagation={() => {
 							open = !open;
-							// toggleSound(selectedVariantPath, false);
-							toggleSound(variant.path, true);
+							if (subscriptionActive) {
+								toggleSound(variant.path, true);
+								const onboarding = get(onboardingStep);
+								if (onboarding === 3) incrementOnboardingStep();
+							} else {
+								$auth.subscriptionModal = true;
+							}
 
 							// mixpanel.track('Sound Variant Selected', {
 							// 	variant: variant.variantName,
@@ -55,9 +63,6 @@
 							// 	group: variant.group,
 							// 	free: variant.free
 							// });
-
-							const onboarding = get(onboardingStep);
-							if (onboarding === 3) incrementOnboardingStep();
 						}}
 					>
 						{#if !variant.free}

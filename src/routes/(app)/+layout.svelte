@@ -24,6 +24,7 @@
 	import SavePlaylist from '@/components/SavePlaylist.svelte';
 	import Toasts from '@/components/Toasts/Toasts.svelte';
 	import playlists from '@/lib/playlists';
+	import SubscriptionModal from '@/components/SubscriptionModal.svelte';
 
 	$: savedVolume = 1;
 
@@ -129,5 +130,6 @@
 </main>
 
 <SignIn />
+<SubscriptionModal />
 
 <Toasts />
