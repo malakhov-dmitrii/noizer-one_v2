@@ -14,8 +14,6 @@
 	import ShortcutsGuide from '@/components/ShortcutsGuide.svelte';
 	import { page } from '$app/stores';
 	import ExploreSection from '@/components/ExploreSection.svelte';
-	import { groupBy } from 'lodash';
-	import { sortBy } from 'lodash';
 	import soundsOrder from '@/lib/soundsOrder';
 	// import mixpanel from 'mixpanel-browser';
 
@@ -75,7 +73,7 @@
 				<div
 					class="grid w-full grid-flow-row grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-x-3 gap-y-3"
 				>
-					{#each sortBy(sounds, ([title]) => soundsOrder[title] ?? 10) as [title, variants]}
+					{#each _.sortBy(sounds, ([title]) => soundsOrder[title] ?? 10) as [title, variants]}
 						<SoundCard {title} {variants} />
 					{/each}
 				</div>
