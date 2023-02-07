@@ -1,17 +1,12 @@
 import { prisma } from '$lib/prisma';
-import { fail } from '@sveltejs/kit';
+import { fail, json } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-export interface Todo {
-	id: number;
-	title: string;
-	completed: boolean;
-	userId: number;
-}
-
-export const load = (async ({ locals }) => {
+export const load = (async ({ locals, request }) => {
 	const session = await locals.getSession();
 	const email = session?.user?.email;
+
+	const playlist = new URL(request.url).searchParams.get('playlist');
 
 	if (email) {
 		const user = await prisma.user.findUnique({
@@ -23,27 +18,30 @@ export const load = (async ({ locals }) => {
 		const playlists = await prisma.playlist.findMany({
 			where: {
 				userId: user?.id
+			},
+			include: {
+				user: true
 			}
 		});
 
-		return {
-			playlists
-		};
+		let selectedPlaylist = null;
+		if (playlist) {
+			selectedPlaylist = await prisma.playlist
+				.findUnique({
+					where: {
+						id: playlist
+					},
+					include: {
+						user: true
+					}
+				})
+				.catch(() => null);
+		}
+
+		return { playlists: selectedPlaylist ? [selectedPlaylist, ...playlists] : playlists };
 	}
 
 	return {
 		playlists: []
 	};
 }) satisfies PageServerLoad;
-
-export const actions: Actions = {
-	submitTodo: async (event) => {
-		const data = await event.request.formData();
-		const title = data.get('title');
-
-		if (!title) return fail(400, { message: 'Title is required' });
-		if (!!title && title.length < 3) {
-			return fail(400, { title, message: 'Title must be at least 3 characters long' });
-		}
-	}
-};

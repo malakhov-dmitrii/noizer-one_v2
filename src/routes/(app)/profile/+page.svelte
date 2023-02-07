@@ -16,6 +16,6 @@
 	<main class="prose max-w-4xl m-auto my-12">
 		<h1>Profile page</h1>
 		<p>You are not logged in to view this page</p>
-		<Button on:click={() => signIn('github')}>Sign In with GitHub</Button>
+		<!-- <Button on:click={() => signIn('github')}>Sign In with GitHub</Button> -->
 	</main>
 {/if}

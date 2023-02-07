@@ -5,11 +5,7 @@
 	<div
 		class="flex space-x-2 items-center xl:items-start mt-4 w-full flex-row xl:flex-col flex-wrap xl:space-x-0 xl:space-y-2"
 	>
-		<a
-			class="underline"
-			href="https://forms.gle/43dJFqvNocZHz8RJ8"
-			rel="noopener noreferrer"
-			target="_blank"
+		<a class="underline" href="https://mlh.one/noizer" rel="noopener noreferrer" target="_blank"
 			>Sign up for iOS & Android Beta
 			<i class="fa-solid fa-arrow-up-right-from-square" />
 		</a>

@@ -14,6 +14,9 @@
 	import ShortcutsGuide from '@/components/ShortcutsGuide.svelte';
 	import { page } from '$app/stores';
 	import ExploreSection from '@/components/ExploreSection.svelte';
+	import { groupBy } from 'lodash';
+	import { sortBy } from 'lodash';
+	import soundsOrder from '@/lib/soundsOrder';
 	// import mixpanel from 'mixpanel-browser';
 
 	const soundsEntries = _.entries(
@@ -22,24 +25,32 @@
 
 	onMount(() => {
 		// mixpanel.init('8a8df07ff26685036e0f8571414fa894', { debug: true });
+		const list = [...playlists, ...$page.data.playlists];
 
 		for (const item of shortcuts) {
 			Mousetrap.bind(`${item.keys.join('+')}`, item.callback);
 		}
 		Mousetrap.bind(['1', '2', '3', '4', '5', '6', '7', '8', '9'], (e: KeyboardEvent) => {
-			const list = [...playlists, ...$page.data.playlists];
 			if (+e.key <= list.length) {
 				const selectedListItem = list[+e.key - 1];
 				playPlaylist(selectedListItem);
 			}
 		});
-	});
-</script>
 
-<svelte:head>
-	<title>Noizer One</title>
-	<meta name="description" content="Todo app" />
-</svelte:head>
+		const initialPlaylistId = $page.url.searchParams.get('playlist');
+		const initialPlaylist = list.find((playlist) => playlist.id === initialPlaylistId);
+
+		console.log({ initialPlaylistId, initialPlaylist });
+
+		if (initialPlaylist) {
+			playPlaylist(initialPlaylist);
+		}
+	});
+
+	$: {
+		// console.log(groupBy(sounds, 'location'));
+	}
+</script>
 
 <main class="flex flex-col justify-center min-h-screen">
 	<div class="relative w-full max-w-4xl px-4 pb-24 m-auto lg:px-0">
@@ -61,13 +72,14 @@
 
 		{#each soundsEntries as [group, items]}
 			{@const sounds = _.entries(items)}
+			<!-- {console.log({ group, sounds })} -->
 			<div>
 				<h2 class="mt-8 mb-4 text-3xl font-medium">{group}</h2>
 
 				<div
 					class="grid w-full grid-flow-row grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-x-3 gap-y-3"
 				>
-					{#each sounds as [title, variants]}
+					{#each sortBy(sounds, ([title]) => soundsOrder[title] ?? 10) as [title, variants]}
 						<SoundCard {title} {variants} />
 					{/each}
 				</div>

@@ -4,9 +4,10 @@ import { get } from 'svelte/store';
 
 const shortcuts = [
 	{
-		keys: ['m'],
+		keys: ['m', 'space'],
 		title: 'Mute/Unmute',
-		callback: () => {
+		callback: (e) => {
+			e.preventDefault();
 			const pb = get(playback);
 			Howler.mute(!pb.muted);
 			playback.set({

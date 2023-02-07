@@ -5,10 +5,13 @@ import _ from 'lodash';
 import type { PlaylistSound } from '@/lib/playlists';
 import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 import type { Playlist } from '@prisma/client';
+import { goto } from '$app/navigation';
 // import mixpanel from 'mixpanel-browser';
 
 export const randomSlice = <T>(arr: T[], n: number): T[] =>
 	[...arr].sort(() => Math.random() - Math.random()).slice(0, n);
+
+Howler.autoUnlock = true;
 
 export interface FileItem {
 	group: string;
@@ -40,7 +43,10 @@ export const toggleSound = (path: string, play?: boolean) => {
 	 * If a playlist is active, reset it, but dont interrupt the sound that is playing
 	 */
 	const activePlaylist = get(playback).playlist;
-	if (activePlaylist) playback.set({ ...get(playback), playlist: null });
+	if (activePlaylist) {
+		playback.set({ ...get(playback), playlist: null });
+		goto('/');
+	}
 
 	if (!activeVariant || activeVariant.error || play) {
 		selectedVariantPerSound.update((state) => {
@@ -126,6 +132,7 @@ export const stop = () => {
 	Howler.stop();
 	selectedVariantPerSound.set({});
 	playback.set({ ...get(playback), playlist: null });
+	goto('/');
 
 	// mixpanel.track('stop');
 };
@@ -174,6 +181,7 @@ export const playPlaylist = (playlist: Playlist) => {
 	stop();
 	for (const item of playlist.sounds as unknown as PlaylistSound[]) toggleSound(item.path);
 	playback.set({ ...get(playback), playlist: playlist.id });
+	goto('/?playlist=' + playlist.id);
 	// mixpanel.track('play_playlist', { playlist: playlist.id });
 	// mixpanel.people.increment('playlists_played');
 };

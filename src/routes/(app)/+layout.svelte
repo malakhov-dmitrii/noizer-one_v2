@@ -4,6 +4,9 @@
 	import {
 		Avatar,
 		Button,
+		Dropdown,
+		DropdownDivider,
+		DropdownItem,
 		Navbar,
 		NavBrand,
 		NavHamburger,
@@ -55,7 +58,7 @@
 	<!-- <NavHamburger on:click={toggle} /> -->
 	<div class="flex items-center gap-2 mt-4 md:order-2 sm:mt-0">
 		{#if $page.data.session}
-			<a href="/profile" class="flex items-center gap-2">
+			<div id="avatar-menu" class="flex items-center gap-2">
 				{#if $page.data.session.user?.image}
 					<Avatar src={$page.data.session.user.image} />
 				{/if}
@@ -67,9 +70,9 @@
 						{$page.data.subscription?.status === 'active' ? 'Premium' : 'Free'}
 					</span>
 				</div>
-			</a>
+			</div>
 
-			<Button size="xs" outline on:click={() => signOut()} class="button">Sign out</Button>
+			<!-- <Button size="xs" outline on:click={() => signOut()} class="button">Sign out</Button> -->
 		{:else}
 			<Button
 				on:click={() => {
@@ -106,6 +109,12 @@
 			</div>
 		</NavLi>
 	</NavUl>
+
+	<Dropdown placement="bottom" triggeredBy="#avatar-menu">
+		<DropdownItem href="/profile">Settings</DropdownItem>
+		<DropdownDivider />
+		<DropdownItem on:click={() => signOut()}>Sign out</DropdownItem>
+	</Dropdown>
 </Navbar>
 <Popover
 	title={`Volume: ${($playback.volume * 100).toFixed(0)}%`}

@@ -11,7 +11,7 @@ export const load: LayoutServerLoad = async (event) => {
 			}
 		});
 
-		console.log('subscription', subscription);
+		// console.log('subscription', subscription);
 
 		return {
 			session,

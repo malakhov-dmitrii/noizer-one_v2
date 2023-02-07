@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { navigating, page } from '$app/stores';
 	import playlists from '@/lib/playlists';
 	import { playback, playPlaylist } from '@/stores/playback';
 	import { toast } from '@/stores/toasts';
-	import type { Playlist } from '@prisma/client';
+	import type { Playlist, User } from '@prisma/client';
 	import axios from 'axios';
 	import { Button, Kbd, Modal } from 'flowbite-svelte';
 
-	let userPlaylists = [...playlists, ...$page.data.playlists] as Playlist[];
+	let userPlaylists = [...playlists, ...$page.data.playlists] as (Playlist & { user: User })[];
 	let deletePlaylistModal = false;
 	let deletePlaylistId = '';
 
@@ -51,6 +52,8 @@
 
 <div class="flex gap-4 px-1 pt-2 pb-3 -mx-1 overflow-x-auto overflow-y-visible flex-nowrap">
 	{#each userPlaylists as playlist}
+		{@const belongsToOtherUser =
+			!!playlist.user?.email && playlist.user?.email !== $page.data.session?.user?.email}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
 			class="relative group"
@@ -69,8 +72,25 @@
 					playlist.id === $playback.playlist
 						? 'outline outline-2 outline-offset-2 outline-blue-400'
 						: ''
-				}`}
+				} 
+				
+				${!!playlist.user?.email ? 'bg-slate-200' : 'bg-slate-100'}
+				`}
 			>
+				{#if belongsToOtherUser}
+					<div
+						on:click|stopPropagation={() => {
+							axios.post(`/api/playlists/${playlist.id}/copy`).then(() => {
+								toast('Playlist copied to your library', 'success');
+							});
+							console.log('save to library');
+						}}
+						class="absolute bottom-0 opacity-50 hover:opacity-100 transition w-full py-0.5 rounded-md -left-0 bg-blue-500 text-white text-xs transform  px-2"
+					>
+						save to library
+					</div>
+				{/if}
+				<!-- ${playlist.userId !== $page.data.session?.user.} -->
 				<p class="line-clamp-1">{playlist.group || playlist.title}</p>
 				{#if playlist.group}
 					<p class="text-xs max-w-[160px] text-gray-500 line-clamp-2">
@@ -79,13 +99,26 @@
 				{/if}
 
 				<!-- DELETE PLAYLIST -->
-				{#if playlist.userId}
+				{#if playlist.userId && !belongsToOtherUser}
 					<button
 						title="Delete playlist"
 						class="absolute top-0 right-0 p-2 text-gray-500 opacity-20 hover:opacity-100 transition-opacity rounded-md hover:bg-gray-200"
 						on:click|stopPropagation={() => handleDelete(playlist.id)}
 					>
 						<i class="fa-solid fa-trash" />
+					</button>
+				{/if}
+				<!-- DELETE PLAYLIST -->
+				{#if playlist.userId}
+					<button
+						title="Copy link to clipboard"
+						class="absolute top-0 left-0 p-2 text-gray-500 opacity-20 hover:opacity-100 transition-opacity rounded-md hover:bg-gray-200"
+						on:click|stopPropagation={() => {
+							navigator.clipboard.writeText(`https://noizer.one/?playlist=${playlist.id}`);
+							toast('Link copied to clipboard', 'success');
+						}}
+					>
+						<i class="fa-solid fa-copy" />
 					</button>
 				{/if}
 			</div>
