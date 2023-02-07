@@ -46,10 +46,6 @@
 			playPlaylist(initialPlaylist);
 		}
 	});
-
-	$: {
-		// console.log(groupBy(sounds, 'location'));
-	}
 </script>
 
 <main class="flex flex-col justify-center min-h-screen">

@@ -5,7 +5,7 @@
 	import { Button } from 'flowbite-svelte';
 	// import type { PageData } from '../../profile/$types';
 
-	export let data: PageData;
+	// export let data: PageData;
 </script>
 
 {#if $page.data.session?.user}
