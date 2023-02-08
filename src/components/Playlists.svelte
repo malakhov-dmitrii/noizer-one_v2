@@ -9,7 +9,10 @@
 	import { Button, Kbd, Modal } from 'flowbite-svelte';
 	import * as _ from 'lodash';
 
-	let userPlaylists = [...playlists, ..._.uniqBy($page.data.playlists ?? [], 'id')] as (Playlist & {
+	let userPlaylists = [
+		...playlists,
+		...(_.uniqBy($page.data.playlists ?? [], 'id') ?? [])
+	] as (Playlist & {
 		user: User;
 	})[];
 	let deletePlaylistModal = false;
