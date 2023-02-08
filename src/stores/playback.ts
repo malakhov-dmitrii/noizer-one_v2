@@ -1,7 +1,7 @@
 import { get, writable } from 'svelte/store';
 import { Howl, Howler } from 'howler';
 import sounds from '@/lib/sounds';
-import _, { keys } from 'lodash';
+import _ from 'lodash';
 import type { PlaylistSound } from '@/lib/playlists';
 import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 import type { Playlist } from '@prisma/client';
@@ -48,7 +48,7 @@ export const toggleSound = (path: string, play?: boolean) => {
 	const activeVariant = get(selectedVariantPerSound)[path];
 
 	const sv = get(selectedVariantPerSound);
-	const soundFromSameSoundGroup = keys(sv).find(
+	const soundFromSameSoundGroup = _.keys(sv).find(
 		(key) => parseSoundPath(key).sound === parseSoundPath(path).sound
 	);
 	soundFromSameSoundGroup && stopSound(soundFromSameSoundGroup);
