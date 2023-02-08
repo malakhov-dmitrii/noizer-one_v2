@@ -59,7 +59,7 @@
 				<label class="space-y-2 flex flex-col">
 					<p>Code</p>
 					<input
-						bind:value={email}
+						bind:value={code}
 						class="input input-bordered"
 						type="text"
 						name="code"
