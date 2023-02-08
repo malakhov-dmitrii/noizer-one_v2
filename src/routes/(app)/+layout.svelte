@@ -1,138 +1,88 @@
 <script lang="ts">
 	import '../../global.css';
-	import { Howler } from 'howler';
-	import {
-		Avatar,
-		Button,
-		Dropdown,
-		DropdownDivider,
-		DropdownItem,
-		Navbar,
-		NavBrand,
-		NavHamburger,
-		NavLi,
-		NavUl,
-		Popover,
-		Range
-	} from 'flowbite-svelte';
-
 	import { page } from '$app/stores';
-	import { signOut } from '@auth/sveltekit/client';
 
 	import img from '$lib/images/logo-2.png';
-	import { playback, playRandom, selectedVariantPerSound, stop } from '@/stores/playback';
 	import _ from 'lodash';
-	import { auth } from '@/stores/auth';
 	import SignIn from '@/components/SignIn.svelte';
-	import SavePlaylist from '@/components/SavePlaylist.svelte';
 	import Toasts from '@/components/Toasts/Toasts.svelte';
-	import playlists from '@/lib/playlists';
 	import SubscriptionModal from '@/components/SubscriptionModal.svelte';
+	import { onMount } from 'svelte';
+	import { themeChange } from 'theme-change';
+	import ThemeChanger from '@/components/ThemeChanger.svelte';
+	import PlaybackControls from '@/components/PlaybackControls.svelte';
+	import { cx } from '@/lib/utils';
 
-	$: savedVolume = 1;
+	// TODO: toggle animation
+	let animateBackground = true;
 
-	function handleMute() {
-		if (!$playback.muted) {
-			savedVolume = $playback.volume;
-			$playback.volume = 0;
-		} else {
-			$playback.volume = savedVolume;
-		}
-
-		Howler.mute(!$playback.muted);
-		playback.set({
-			...$playback,
-			muted: !$playback.muted
-		});
-	}
+	onMount(() => {
+		themeChange(false);
+	});
 </script>
 
-<Navbar let:hidden let:toggle>
-	<NavBrand href="/">
-		<img src={img} class="h-6 mr-3 sm:h-14" alt="Logo" />
+{#if animateBackground}
+	<div
+		class="fixed z-0 top-0 left-0 w-full h-full bg-gradient-to-r from-primary to-accent opacity-60 pointer-events-none"
+		style="background-size: 400% 400%; animation: gradient 15s ease infinite;"
+	/>
+{/if}
+
+<div class="navbar bg-transparent container m-auto">
+	<div class="navbar-start cursor-pointer">
+		<img src={img} class="h-10 mr-3 sm:h-14" alt="Logo" />
 		<div>
-			<h3 class="text-xl md:text-3xl font-bold">Noizer One</h3>
-			<p>Live soundscapes right for you</p>
+			<h3 class="text-lg md:text-3xl leading-4 font-bold">Noizer One</h3>
+			<p class="hidden md:block">Live soundscapes right for you</p>
 		</div>
-	</NavBrand>
-	<!-- <NavHamburger on:click={toggle} /> -->
-	<div class="flex items-center gap-2 mt-4 md:order-2 sm:mt-0">
-		{#if $page.data.session}
-			<div id="avatar-menu" class="flex items-center gap-2">
-				{#if $page.data.session.user?.image}
-					<Avatar src={$page.data.session.user.image} />
-				{/if}
-				<div class="flex flex-col text-sm">
-					<span class="text-sm">
-						{$page.data.session.user?.name ?? 'User'}
+		<!-- <a class="btn btn-ghost normal-case text-xl">Noizer One</a> -->
+	</div>
+
+	<div class="navbar-center space-x-1 hidden lg:inline-flex">
+		<PlaybackControls />
+	</div>
+
+	<div class="navbar-end">
+		<button
+			on:click={() => {
+				animateBackground = !animateBackground;
+			}}
+			title="Toggle background animation"
+			class={cx('btn btn-sm btn-primary', animateBackground ? 'btn-outline' : '')}
+		>
+			<i class="fa-solid fa-wand-magic-sparkles" />
+		</button>
+		<ThemeChanger />
+		<div class="dropdown dropdown-end">
+			<label tabindex="0" class="flex gap-2 items-center cursor-pointer btn btn-ghost text-left">
+				<div class="avatar">
+					<div class="w-10 rounded-full">
+						<img src={$page.data.session?.user?.image} />
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<span class="text hidden md:block">
+						{$page.data.session?.user?.name ?? 'User'}
 					</span>
 					<span class="text-xs font-light text-gray-400">
 						{$page.data.subscription?.status === 'active' ? 'Premium' : 'Free'}
 					</span>
 				</div>
-			</div>
-
-			<!-- <Button size="xs" outline on:click={() => signOut()} class="button">Sign out</Button> -->
-		{:else}
-			<Button
-				on:click={() => {
-					$auth.modal = true;
-				}}>Sign In</Button
+			</label>
+			<ul
+				tabindex="0"
+				class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 			>
-		{/if}
-		<NavHamburger on:click={toggle} />
+				<li><a>Billing</a></li>
+				<li><a>Logout</a></li>
+			</ul>
+		</div>
 	</div>
-	<NavUl {hidden} class="order-1">
-		<NavLi>
-			<div class="flex gap-2">
-				<Button
-					outline
-					size="sm"
-					gradient
-					on:click={stop}
-					disabled={!_.keys($selectedVariantPerSound).length}
-				>
-					<i class="text-lg text-gray-700 fa-solid fa-stop" />
-				</Button>
-				<Button outline size="sm" gradient id="volume" on:click={handleMute}>
-					{#if $playback.muted}
-						<i class="text-lg text-gray-700 fa-solid fa-volume-mute" />
-					{:else}
-						<i class="text-lg text-gray-700 fa-solid fa-volume-up" />
-					{/if}
-				</Button>
-				<Button outline size="sm" gradient on:click={playRandom}>
-					<i class="text-lg fa-solid fa-shuffle" />
-				</Button>
+</div>
 
-				<SavePlaylist playlists={[...playlists, ...($page?.data?.playlists ?? [])]} />
-			</div>
-		</NavLi>
-	</NavUl>
-
-	<Dropdown placement="bottom" triggeredBy="#avatar-menu">
-		<DropdownItem href="/profile">Settings</DropdownItem>
-		<DropdownDivider />
-		<DropdownItem on:click={() => signOut()}>Sign out</DropdownItem>
-	</Dropdown>
-</Navbar>
-<Popover
-	title={`Volume: ${($playback.volume * 100).toFixed(0)}%`}
-	class="w-64 text-sm font-light"
-	triggeredBy="#volume"
-	placement="bottom"
->
-	<Range
-		bind:value={$playback.volume}
-		min={0}
-		max={1}
-		step={0.05}
-		on:change={(e) => {
-			// @ts-expect-error - Howler is not typed properly
-			Howler.volume(+e.target?.value);
-		}}
-	/>
-</Popover>
+<div class="flex lg:hidden container flex-wrap mt-8 justify-center">
+	<PlaybackControls />
+</div>
 
 <main class="">
 	<slot />

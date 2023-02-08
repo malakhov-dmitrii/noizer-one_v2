@@ -1,7 +1,7 @@
 import { get, writable } from 'svelte/store';
 import { Howl, Howler } from 'howler';
 import sounds from '@/lib/sounds';
-import _ from 'lodash';
+import _, { keys } from 'lodash';
 import type { PlaylistSound } from '@/lib/playlists';
 import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 import type { Playlist } from '@prisma/client';
@@ -10,6 +10,17 @@ import { goto } from '$app/navigation';
 
 export const randomSlice = <T>(arr: T[], n: number): T[] =>
 	[...arr].sort(() => Math.random() - Math.random()).slice(0, n);
+
+const parseSoundPath = (path: string): Omit<FileItem, 'free'> => {
+	const [, , group, soundWithIcon, variantName] = path.split('/');
+
+	return {
+		group,
+		sound: soundWithIcon.split('_')[0],
+		variantName,
+		path
+	};
+};
 
 Howler.autoUnlock = true;
 
@@ -36,6 +47,12 @@ export const toggleSound = (path: string, play?: boolean) => {
 	// if its not playing, load it and play it
 	const activeVariant = get(selectedVariantPerSound)[path];
 
+	const sv = get(selectedVariantPerSound);
+	const soundFromSameSoundGroup = keys(sv).find(
+		(key) => parseSoundPath(key).sound === parseSoundPath(path).sound
+	);
+	soundFromSameSoundGroup && stopSound(soundFromSameSoundGroup);
+
 	const onboarding = get(onboardingStep);
 	if (onboarding === 0 || onboarding === 1) incrementOnboardingStep();
 
@@ -48,6 +65,9 @@ export const toggleSound = (path: string, play?: boolean) => {
 		goto('/');
 	}
 
+	/**
+	 * Here we want to play the sound
+	 */
 	if (!activeVariant || activeVariant.error || play) {
 		selectedVariantPerSound.update((state) => {
 			state[path] = {
@@ -126,6 +146,16 @@ export const toggleSound = (path: string, play?: boolean) => {
 	// 	free: sound?.free
 	// });
 	// mixpanel.people.increment('toggle_sound');
+};
+
+const stopSound = (path: string) => {
+	const activeVariant = get(selectedVariantPerSound)[path];
+	activeVariant?.howler?.stop();
+	selectedVariantPerSound.update((state) => {
+		state[path] = undefined;
+		delete state[path];
+		return state;
+	});
 };
 
 export const stop = () => {

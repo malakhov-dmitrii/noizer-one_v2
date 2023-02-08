@@ -1,12 +1,10 @@
-<div
-	class="xl:absolute w-full static text-gray-600 xl:w-56 px-4 py-2 border-gray-400 rounded-md -right-64 top-72 xl:block"
->
+<div class="xl:absolute w-full static xl:w-56 px-4 py-2 rounded-md -right-64 top-72 xl:block">
 	<h3 class="font-mono text-lg">Explore</h3>
 	<div
 		class="flex space-x-2 items-center xl:items-start mt-4 w-full flex-row xl:flex-col flex-wrap xl:space-x-0 xl:space-y-2"
 	>
 		<a class="underline" href="https://mlh.one/noizer" rel="noopener noreferrer" target="_blank"
-			>Sign up for iOS & Android Beta
+			>iOS & Android Beta
 			<i class="fa-solid fa-arrow-up-right-from-square" />
 		</a>
 		<a

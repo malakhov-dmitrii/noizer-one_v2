@@ -1,4 +1,4 @@
-import type { FileItem, GroupedSounds } from 'src/stores/playback';
+import type { FileItem, GroupedSounds } from '@/stores/playback';
 
 export const listSounds = (sounds: FileItem[]): GroupedSounds =>
 	sounds.reduce((result, item) => {
@@ -14,3 +14,7 @@ export const listSounds = (sounds: FileItem[]): GroupedSounds =>
 		// Return the result object for this iteration
 		return result;
 	}, {});
+
+export const cx = (...classes: (string | undefined)[]) => {
+	return classes.filter(Boolean).join(' ');
+};

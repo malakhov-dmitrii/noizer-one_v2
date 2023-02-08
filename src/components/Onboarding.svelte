@@ -1,6 +1,5 @@
 <script>
 	import { onboardingStep } from '@/stores/onboarding';
-	import { Button, Hr } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
 	let loaded = false;
@@ -18,14 +17,13 @@
 	<div class="mt-12">
 		<div class="flex flex-wrap items-end gap-4">
 			<h2 class="text-3xl font-medium">How to use?</h2>
-			<Button
-				outline
-				size="xs"
+			<button
+				class="btn btn-xs btn-primary btn-outline"
 				on:click={() => {
 					onboardingStep.set(4);
 					localStorage.setItem('onboarding-guide', 'hidden');
 					hide = true;
-				}}>Dismiss</Button
+				}}>Dismiss</button
 			>
 		</div>
 		<div class="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-1">
@@ -75,6 +73,5 @@
 			</div>
 		</div>
 	</div>
-
-	<Hr />
+	<div class="divider" />
 {/if}

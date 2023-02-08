@@ -38,8 +38,6 @@
 		const initialPlaylistId = $page.url.searchParams.get('playlist');
 		const initialPlaylist = list.find((playlist) => playlist.id === initialPlaylistId);
 
-		console.log({ initialPlaylistId, initialPlaylist });
-
 		if (initialPlaylist) {
 			playPlaylist(initialPlaylist);
 		}
@@ -50,9 +48,7 @@
 	<div class="relative w-full max-w-4xl px-4 pb-24 m-auto lg:px-0">
 		<Onboarding />
 
-		<div
-			class="absolute hidden text-gray-600 w-56 px-4 py-2 border-gray-400 rounded-md -right-64 top-12 xl:block"
-		>
+		<div class="absolute hidden w-56 px-4 py-2 rounded-md -right-64 top-12 xl:block">
 			<ShortcutsGuide />
 		</div>
 
@@ -71,7 +67,7 @@
 				<h2 class="mt-8 mb-4 text-3xl font-medium">{group}</h2>
 
 				<div
-					class="grid w-full grid-flow-row grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-x-3 gap-y-3"
+					class="grid w-full grid-flow-row grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-x-6 gap-y-6"
 				>
 					{#each _.sortBy(sounds, ([title]) => soundsOrder[title] ?? 10) as [title, variants]}
 						<SoundCard {title} {variants} />

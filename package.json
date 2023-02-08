@@ -64,6 +64,7 @@
 		"lodash": "^4.17.21",
 		"mixpanel-browser": "^2.45.0",
 		"mousetrap": "^1.6.5",
-		"stripe": "^11.6.0"
+		"stripe": "^11.6.0",
+		"theme-change": "^2.3.0"
 	}
 }
