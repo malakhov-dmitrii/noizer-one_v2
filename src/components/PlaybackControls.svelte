@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import SavePlaylist from '@/components/SavePlaylist.svelte';
 	import playlists from '@/lib/playlists';
-	import { playback, playRandom } from '@/stores/playback';
+	import { playback, playRandom, stop } from '@/stores/playback';
 
 	$: savedVolume = 1;
 

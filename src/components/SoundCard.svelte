@@ -1,5 +1,4 @@
 <script lang="ts">
-	// import { Range } from 'flowbite-svelte';
 	import { selectedVariantPerSound, toggleSound, type FileItem } from '@/stores/playback';
 	import SoundVariants from '@/components/SoundVariants.svelte';
 	import { cx } from '@/lib/utils';

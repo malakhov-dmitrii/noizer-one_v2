@@ -12,6 +12,8 @@
 	import ThemeChanger from '@/components/ThemeChanger.svelte';
 	import PlaybackControls from '@/components/PlaybackControls.svelte';
 	import { cx } from '@/lib/utils';
+	import { signOut } from '@auth/sveltekit/client';
+	import { auth } from '@/stores/auth';
 
 	// TODO: toggle animation
 	let animateBackground = true;
@@ -53,30 +55,41 @@
 			<i class="fa-solid fa-wand-magic-sparkles" />
 		</button>
 		<ThemeChanger />
-		<div class="dropdown dropdown-end">
-			<label tabindex="0" class="flex gap-2 items-center cursor-pointer btn btn-ghost text-left">
-				<div class="avatar">
-					<div class="w-10 rounded-full">
-						<img src={$page.data.session?.user?.image} />
+		{#if $page.data.session?.user}
+			<div class="dropdown dropdown-end">
+				<label tabindex="0" class="flex gap-2 items-center cursor-pointer btn btn-ghost text-left">
+					<div class="avatar">
+						<div class="w-10 rounded-full">
+							<img src={$page.data.session?.user?.image} />
+						</div>
 					</div>
-				</div>
-				<div class="flex flex-col">
-					<span class="text hidden md:block">
-						{$page.data.session?.user?.name ?? 'User'}
-					</span>
-					<span class="text-xs font-light text-gray-400">
-						{$page.data.subscription?.status === 'active' ? 'Premium' : 'Free'}
-					</span>
-				</div>
-			</label>
-			<ul
-				tabindex="0"
-				class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+					<div class="flex flex-col">
+						<span class="text hidden md:block">
+							{$page.data.session?.user?.name ?? 'User'}
+						</span>
+						<span class="text-xs font-light text-gray-400">
+							{$page.data.subscription?.status === 'active' ? 'Premium' : 'Free'}
+						</span>
+					</div>
+				</label>
+				<ul
+					tabindex="0"
+					class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+				>
+					<li><a>Billing</a></li>
+					<li on:click={() => signOut()}><a>Logout</a></li>
+				</ul>
+			</div>
+		{:else}
+			<button
+				class="btn btn-primary"
+				on:click={() => {
+					$auth.modal = true;
+				}}
 			>
-				<li><a>Billing</a></li>
-				<li><a>Logout</a></li>
-			</ul>
-		</div>
+				Sign In
+			</button>
+		{/if}
 	</div>
 </div>
 

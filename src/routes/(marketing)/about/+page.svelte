@@ -1,9 +1,11 @@
 <script lang="ts">
 	import SoundCard from '@/components/SoundCard.svelte';
+	import ThemeChanger from '@/components/ThemeChanger.svelte';
 	import sounds from '@/lib/sounds';
 	import { playback, selectedVariantPerSound } from '@/stores/playback';
-	import { Button } from 'flowbite-svelte';
+	import { onMount } from 'svelte';
 	import { fade, slide } from 'svelte/transition';
+	import { themeChange } from 'theme-change';
 
 	$: tried = Object.keys($selectedVariantPerSound).length > 0;
 
@@ -74,6 +76,10 @@
 		//   },
 	];
 
+	onMount(() => {
+		themeChange(false);
+	});
+
 	// $:{
 	// 	// $selectedVariantPerSound.
 	// }
@@ -137,7 +143,7 @@
 
 				<div class="mt-16">
 					<a href="/">
-						<Button size="xl">Get started</Button>
+						<button class="btn btn-primary btn-xl">Get started</button>
 					</a>
 				</div>
 			</div>
@@ -234,7 +240,7 @@
 
 				<div class="mt-4">
 					<a href="/">
-						<Button>Get started</Button>
+						<button class="btn btn-primary">Get started</button>
 					</a>
 				</div>
 			</div>
@@ -274,6 +280,23 @@
 					</div>
 				{/each}
 
+				<div
+					class="flex items-center justify-between flex-col sm:flex-row sm:even:flex-row-reverse border-black border-2 rounded-lg py-12 px-8 md:px-16"
+				>
+					<div class="flex-1">
+						<i class={`fa-solid text-9xl fa-wand-magic-sparkles`} />
+					</div>
+
+					<div class="divider lg:divider-horizontal" />
+					<div class="flex-1 text-left">
+						<h2 class="text-2xl font-medium">20 themes</h2>
+						<p class="mt-2">
+							Light, dark, black, cyberpunk, whatever! Try yourself now:
+							<ThemeChanger />
+						</p>
+					</div>
+				</div>
+
 				<h3>
 					<span class="text-2xl font-bold">And more...</span>
 					<span class="text-lg"> (coming soon)</span>
@@ -281,10 +304,10 @@
 
 				<div class="mt-4 flex gap-4 justify-center">
 					<a href="/">
-						<Button>Get started</Button>
+						<button class="btn btn-primary">Get started</button>
 					</a>
-					<a href="" class="">
-						<Button outline>View our roadmap</Button>
+					<a href="https://noizer-one.canny.io/feature-requests" class="">
+						<button class="btn btn-primary btn-outline">View our roadmap</button>
 					</a>
 				</div>
 			</div>

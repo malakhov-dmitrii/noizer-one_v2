@@ -6,8 +6,7 @@
 	import { toast } from '@/stores/toasts';
 	import type { Playlist, User } from '@prisma/client';
 	import axios from 'axios';
-	import { Button, Kbd, Modal } from 'flowbite-svelte';
-	import * as _ from 'lodash';
+	import _ from 'lodash';
 
 	let userPlaylists = [
 		...playlists,

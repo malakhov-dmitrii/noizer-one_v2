@@ -2,7 +2,7 @@
 	import { auth } from '@/stores/auth';
 	import axios from 'axios';
 	import { signIn } from '@auth/sveltekit/client';
-	import { Button, Checkbox, Helper, Hr, Input, Label, Modal } from 'flowbite-svelte';
+	import { cx } from '@/lib/utils';
 	// import mixpanel from 'mixpanel-browser';
 
 	$: email = '';
@@ -38,52 +38,69 @@
 	}
 </script>
 
-<Modal bind:open={$auth.modal} size="xs" autoclose={false}>
-	<div class="flex flex-col space-y-6">
-		<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in to the platform</h3>
-		<Label class="space-y-2">
-			<span>Email</span>
-			<Input bind:value={email} type="text" name="email" placeholder="name@company.com" />
-		</Label>
-
-		{#if codeSentFor}
-			<Label class="space-y-2">
-				<span>Code</span>
-				<Input bind:value={code} type="text" name="code" placeholder="1234" />
-			</Label>
-		{/if}
-
-		{#if error}
-			<Helper color="red">Provided code is invalid. Please try again.</Helper>
-		{/if}
-
-		<Button disabled={!email || codeLoading} class="w-full" on:click={handleSubmit}>
-			{#if codeLoading}
-				<i class="fa fa-spinner fa-spin mr-2" />
-			{/if}
+<!-- Put this part before </body> tag -->
+<input bind:checked={$auth.modal} type="checkbox" id="auth-modal" class="modal-toggle" />
+<div class="modal">
+	<div class="modal-box">
+		<div class="flex flex-col space-y-6">
+			<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in to the platform</h3>
+			<label class="space-y-2 flex flex-col">
+				<p>Email</p>
+				<input
+					bind:value={email}
+					class="input input-bordered"
+					type="email"
+					name="email"
+					placeholder="name@company.com"
+				/>
+			</label>
 
 			{#if codeSentFor}
-				{#if codeSentFor === email}
-					Verify code
-				{:else}
-					Resend code
-				{/if}
-			{:else}
-				Send code
+				<label class="space-y-2 flex flex-col">
+					<p>Code</p>
+					<input
+						bind:value={email}
+						class="input input-bordered"
+						type="text"
+						name="code"
+						placeholder="1234"
+					/>
+				</label>
 			{/if}
-		</Button>
+
+			{#if error}
+				<p class="text-red-500 text-xs">Provided code is invalid. Please try again.</p>
+			{/if}
+
+			<button
+				class={cx('btn btn-primary', !email || codeLoading ? 'btn-disabled' : '')}
+				on:click={handleSubmit}
+			>
+				{#if codeLoading}
+					<i class="fa fa-spinner fa-spin mr-2" />
+				{/if}
+
+				{#if codeSentFor}
+					{#if codeSentFor === email}
+						Verify code
+					{:else}
+						Resend code
+					{/if}
+				{:else}
+					Send code
+				{/if}
+			</button>
+
+			<button
+				class="btn btn-ghost btn-sm"
+				on:click={() => {
+					$auth.modal = false;
+				}}
+			>
+				<i class="fa-solid fa-close mr-2" />
+
+				close
+			</button>
+		</div>
 	</div>
-
-	<Hr />
-
-	<!-- <Button class="w-full" size="xs" outline on:click={() => signIn('google')}>
-		<i class="text-lg fa-brands fa-google" />
-		<span class="ml-2">Sign in with Google</span>
-	</Button> -->
-
-	<!-- Sign In with GitHub -->
-	<!-- <Button class="w-full" size="xs" outline on:click={() => signIn('github')}>
-		<i class="text-lg fa-brands fa-github" />
-		<span class="ml-2">Sign in with GitHub</span>
-	</Button> -->
-</Modal>
+</div>
