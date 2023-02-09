@@ -17,6 +17,9 @@
 	import soundsOrder from '@/lib/soundsOrder';
 	// import mixpanel from 'mixpanel-browser';
 
+	import { tweened } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
+
 	const soundsEntries = _.entries(
 		_.pick(listSounds(sounds), 'Locations', 'Background', 'Tweak', 'Color noise', 'Others', 'ASMR')
 	);

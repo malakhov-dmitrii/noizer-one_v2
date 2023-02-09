@@ -2,7 +2,8 @@
 	import { page } from '$app/stores';
 	import SavePlaylist from '@/components/SavePlaylist.svelte';
 	import playlists from '@/lib/playlists';
-	import { playback, playRandom, stop } from '@/stores/playback';
+	import { auth } from '@/stores/auth';
+	import { playback, playRandom, stop, toggleTweenVolume } from '@/stores/playback';
 
 	$: savedVolume = 1;
 
@@ -34,6 +35,21 @@
 <button class="btn btn-xs lg:btn-md btn-ghost btn-primary" on:click={stop}>
 	<i class="fa-solid fa-stop mr-2" />
 	Stop</button
+>
+<button
+	class="btn btn-xs lg:btn-md btn-ghost btn-primary"
+	on:click={() => {
+		if (!$page.data.subscription) {
+			$auth.subscriptionModal = true;
+			return;
+		} else {
+			toggleTweenVolume();
+		}
+		console.log($page.data);
+	}}
+>
+	<i class="fa-solid fa-wave-sine mr-2" />
+	Tween volume</button
 >
 
 <SavePlaylist playlists={[...playlists, ...($page?.data?.playlists ?? [])]} />

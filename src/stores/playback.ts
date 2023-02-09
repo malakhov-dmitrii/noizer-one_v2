@@ -1,4 +1,4 @@
-import { get, writable } from 'svelte/store';
+import { get, writable, type Unsubscriber } from 'svelte/store';
 import { Howl, Howler } from 'howler';
 import sounds from '@/lib/sounds';
 import _ from 'lodash';
@@ -6,6 +6,8 @@ import type { PlaylistSound } from '@/lib/playlists';
 import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 import type { Playlist } from '@prisma/client';
 import { goto } from '$app/navigation';
+import { tweened, type Tweened } from 'svelte/motion';
+import { cubicInOut } from 'svelte/easing';
 // import mixpanel from 'mixpanel-browser';
 
 export const randomSlice = <T>(arr: T[], n: number): T[] =>
@@ -33,6 +35,8 @@ export interface FileItem {
 	free: boolean;
 }
 
+// const osc = new OscillatorNode();
+
 export type GroupedSounds = Record<string, Record<string, FileItem[]>>;
 
 export interface SoundVariant {
@@ -42,6 +46,7 @@ export interface SoundVariant {
 }
 
 export const toggleSound = (path: string, play?: boolean) => {
+	stopAllTweens();
 	// find item in sounds list
 	// if its playing, stop it
 	// if its not playing, load it and play it
@@ -93,7 +98,11 @@ export const toggleSound = (path: string, play?: boolean) => {
 				state[path] = {
 					loading: false,
 					howler: howl,
-					error: false
+					error: false,
+					volumeTween: tweened(50, {
+						duration: 10000,
+						easing: cubicInOut
+					})
 				};
 				return state;
 			});
@@ -107,7 +116,11 @@ export const toggleSound = (path: string, play?: boolean) => {
 				state[path] = {
 					loading: false,
 					howler: howl,
-					error: false
+					error: false,
+					volumeTween: tweened(50, {
+						duration: 10000,
+						easing: cubicInOut
+					})
 				};
 				return state;
 			});
@@ -151,15 +164,23 @@ export const toggleSound = (path: string, play?: boolean) => {
 const stopSound = (path: string) => {
 	const activeVariant = get(selectedVariantPerSound)[path];
 	activeVariant?.howler?.stop();
+	if (activeVariant?.volumeTweenUnsubscribe) {
+		activeVariant.volumeTweenUnsubscribe();
+		activeVariant.volumeTweenUnsubscribe = undefined;
+	}
 	selectedVariantPerSound.update((state) => {
 		state[path] = undefined;
 		delete state[path];
 		return state;
 	});
+	playback.set({ ...get(playback), tweenVolume: false });
 };
 
 export const stop = () => {
 	Howler.stop();
+
+	stopAllTweens();
+
 	selectedVariantPerSound.set({});
 	playback.set({ ...get(playback), playlist: null });
 	goto('/');
@@ -189,21 +210,25 @@ export const playRandom = () => {
 	// mixpanel.track('play_random');
 };
 
+interface SoundVariantItem {
+	howler?: Howl;
+	volumeTween?: Tweened<number>;
+	volumeTweenUnsubscribe?: Unsubscriber;
+	loading: boolean;
+	error: boolean;
+}
+
 export const selectedVariantPerSound = writable(
 	{} as Record<
 		string, // sound path
-		| {
-				howler?: Howl;
-				loading: boolean;
-				error: boolean;
-		  }
-		| undefined
+		SoundVariantItem | undefined
 	>
 );
 
 export const playback = writable({
 	muted: false,
 	volume: 1,
+	tweenVolume: false,
 	playlist: null as string | null
 });
 
@@ -214,4 +239,54 @@ export const playPlaylist = (playlist: Playlist) => {
 	goto('/?playlist=' + playlist.id);
 	// mixpanel.track('play_playlist', { playlist: playlist.id });
 	// mixpanel.people.increment('playlists_played');
+};
+
+const stopAllTweens = () => {
+	const playingSounds = Object.values(get(selectedVariantPerSound));
+	playingSounds.forEach((i) => {
+		if (i) {
+			console.log('stopping', i?.volumeTweenUnsubscribe);
+			i?.volumeTweenUnsubscribe?.();
+			i.volumeTweenUnsubscribe = undefined;
+		}
+	});
+
+	playback.set({ ...get(playback), tweenVolume: false });
+};
+
+const tweenVolume = (item: SoundVariantItem) => {
+	const targetValue = _.random(15, 100, false);
+	console.log('tweening', targetValue);
+	item.volumeTween?.set(targetValue);
+	const unsub = item.volumeTween?.subscribe((value) => {
+		console.log(value);
+
+		item?.howler?.volume(value / 100);
+		if (value === targetValue) {
+			unsub?.();
+			tweenVolume(item);
+		}
+	});
+	return unsub;
+};
+
+export const toggleTweenVolume = () => {
+	const state = get(playback);
+	playback.set({ ...state, tweenVolume: !state.tweenVolume });
+
+	const playingSounds = Object.values(get(selectedVariantPerSound)).filter((i) =>
+		i?.howler?.playing()
+	);
+	if (!state.tweenVolume) {
+		const unsubs = playingSounds.filter(Boolean).map((i) => tweenVolume(i!));
+		playingSounds.forEach((i, index) => {
+			i!.volumeTweenUnsubscribe = unsubs[index];
+		});
+	} else {
+		playingSounds.forEach((i) => {
+			i!.volumeTweenUnsubscribe?.();
+			i!.volumeTweenUnsubscribe = undefined;
+			i!.howler?.volume(0.5);
+		});
+	}
 };

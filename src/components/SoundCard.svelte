@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { selectedVariantPerSound, toggleSound, type FileItem } from '@/stores/playback';
+	import { playback, selectedVariantPerSound, toggleSound, type FileItem } from '@/stores/playback';
 	import SoundVariants from '@/components/SoundVariants.svelte';
 	import { cx } from '@/lib/utils';
 
@@ -10,6 +10,7 @@
 		variants.find((variant) => !!$selectedVariantPerSound[variant.path]) ?? variants[0];
 
 	$: playingVariant = $selectedVariantPerSound[selectedVariant.path];
+	$: tween = !!$playback.tweenVolume;
 	$: loading = !!playingVariant?.loading;
 	let volume = 0.5;
 
@@ -77,33 +78,22 @@
 			/>
 		</div>
 
-		<div class="mt-0" on:click={(e) => e.stopPropagation()}>
-			<input
-				type="range"
-				min="0"
-				max="1"
-				disabled={!playingVariant}
-				step="0.05"
-				bind:value={volume}
-				on:change={() => playingVariant?.howler?.volume(volume)}
-				class={cx(
-					'range range-xs range-primary',
-					!playingVariant ? 'filter grayscale opacity-50' : ''
-				)}
-			/>
-			<!-- <Range
-				class={`${
-					!playingVariant ? 'opacity-50 filter grayscale' : 'opacity-100'
-				} transition-opacity`}
-				size="sm"
-				
-				min={0}
-				max={1}
-				step={0.05}
-				disabled={!playingVariant}
-				bind:value={volume}
-				on:change={() => playingVariant?.howler?.volume(volume)}
-			/> -->
-		</div>
+		{#if !tween}
+			<div class="mt-0" on:click={(e) => e.stopPropagation()}>
+				<input
+					type="range"
+					min="0"
+					max="1"
+					disabled={!playingVariant}
+					step="0.05"
+					bind:value={volume}
+					on:change={() => playingVariant?.howler?.volume(volume)}
+					class={cx(
+						'range range-xs range-primary',
+						!playingVariant ? 'filter grayscale opacity-50' : ''
+					)}
+				/>
+			</div>
+		{/if}
 	</div>
 </div>
