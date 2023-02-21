@@ -8,7 +8,7 @@
 	import { onMount } from 'svelte';
 	import shortcuts from '@/lib/shortcuts';
 	import Mousetrap from 'mousetrap';
-	import playlists from '@/lib/playlists';
+	import initialPlaylists from '@/lib/playlists';
 	import { playPlaylist } from '@/stores/playback';
 	import Onboarding from '@/components/Onboarding.svelte';
 	import ShortcutsGuide from '@/components/ShortcutsGuide.svelte';
@@ -26,7 +26,7 @@
 
 	onMount(() => {
 		// mixpanel.init('8a8df07ff26685036e0f8571414fa894', { debug: true });
-		const list = [...playlists, ...$page.data.playlists];
+		const list = [...initialPlaylists, ...$page.data.playlists];
 
 		for (const item of shortcuts) {
 			Mousetrap.bind(`${item.keys.join('+')}`, item.callback);

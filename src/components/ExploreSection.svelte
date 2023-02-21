@@ -1,4 +1,4 @@
-<div class="xl:absolute w-full static xl:w-56 px-4 py-2 rounded-md -right-64 top-72 xl:block">
+<div class="xl:absolute w-full static xl:w-56 lg:px-4 py-2 rounded-md -right-64 top-72 xl:block">
 	<h3 class="font-mono text-lg">Explore</h3>
 	<div
 		class="flex space-x-2 items-center xl:items-start mt-4 w-full flex-row xl:flex-col flex-wrap xl:space-x-0 xl:space-y-2"

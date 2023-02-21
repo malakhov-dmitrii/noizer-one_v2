@@ -8,18 +8,23 @@
 // 	}[];
 // }
 
-import type { Playlist } from '@prisma/client';
+import type { Database } from '@/lib/database.types';
+// import type { Playlist } from '@prisma/client';
 
 export interface PlaylistSound {
 	path: string;
 	volume: number;
 }
 
-const playlists: Pick<Playlist, 'group' | 'id' | 'sounds' | 'title'>[] = [
+export type Playlist = Database['public']['Tables']['playlists']['Row'];
+
+const initialPlaylists: Playlist[] = [
 	{
 		group: 'Focus',
 		title: 'Cafe work',
-		id: 'initial1',
+		id: -1,
+		user_id: 'admin',
+		created_at: '2021-08-01T00:00:00.000Z',
 		sounds: [
 			{
 				path: '/audio/Locations/Cafe_fa-mug-saucer/Cafe (English speech)',
@@ -38,7 +43,9 @@ const playlists: Pick<Playlist, 'group' | 'id' | 'sounds' | 'title'>[] = [
 	{
 		group: 'Focus',
 		title: 'Cafe on the stormed beach',
-		id: 'initial12',
+		id: -2,
+		user_id: 'admin',
+		created_at: '2021-08-01T00:00:00.000Z',
 		sounds: [
 			{
 				path: '/audio/Locations/Cafe_fa-mug-saucer/Cafe (English speech)',
@@ -57,7 +64,9 @@ const playlists: Pick<Playlist, 'group' | 'id' | 'sounds' | 'title'>[] = [
 	{
 		group: 'Relax',
 		title: 'Forest campfire',
-		id: 'initial13',
+		id: -3,
+		created_at: '2021-08-01T00:00:00.000Z',
+		user_id: 'admin',
 		sounds: [
 			{
 				path: '/audio/Background/Bonfire_fa-fire/Bonfire 1',
@@ -71,4 +80,4 @@ const playlists: Pick<Playlist, 'group' | 'id' | 'sounds' | 'title'>[] = [
 	}
 ];
 
-export default playlists;
+export default initialPlaylists;

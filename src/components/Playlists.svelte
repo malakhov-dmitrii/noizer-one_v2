@@ -1,21 +1,23 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { navigating, page } from '$app/stores';
-	import playlists from '@/lib/playlists';
+	import { supabaseClient } from '@/lib/db';
+	import initialPlaylists from '@/lib/playlists';
 	import { playback, playPlaylist } from '@/stores/playback';
+	import { playlists } from '@/stores/playlists';
 	import { toast } from '@/stores/toasts';
 	import type { Playlist, User } from '@prisma/client';
 	import axios from 'axios';
 	import _ from 'lodash';
 
-	let userPlaylists = [
-		...playlists,
-		...(_.uniqBy($page.data.playlists ?? [], 'id') ?? [])
-	] as (Playlist & {
-		user: User;
-	})[];
+	// let userPlaylists = [
+	// 	...initialPlaylists,
+	// 	...(_.uniqBy($page.data.playlists ?? [], 'id') ?? [])
+	// ] as (Playlist & {
+	// 	user: User;
+	// })[];
 	let deletePlaylistModal = false;
-	let deletePlaylistId = '';
+	let deletePlaylistId = null as number | null;
 
 	/**
 	 * Handle delete playlist
@@ -38,12 +40,18 @@
 			deletePlaylistModal = true;
 			return;
 		}
-		const res = await axios.delete(`/api/playlists/${id}`);
-		if (res.status === 200) {
+
+		const res = await supabaseClient.from('playlists').delete().eq('id', id);
+		if (res.error) {
+			toast('Failed to delete playlist', 'error');
+			return;
+		} else {
 			toast('Playlist deleted', 'success');
-			userPlaylists = userPlaylists.filter((playlist) => playlist.id !== id);
+			playlists.update((list) => {
+				return list.filter((playlist) => playlist.id !== id);
+			});
 			deletePlaylistModal = false;
-			deletePlaylistId = '';
+			deletePlaylistId = null;
 		}
 	}
 </script>
@@ -58,9 +66,11 @@
 </div>
 
 <div class="flex gap-4 px-1 pt-2 pb-3 -mx-1 overflow-x-auto overflow-y-visible flex-nowrap">
-	{#each userPlaylists as playlist}
+	{#each $playlists as playlist}
 		{@const belongsToOtherUser =
-			!!playlist.user?.email && playlist.user?.email !== $page.data.session?.user?.email}
+			playlist.user_id !== 'admin' &&
+			!!playlist.user_id &&
+			playlist.user_id !== $page.data.session?.user.id}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
 			class="relative group"
@@ -75,22 +85,34 @@
 			}}
 		>
 			<div
-				class={`relative font-mono h-16 card-bordered glass rounded-md bg-base-200 bg-opacity-90 py-4 text-center px-4 min-w-[140px] cursor-pointer shadow-md leading-4 whitespace-nowrap card ${
+				class={`relative font-mono h-16 card-bordered glass rounded-md bg-base-200 bg-opacitynull0 py-4 text-center px-4 min-w-[140px] cursor-pointer shadow-md leading-4 whitespace-nowrap card ${
 					playlist.id === $playback.playlist
 						? 'outline outline-2 outline-offset-2 outline-primary'
 						: ''
 				} 
 				
-				${!!playlist.user?.email ? 'bg-base-200' : 'bg-base-100'}
+				${!!playlist.user_id ? 'bg-base-200' : 'bg-base-100'}
 				`}
 			>
 				{#if belongsToOtherUser}
 					<div
-						on:click|stopPropagation={() => {
-							axios.post(`/api/playlists/${playlist.id}/copy`).then(() => {
-								toast('Playlist copied to your library', 'success');
+						on:click|stopPropagation={async () => {
+							if (!$page.data.session?.user.id) {
+								toast('You must be logged in to save playlists', 'error');
+								return;
+							}
+
+							const { id, ...data } = playlist;
+							const res = await supabaseClient.from('playlists').insert({
+								...data,
+								user_id: $page.data.session?.user.id
 							});
-							console.log('save to library');
+							if (res.error) {
+								toast('Failed to save playlist', 'error');
+								return;
+							} else {
+								toast('Playlist copied to your library', 'success');
+							}
 						}}
 						class="absolute bottom-0 opacity-50 hover:opacity-100 transition w-full py-0.5 rounded-md -left-0 bg-primary text-primary-content text-xs transform px-2"
 					>
@@ -106,7 +128,7 @@
 				{/if}
 
 				<!-- DELETE PLAYLIST -->
-				{#if playlist.userId && !belongsToOtherUser}
+				{#if playlist.user_id !== 'admin' && playlist.user_id && !belongsToOtherUser}
 					<button
 						title="Delete playlist"
 						class="absolute top-0 right-0 p-2 opacity-20 hover:opacity-100 transition-opacity rounded-md "
@@ -116,7 +138,7 @@
 					</button>
 				{/if}
 				<!-- CREATE SHAREABLE LINK TO THE PLAYLIST -->
-				{#if playlist.userId}
+				{#if playlist.user_id !== 'admin' && playlist.user_id}
 					<button
 						title="Copy link to clipboard"
 						class="absolute top-0 left-0 p-2 text-accent opacity-40 hover:opacity-100 transition-opacity rounded-md "
@@ -169,7 +191,7 @@
 				for="delete-pokaylist-modal"
 				on:click={() => {
 					deletePlaylistModal = false;
-					deletePlaylistId = '';
+					deletePlaylistId = null;
 				}}
 				class="btn btn-ghost">Cancel</label
 			>

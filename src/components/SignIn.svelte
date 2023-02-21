@@ -3,6 +3,8 @@
 	import axios from 'axios';
 	import { signIn } from '@auth/sveltekit/client';
 	import { cx } from '@/lib/utils';
+	import { supabaseClient } from '@/lib/db';
+	import { toast } from '@/stores/toasts';
 	// import mixpanel from 'mixpanel-browser';
 
 	$: email = '';
@@ -12,29 +14,39 @@
 	let error = '';
 
 	async function handleSubmit() {
+		codeLoading = true;
+		await supabaseClient.auth.signInWithOtp({
+			email,
+			options: { emailRedirectTo: window.location.href }
+		});
+		codeSentFor = email;
+		codeLoading = false;
+
+		toast('Code sent to ' + email, 'success');
+
 		// Send request to /api/auth/send-code
 		// If code is sent, show input for code
 		// If code is correct, close modal
-		if (!codeSentFor || codeSentFor !== email) {
-			codeLoading = true;
-			await axios.post('/api/auth/send-code', { email });
+		// if (!codeSentFor || codeSentFor !== email) {
+		// 	codeLoading = true;
+		// 	await axios.post('/api/auth/send-code', { email });
 
-			codeLoading = false;
-			codeSentFor = email;
-		} else {
-			codeLoading = false;
-			const r = await signIn('credentials', { email, password: code, redirect: false });
-			const data = await r?.json();
-			if (data?.url?.includes('error')) {
-				codeSentFor = '';
-				error = data.url.split('error=')[1];
-			} else {
-				// mixpanel.identify(email);
-				// mixpanel.people.set({ email, last_login: new Date().toISOString() });
-				$auth.modal = false;
-				email = '';
-			}
-		}
+		// 	codeLoading = false;
+		// 	codeSentFor = email;
+		// } else {
+		// 	codeLoading = false;
+		// 	const r = await signIn('credentials', { email, password: code, redirect: false });
+		// 	const data = await r?.json();
+		// 	if (data?.url?.includes('error')) {
+		// 		codeSentFor = '';
+		// 		error = data.url.split('error=')[1];
+		// 	} else {
+		// 		// mixpanel.identify(email);
+		// 		// mixpanel.people.set({ email, last_login: new Date().toISOString() });
+		// 		$auth.modal = false;
+		// 		email = '';
+		// 	}
+		// }
 	}
 </script>
 
@@ -55,19 +67,6 @@
 				/>
 			</label>
 
-			{#if codeSentFor}
-				<label class="space-y-2 flex flex-col">
-					<p>Code</p>
-					<input
-						bind:value={code}
-						class="input input-bordered"
-						type="text"
-						name="code"
-						placeholder="1234"
-					/>
-				</label>
-			{/if}
-
 			{#if error}
 				<p class="text-red-500 text-xs">Provided code is invalid. Please try again.</p>
 			{/if}
@@ -80,15 +79,7 @@
 					<i class="fa fa-spinner fa-spin mr-2" />
 				{/if}
 
-				{#if codeSentFor}
-					{#if codeSentFor === email}
-						Verify code
-					{:else}
-						Resend code
-					{/if}
-				{:else}
-					Send code
-				{/if}
+				Send magic link
 			</button>
 
 			<button

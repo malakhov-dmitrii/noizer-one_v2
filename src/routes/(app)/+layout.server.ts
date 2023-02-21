@@ -1,25 +1,15 @@
 import { prisma } from '@/lib/prisma';
 import type { LayoutServerLoad } from './$types';
+import { getServerSession } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
 export const load: LayoutServerLoad = async (event) => {
-	const session = await event.locals.getSession();
+	const { session, supabaseClient } = await getSupabase(event);
+	const subsription = await supabaseClient
+		.from('subcriptions')
+		.select('*')
+		.eq('user_id', session?.user.id)
+		.single();
 
-	if (session?.user?.email) {
-		const subscription = await prisma.subscription.findUnique({
-			where: {
-				userEmail: session.user.email
-			}
-		});
-
-		// console.log('subscription', subscription);
-
-		return {
-			session,
-			subscription
-		};
-	}
-	return {
-		session: session,
-		subscription: null
-	};
+	return { session, subsription: subsription?.data };
 };

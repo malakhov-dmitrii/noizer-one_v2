@@ -1,0 +1,95 @@
+Arguments: 
+  /Users/dmitrijmalahov/Library/pnpm/nodejs/16.19.0/bin/node /usr/local/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js add @supabase/supabase-js
+
+PATH: 
+  /Users/dmitrijmalahov/.rbenv/shims:/Users/dmitrijmalahov/.amplify/bin:/Users/dmitrijmalahov/Library/pnpm:/usr/local/opt/mongodb-community@4.4/bin:/Users/dmitrijmalahov/opt/anaconda3/bin:/Users/dmitrijmalahov/.nvm/versions/node/v16.16.0/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dmitrijmalahov/flutter/bin:/usr/local/go/bin:/opt/X11/bin:/Library/Apple/usr/bin:/Applications/Postgres.app/Contents/Versions/latest/bin:/Users/dmitrijmalahov/Library/Android/sdk/platform-tools:/Users/dmitrijmalahov/.rbenv/shims:/Users/dmitrijmalahov/.amplify/bin:/Users/dmitrijmalahov/Library/pnpm:/usr/local/opt/mongodb-community@4.4/bin:/Users/dmitrijmalahov/opt/anaconda3/bin:/Users/dmitrijmalahov/.nvm/versions/node/v16.16.0/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/Users/dmitrijmalahov/.cargo/bin:/Users/dmitrijmalahov/.fig/bin:/Users/dmitrijmalahov/.local/bin:/home/dmitrijmalahov/flutter/bin/flutter:/Users/dmitrijmalahov/.local/share/fig/plugins/git-flow:/usr/local/bin:/home/dmitrijmalahov/flutter/bin/flutter:/Users/dmitrijmalahov/flutter/bin:/Users/dmitrijmalahov/.local/share/fig/plugins/git-flow
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.19.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/Users/dmitrijmalahov/Library/Caches/Yarn/v6/npm-estraverse-4.3.0-398ad3f3c5a24948be7725e83d11a7de28cdbd1d-integrity/node_modules/estraverse/.jshintrc' -> '/Users/dmitrijmalahov/code/samples/noizer-one_v2/node_modules/@typescript-eslint/utils/node_modules/estraverse/.jshintrc'
+
+npm manifest: 
+  {
+  	"name": "svelekit-sample",
+  	"version": "0.0.1",
+  	"scripts": {
+  		"dev": "vite dev",
+  		"build": "vite build",
+  		"preview": "vite preview",
+  		"test": "playwright test",
+  		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+  		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+  		"test:unit": "vitest",
+  		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+  		"format": "prettier --plugin-search-dir . --write ."
+  	},
+  	"devDependencies": {
+  		"@fontsource/fira-mono": "^4.5.10",
+  		"@neoconfetti/svelte": "^1.0.0",
+  		"@playwright/test": "^1.28.1",
+  		"@popperjs/core": "^2.11.6",
+  		"@sveltejs/adapter-auto": "^1.0.0",
+  		"@sveltejs/kit": "^1.5.0",
+  		"@tailwindcss/aspect-ratio": "^0.4.2",
+  		"@tailwindcss/forms": "^0.5.3",
+  		"@tailwindcss/line-clamp": "^0.4.2",
+  		"@tailwindcss/typography": "^0.5.8",
+  		"@types/cookie": "^0.5.1",
+  		"@types/howler": "^2.2.7",
+  		"@types/lodash": "^4.14.191",
+  		"@types/mixpanel-browser": "^2.38.0",
+  		"@types/mousetrap": "^1.6.11",
+  		"@types/nodemailer": "^6.4.7",
+  		"@typescript-eslint/eslint-plugin": "^5.45.0",
+  		"@typescript-eslint/parser": "^5.45.0",
+  		"autoprefixer": "^10.4.13",
+  		"classnames": "^2.3.2",
+  		"eslint": "^8.28.0",
+  		"eslint-config-prettier": "^8.5.0",
+  		"eslint-plugin-svelte3": "^4.0.0",
+  		"flowbite": "^1.6.0",
+  		"flowbite-svelte": "^0.29.9",
+  		"nodemailer": "^6.8.0",
+  		"postcss": "^8.4.20",
+  		"prettier": "^2.8.0",
+  		"prettier-plugin-svelte": "^2.8.1",
+  		"prisma": "^4.8.0",
+  		"svelte": "^3.54.0",
+  		"svelte-check": "^2.9.2",
+  		"tailwindcss": "^3.2.4",
+  		"tslib": "^2.4.1",
+  		"typescript": "^4.9.3",
+  		"vite": "^4.0.0",
+  		"vitest": "^0.25.3"
+  	},
+  	"type": "module",
+  	"dependencies": {
+  		"@auth/core": "^0.2.5",
+  		"@auth/sveltekit": "^0.1.12",
+  		"@next-auth/prisma-adapter": "^1.0.5",
+  		"@prisma/client": "^4.8.0",
+  		"@sendgrid/mail": "^7.7.0",
+  		"axios": "^1.2.2",
+  		"daisyui": "^2.46.1",
+  		"howler": "^2.2.3",
+  		"lodash": "^4.17.21",
+  		"mixpanel-browser": "^2.45.0",
+  		"mousetrap": "^1.6.5",
+  		"stripe": "^11.6.0",
+  		"theme-change": "^2.3.0"
+  	}
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

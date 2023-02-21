@@ -2,9 +2,8 @@ import { get, writable, type Unsubscriber } from 'svelte/store';
 import { Howl, Howler } from 'howler';
 import sounds from '@/lib/sounds';
 import _ from 'lodash';
-import type { PlaylistSound } from '@/lib/playlists';
+import type { Playlist, PlaylistSound } from '@/lib/playlists';
 import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
-import type { Playlist } from '@prisma/client';
 import { goto } from '$app/navigation';
 import { tweened, type Tweened } from 'svelte/motion';
 import { cubicInOut } from 'svelte/easing';
@@ -229,7 +228,7 @@ export const playback = writable({
 	muted: false,
 	volume: 1,
 	tweenVolume: false,
-	playlist: null as string | null
+	playlist: null as number | null
 });
 
 export const playPlaylist = (playlist: Playlist) => {

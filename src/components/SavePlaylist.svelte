@@ -1,24 +1,26 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { supabaseClient } from '@/lib/db';
 	import { cx } from '@/lib/utils';
 	import { auth } from '@/stores/auth';
 	import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 	import { selectedVariantPerSound } from '@/stores/playback';
+	import { playlists } from '@/stores/playlists';
 	import { toast } from '@/stores/toasts';
 	import type { Playlist } from '@prisma/client';
 	import axios from 'axios';
 
 	import _ from 'lodash';
+	import { createEventDispatcher } from 'svelte';
 	import { get } from 'svelte/store';
 
 	let savePlaylistModal = false;
 	let savePlaylistTitle = '';
 	let savePlaylistGroup = '';
 
-	export let playlists: Playlist[] = [];
-
 	async function handleSavePlaylist() {
+		if (!$page.data.session?.user.id) return;
 		const data = _.entries($selectedVariantPerSound).map(([key, value]) => {
 			return {
 				volume: value?.howler?.volume() ?? 1,
@@ -31,13 +33,17 @@
 			return;
 		}
 
-		const res = await axios.post('/api/playlists', {
-			title: savePlaylistTitle,
-			group: savePlaylistGroup,
-			data
-		});
+		const res = await supabaseClient
+			.from('playlists')
+			.insert({
+				title: savePlaylistTitle,
+				group: savePlaylistGroup,
+				sounds: data,
+				user_id: $page.data.session.user.id
+			})
+			.select();
 
-		if (res.status === 200) {
+		if (!res.error && res.data) {
 			toast('Playlist saved', 'success');
 
 			savePlaylistModal = false;
@@ -47,11 +53,11 @@
 			const onboarding = get(onboardingStep);
 			if (onboarding === 2) incrementOnboardingStep();
 
-			goto(`/?playlist=${res.data.playlist.id}`);
+			goto(`/?playlist=${res.data[0].id}`);
 
-			// playlists.update((list) => {
-			// 	return [...list, res.data];
-			// });
+			playlists.update((list) => {
+				return [...list, res.data[0]];
+			});
 		}
 	}
 </script>
@@ -109,7 +115,7 @@
 			<p class="text-xs">Its not necessary, but will help you to navigate your saved playlists</p>
 		{/if}
 
-		{#if !!savePlaylistGroup && _.uniqBy(playlists, 'group')
+		{#if !!savePlaylistGroup && _.uniqBy($playlists, 'group')
 				.map((i) => i.group?.toLowerCase())
 				.includes(savePlaylistGroup.toLowerCase())}
 			<p class="text-xs">Existing group will be used</p>

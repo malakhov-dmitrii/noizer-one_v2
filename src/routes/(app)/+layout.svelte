@@ -14,12 +14,28 @@
 	import { cx } from '@/lib/utils';
 	import { signOut } from '@auth/sveltekit/client';
 	import { auth } from '@/stores/auth';
+	import { supabaseClient } from '@/lib/db';
+	import { invalidate } from '$app/navigation';
+	import { playlists } from '@/stores/playlists';
+	import initialPlaylists from '@/lib/playlists';
 
 	// TODO: toggle animation
-	let animateBackground = true;
+	let animateBackground = false;
 
 	onMount(() => {
 		themeChange(false);
+
+		const {
+			data: { subscription }
+		} = supabaseClient.auth.onAuthStateChange(() => {
+			invalidate('supabase:auth');
+		});
+
+		playlists.set([...initialPlaylists, ...$page.data.playlists]);
+
+		return () => {
+			subscription.unsubscribe();
+		};
 	});
 </script>
 
@@ -30,8 +46,8 @@
 	/>
 {/if}
 
-<div class="navbar bg-transparent container m-auto">
-	<div class="navbar-start cursor-pointer">
+<div class="container py-2 flex items-center m-auto">
+	<div class="flex items-center flex-1 cursor-pointer">
 		<img src={img} class="h-10 mr-3 sm:h-14" alt="Logo" />
 		<div>
 			<h3 class="text-lg md:text-3xl leading-4 font-bold">Noizer One</h3>
@@ -40,11 +56,11 @@
 		<!-- <a class="btn btn-ghost normal-case text-xl">Noizer One</a> -->
 	</div>
 
-	<div class="navbar-center space-x-1 hidden lg:inline-flex">
+	<div class="items-center space-x-1 flex-2 hidden xl:inline-flex">
 		<PlaybackControls />
 	</div>
 
-	<div class="navbar-end">
+	<div class="flex items-center flex-1 justify-end">
 		<button
 			on:click={() => {
 				animateBackground = !animateBackground;
@@ -60,12 +76,14 @@
 				<label tabindex="0" class="flex gap-2 items-center cursor-pointer btn btn-ghost text-left">
 					<div class="avatar">
 						<div class="w-10 rounded-full">
-							<img src={$page.data.session?.user?.image} />
+							<img
+								src={`https://api.dicebear.com/5.x/croodles/svg?seed=${$page.data.session?.user?.email}&scale=150`}
+							/>
 						</div>
 					</div>
 					<div class="flex flex-col">
 						<span class="text hidden md:block">
-							{$page.data.session?.user?.name ?? 'User'}
+							{$page.data.session?.user?.email?.split('@')[0] ?? 'User'}
 						</span>
 						<span class="text-xs font-light text-gray-400">
 							{$page.data.subscription?.status === 'active' ? 'Premium' : 'Free'}
@@ -77,7 +95,7 @@
 					class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 				>
 					<li><a>Billing</a></li>
-					<li on:click={() => signOut()}><a>Logout</a></li>
+					<li on:click={() => supabaseClient.auth.signOut()}><a>Logout</a></li>
 				</ul>
 			</div>
 		{:else}
@@ -93,7 +111,7 @@
 	</div>
 </div>
 
-<div class="flex lg:hidden container flex-wrap mt-8 justify-center">
+<div class="flex container m-auto flex-wrap mt-8 xl:hidden justify-center">
 	<PlaybackControls />
 </div>
 
@@ -102,6 +120,8 @@
 </main>
 
 <SignIn />
-<SubscriptionModal />
+{#if $auth.subscriptionModal}
+	<SubscriptionModal />
+{/if}
 
 <Toasts />

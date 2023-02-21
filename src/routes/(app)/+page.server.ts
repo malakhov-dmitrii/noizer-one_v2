@@ -1,47 +1,23 @@
-import { prisma } from '$lib/prisma';
-import { fail, json } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import { supabaseClient } from '@/lib/db';
+import { getServerSession } from '@supabase/auth-helpers-sveltekit';
+import type { PageServerLoad } from './$types';
 
-export const load = (async ({ locals, request }) => {
-	const session = await locals.getSession();
-	const email = session?.user?.email;
+export const load = (async (event) => {
+	const playlist = new URL(event.request.url).searchParams.get('playlist');
+	const session = await getServerSession(event);
 
-	const playlist = new URL(request.url).searchParams.get('playlist');
+	const playlistsRes = await supabaseClient
+		.from('playlists')
+		.select()
+		.eq('user_id', session?.user.id);
 
-	if (email) {
-		const user = await prisma.user.findUnique({
-			where: {
-				email
-			}
-		});
+	const selectedPlaylist = await supabaseClient
+		.from('playlists')
+		.select('*')
+		.eq('id', playlist)
+		.single();
 
-		const playlists = await prisma.playlist.findMany({
-			where: {
-				userId: user?.id
-			},
-			include: {
-				user: true
-			}
-		});
+	const playlists = playlistsRes.data ?? [];
 
-		let selectedPlaylist = null;
-		if (playlist) {
-			selectedPlaylist = await prisma.playlist
-				.findUnique({
-					where: {
-						id: playlist
-					},
-					include: {
-						user: true
-					}
-				})
-				.catch(() => null);
-		}
-
-		return { playlists: selectedPlaylist ? [selectedPlaylist, ...playlists] : playlists };
-	}
-
-	return {
-		playlists: []
-	};
+	return { playlists: selectedPlaylist?.data ? [selectedPlaylist.data, ...playlists] : playlists };
 }) satisfies PageServerLoad;
