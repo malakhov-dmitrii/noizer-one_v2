@@ -1,4 +1,4 @@
-import { PRIVATE_SUPABASE_KEY, STRIPE_SECRET_KEY } from '$env/static/private';
+import { PRIVATE_SUPABASE_KEY, STRIPE_SECRET_KEY, STRIPE_SECRET_SIGNER } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '@/lib/database.types';
 import { prisma } from '@/lib/prisma';
@@ -11,7 +11,8 @@ const supabaseClient = createClient<Database>(PUBLIC_SUPABASE_URL, PRIVATE_SUPAB
 });
 
 // This is your Stripe CLI webhook secret for testing your endpoint locally.
-const endpointSecret = 'whsec_3a714e1d9a932939473c253261ae54aae868daeb340d403b8d1346ab3524a68d';
+const endpointSecret =
+	STRIPE_SECRET_SIGNER ?? 'whsec_3a714e1d9a932939473c253261ae54aae868daeb340d403b8d1346ab3524a68d';
 
 const jsonError = (message: string, status: number) =>
 	json({ error: message }, { status, headers: { 'content-type': 'application/json' } });
