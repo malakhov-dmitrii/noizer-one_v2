@@ -37,6 +37,10 @@
 			subscription.unsubscribe();
 		};
 	});
+
+	$: {
+		console.log($page.data);
+	}
 </script>
 
 {#if animateBackground}

@@ -25,12 +25,21 @@ const subscriptionCreated = async (subscription: Stripe.Subscription) => {
 	if (!customer.email) return jsonError('Customer has no email', 400);
 
 	const user = await supabaseClient.from('profiles').select().eq('email', customer.email).single();
-	// const user = await prisma.user.findUnique({ where: { email: customer.email } });
-	if (!user.data?.email) return jsonError('User not found', 400);
+
+	let newUser;
+	if (!user.data?.email) {
+		newUser = await supabaseClient.auth.admin.createUser({
+			email: customer.email
+		});
+	}
+
+	const userData = user.data ?? newUser?.data.user;
+
+	if (!userData) return jsonError('User not found', 400);
 
 	await supabaseClient.from('subscriptions').insert({
-		user_email: user.data.email,
-		user_id: user.data.id,
+		user_email: userData.email ?? customer.email,
+		user_id: userData.id,
 		stripe_subsription_id: subscription.id,
 		status: subscription.status,
 		customer_id: subscription.customer as string,
@@ -47,24 +56,22 @@ const subscriptionDeleted = async (subscription: Stripe.Subscription) => {
 };
 
 const subscriptionUpdated = async (subscription: Stripe.Subscription) => {
-	const sub = await prisma.subscription.findUnique({
-		where: {
-			stripeSubscriptionId: subscription.id
-		}
-	});
+	const sub = await supabaseClient
+		.from('subscriptions')
+		.select()
+		.eq('stripe_subscription_id', subscription.id)
+		.single();
 
 	if (!sub) return subscriptionCreated(subscription);
 
-	await prisma.subscription.update({
-		data: {
-			current_period_end: new Date(subscription.current_period_end * 1000),
-			current_period_start: new Date(subscription.current_period_start * 1000),
+	await supabaseClient
+		.from('subscriptions')
+		.update({
+			current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+			current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
 			status: subscription.status
-		},
-		where: {
-			stripeSubscriptionId: subscription.id
-		}
-	});
+		})
+		.eq('stripe_subscription_id', subscription.id);
 
 	return json({ status: 'success' });
 };
