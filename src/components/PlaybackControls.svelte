@@ -40,12 +40,7 @@
 <button
 	class="btn btn-xs lg:btn-md btn-ghost btn-primary"
 	on:click={() => {
-		if (!$page.data.subscription) {
-			$auth.subscriptionModal = true;
-			return;
-		} else {
-			toggleTweenVolume();
-		}
+		toggleTweenVolume();
 	}}
 >
 	<i class="fa-solid fa-wave-sine mr-2" />

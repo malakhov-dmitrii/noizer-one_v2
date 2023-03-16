@@ -77,7 +77,10 @@
 			<div class="w-1 h-1 bg-neutral-focus rounded-full" />
 		{/each}
 	</div>
+	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<div class="dropdown">
+		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label
 			tabindex="0"
 			class="w-full cursor-pointer transition-opacity opacity-0 group-hover:opacity-100"
@@ -88,6 +91,7 @@
 				<p>{variants.length - 1} more variants</p>
 			</div>
 		</label>
+		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<ul
 			tabindex="0"
 			class="dropdown-content max-h-40 overflow-auto menu p-2 shadow bg-base-100 w-full rounded-box max-w-52 flex flex-col flex-nowrap"
@@ -95,16 +99,14 @@
 			{#each variants as variant}
 				{#if variant.path !== selectedVariantPath}
 					<li>
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y-missing-attribute -->
 						<a
 							class="flex items-center gap-2 px-2 py-1.5 text-xs  transition-all rounded-md "
 							on:click|stopPropagation={() => {
-								if (subscriptionActive) {
-									toggleSound(variant.path, true);
-									const onboarding = get(onboardingStep);
-									if (onboarding === 3) incrementOnboardingStep();
-								} else {
-									$auth.subscriptionModal = true;
-								}
+								toggleSound(variant.path, true);
+								const onboarding = get(onboardingStep);
+								if (onboarding === 3) incrementOnboardingStep();
 							}}
 						>
 							{#if !variant.free}

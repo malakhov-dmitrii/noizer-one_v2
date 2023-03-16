@@ -6,7 +6,6 @@
 	import _ from 'lodash';
 	import SignIn from '@/components/SignIn.svelte';
 	import Toasts from '@/components/Toasts/Toasts.svelte';
-	import SubscriptionModal from '@/components/SubscriptionModal.svelte';
 	import { onMount } from 'svelte';
 	import { themeChange } from 'theme-change';
 	import ThemeChanger from '@/components/ThemeChanger.svelte';
@@ -124,8 +123,5 @@
 </main>
 
 <SignIn />
-{#if $auth.subscriptionModal}
-	<SubscriptionModal />
-{/if}
 
 <Toasts />

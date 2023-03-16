@@ -79,15 +79,7 @@
 	onMount(() => {
 		themeChange(false);
 	});
-
-	// $:{
-	// 	// $selectedVariantPerSound.
-	// }
 </script>
-
-<svelte:head>
-	<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
-</svelte:head>
 
 <div class="p-10">
 	<h3 class="text-3xl font-bold">Noizer One</h3>
@@ -317,14 +309,6 @@
 
 <div class="p-2">
 	<div class="divider" />
-</div>
-
-<div>
-	<h2 class="text-center text-3xl font-bold mb-4">Pricing</h2>
-	<stripe-pricing-table
-		pricing-table-id="prctbl_1MMMrFHM4ixiixxgpvO2HeTu"
-		publishable-key="pk_test_51MKGVMHM4ixiixxgJOKAgByR2KNZVBCdhECdPrlS69jouagsS8AKyTGnivSGppFSTprb6gBoT8ONyYDbxupfhwAX000h8i0LD0"
-	/>
 </div>
 
 <div class="p-2">
