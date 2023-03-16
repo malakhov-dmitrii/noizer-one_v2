@@ -1,38 +1,64 @@
-# create-svelte
+# Noizer One
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+![image](https://raw.githubusercontent.com/malakhov-dmitrii/noizer-one_v2/main/static/img/screenshot.jpg)
 
-## Creating a project
+Noizer One is an open-source web and mobile application that provides a collection of 50+ different background sounds, carefully categorized into various groups, to help users create the perfect ambience for work, study, relaxation, and more.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
+
+- 56 different sounds across 6 categories
+- 250+ total sound variations
+- Smart Shuffle
+- Volume tween (volume of each playing sounds change over time to make more dynamic experience)
+- Save as preset (and share them)
+- Keyboard shortcuts
+- 20+ themes
+- Animated backgrounds unique for theme
+- [YouTube Channel](https://www.youtube.com/@noizerone)
+
+### Coming soon
+
+Feel free to contribute to the project with features below:
+
+- Playback speed adjustments
+- Spacial sounds
+- Spotify Playlist
+- AI Generated video-backgroud for the mix
+
+## Demo
+
+[Demo](https://www.noizer.one?ref=github)
+
+## Tech Stack
+
+**Client:** SvelteKit, TypeScript, TailwindCSS, DaisyUI
+
+**Server:** Supabase
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## Deployment
+
+Deploy with Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmalakhov-dmitrii%2Fnoizer-one_v2&env=PUBLIC_SUPABASE_URL,PUBLIC_SUPABASE_ANON_KEY,PRIVATE_SUPABASE_KEY&project-name=noizer-one-clone&repository-name=noizer-one-clone&demo-title=Noizer%20One&demo-url=https%3A%2F%2Fwww.noizer.one%3Fref%3Dvercel)
+
+### Local setup
+
+To deploy this project run
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+  pnpm i
+  // yarn
+  // npm i
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+  pnpm dev
+  // yarn dev
+  // npm run dev
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Then open [127.0.0.1:5173/](127.0.0.1:5173/) to get started
