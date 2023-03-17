@@ -61,6 +61,7 @@
 		"@sendgrid/mail": "^7.7.0",
 		"@supabase/auth-helpers-sveltekit": "^0.8.7",
 		"@supabase/supabase-js": "^2.8.0",
+		"@vercel/analytics": "^0.1.11",
 		"axios": "^1.2.2",
 		"daisyui": "^2.46.1",
 		"howler": "^2.2.3",

@@ -26,6 +26,7 @@ specifiers:
   '@types/nodemailer': ^6.4.7
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
+  '@vercel/analytics': ^0.1.11
   autoprefixer: ^10.4.13
   axios: ^1.2.2
   classnames: ^2.3.2
@@ -62,6 +63,7 @@ dependencies:
   '@sendgrid/mail': 7.7.0
   '@supabase/auth-helpers-sveltekit': 0.8.7_h4fmw4dd6b3xkulak4k3c7hqqu
   '@supabase/supabase-js': 2.8.0
+  '@vercel/analytics': 0.1.11
   axios: 1.2.2
   daisyui: 2.46.1_r4gnkvssmvyxmi2wmat5xbx36a
   howler: 2.2.3
@@ -825,6 +827,12 @@ packages:
       '@typescript-eslint/types': 5.48.0
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@vercel/analytics/0.1.11:
+    resolution: {integrity: sha512-mj5CPR02y0BRs1tN3oZcBNAX9a8NxsIUl9vElDPcqxnMfP0RbRc9fI9Ud7+QDg/1Izvt5uMumsr+6YsmVHcyuw==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.8.1:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
