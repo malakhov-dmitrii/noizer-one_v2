@@ -78,11 +78,15 @@
 		</button>
 		<ThemeChanger />
 		{#if $page.data.session?.user}
+			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<div class="dropdown dropdown-end">
+				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+				<!-- svelte-ignore a11y-label-has-associated-control -->
 				<label tabindex="0" class="flex gap-2 items-center cursor-pointer btn btn-ghost text-left">
 					<div class="avatar">
 						<div class="w-10 rounded-full">
 							<img
+								alt="Avatar"
 								src={`https://api.dicebear.com/5.x/croodles/svg?seed=${$page.data.session?.user?.email}&scale=150`}
 							/>
 						</div>
@@ -97,6 +101,7 @@
 					tabindex="0"
 					class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 				>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<li on:click={() => supabaseClient.auth.signOut()}><a>Logout</a></li>
 				</ul>
 			</div>

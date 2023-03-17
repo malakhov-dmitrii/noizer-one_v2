@@ -55,7 +55,7 @@
 <div class="modal">
 	<div class="modal-box">
 		<div class="flex flex-col space-y-6">
-			<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">Sign in to the platform</h3>
+			<h3 class="text-xl font-medium text-neutral-content p-0">Sign in to the platform</h3>
 			<label class="space-y-2 flex flex-col">
 				<p>Email</p>
 				<input
