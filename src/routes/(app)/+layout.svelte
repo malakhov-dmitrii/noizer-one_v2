@@ -88,16 +88,12 @@
 						<span class="text hidden md:block">
 							{$page.data.session?.user?.email?.split('@')[0] ?? 'User'}
 						</span>
-						<span class="text-xs font-light text-gray-400">
-							{$page.data.subscription?.status === 'active' ? 'Premium' : 'Free'}
-						</span>
 					</div>
 				</label>
 				<ul
 					tabindex="0"
 					class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 				>
-					<li><a>Billing</a></li>
 					<li on:click={() => supabaseClient.auth.signOut()}><a>Logout</a></li>
 				</ul>
 			</div>
