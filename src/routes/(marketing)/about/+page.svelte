@@ -6,6 +6,8 @@
 	import { onMount } from 'svelte';
 	import { fade, slide } from 'svelte/transition';
 	import { themeChange } from 'theme-change';
+	import * as amplitude from '@amplitude/analytics-browser';
+	import { PUBLIC_AMPLITUDE_API_KEY } from '$env/static/public';
 
 	$: tried = Object.keys($selectedVariantPerSound).length > 0;
 
@@ -77,6 +79,8 @@
 	];
 
 	onMount(() => {
+		amplitude.init(PUBLIC_AMPLITUDE_API_KEY);
+
 		themeChange(false);
 	});
 </script>

@@ -7,6 +7,7 @@ import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 import { goto } from '$app/navigation';
 import { tweened, type Tweened } from 'svelte/motion';
 import { cubicInOut } from 'svelte/easing';
+import * as amplitude from '@amplitude/analytics-browser';
 // import mixpanel from 'mixpanel-browser';
 
 export const randomSlice = <T>(arr: T[], n: number): T[] =>
@@ -151,6 +152,13 @@ export const toggleSound = (path: string, play?: boolean) => {
 	}
 
 	const sound = sounds.find((i) => i.path === path);
+
+	amplitude.track('toggle_sound', {
+		sound: sound?.sound,
+		variant: sound?.variantName,
+		group: sound?.group,
+		free: sound?.free
+	});
 	// mixpanel.track('toggle_sound', {
 	// 	sound: sound?.sound,
 	// 	variant: sound?.variantName,
@@ -182,6 +190,8 @@ export const stop = () => {
 
 	selectedVariantPerSound.set({});
 	playback.set({ ...get(playback), playlist: null });
+	amplitude.track('stop');
+
 	goto('/');
 
 	// mixpanel.track('stop');
@@ -206,7 +216,7 @@ export const playRandom = () => {
 		toggleSound(path);
 	}
 
-	// mixpanel.track('play_random');
+	amplitude.track('play_random');
 };
 
 interface SoundVariantItem {
@@ -236,8 +246,7 @@ export const playPlaylist = (playlist: Playlist) => {
 	for (const item of playlist.sounds as unknown as PlaylistSound[]) toggleSound(item.path);
 	playback.set({ ...get(playback), playlist: playlist.id });
 	goto('/?playlist=' + playlist.id);
-	// mixpanel.track('play_playlist', { playlist: playlist.id });
-	// mixpanel.people.increment('playlists_played');
+	amplitude.track('play_playlist', { playlist: playlist.id, playlist_name: playlist.title });
 };
 
 const stopAllTweens = () => {
@@ -288,4 +297,6 @@ export const toggleTweenVolume = () => {
 			i!.howler?.volume(0.5);
 		});
 	}
+
+	amplitude.track('toggle_tween_volume', { tween_volume: !state.tweenVolume });
 };

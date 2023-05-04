@@ -40,18 +40,30 @@ export interface Database {
           created_at: string | null
           email: string | null
           id: string
+          stripe_current_period_end: string | null
+          stripe_customer_id: string | null
+          stripe_price_id: string | null
+          stripe_subscription_id: string | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
           email?: string | null
           id: string
+          stripe_current_period_end?: string | null
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
           user_id: string
         }
         Update: {
           created_at?: string | null
           email?: string | null
           id?: string
+          stripe_current_period_end?: string | null
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
           user_id?: string
         }
       }

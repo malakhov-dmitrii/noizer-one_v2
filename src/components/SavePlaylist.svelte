@@ -14,6 +14,7 @@
 	import _ from 'lodash';
 	import { createEventDispatcher } from 'svelte';
 	import { get } from 'svelte/store';
+	import * as amplitude from '@amplitude/analytics-browser';
 
 	let savePlaylistModal = false;
 	let savePlaylistTitle = '';
@@ -32,6 +33,12 @@
 			toast('Please enter a title', 'error');
 			return;
 		}
+
+		amplitude.track('save_playlist', {
+			title: savePlaylistTitle,
+			group: savePlaylistGroup,
+			sounds: data
+		});
 
 		const res = await supabaseClient
 			.from('playlists')

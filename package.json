@@ -54,6 +54,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@amplitude/analytics-browser": "^1.10.3",
 		"@auth/core": "^0.2.5",
 		"@auth/sveltekit": "^0.1.12",
 		"@next-auth/prisma-adapter": "^1.0.5",

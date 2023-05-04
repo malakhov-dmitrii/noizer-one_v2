@@ -19,12 +19,18 @@
 	import initialPlaylists from '@/lib/playlists';
 	import { dev } from '$app/environment';
 	import { inject } from '@vercel/analytics';
+	import * as amplitude from '@amplitude/analytics-browser';
+	import { PUBLIC_AMPLITUDE_API_KEY } from '$env/static/public';
 
 	inject({ mode: dev ? 'development' : 'production' });
 	// TODO: toggle animation
 	let animateBackground = false;
 
 	onMount(() => {
+		console.log($page.data.session?.user);
+
+		amplitude.init(PUBLIC_AMPLITUDE_API_KEY);
+
 		themeChange(false);
 
 		const {
@@ -39,6 +45,16 @@
 			subscription.unsubscribe();
 		};
 	});
+
+	$: {
+		if ($page.data.session?.user.email) {
+			const identify = new amplitude.Identify();
+			identify.set('email', $page.data.session?.user.email);
+			identify.set('name', $page.data.session?.user.email?.split('@')[0] ?? 'User');
+			identify.set('userId', $page.data.session?.user.id);
+			amplitude.identify(identify);
+		}
+	}
 
 	$: {
 		console.log($page.data);

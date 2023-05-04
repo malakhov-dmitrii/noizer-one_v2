@@ -24,3 +24,16 @@ declare namespace App {
 	// interface PageData {}
 	// interface Platform {}
 }
+
+export type SubscriptionPlan = {
+	name: string;
+	description: string;
+	stripePriceId: string;
+};
+
+export type UserSubscriptionPlan = SubscriptionPlan &
+	Pick<Profile, 'stripe_customer_id' | 'stripe_subscription_id'> & {
+		stripe_current_period_end: number;
+		isPro: boolean;
+	};
+export type Profile = Database['public']['Tables']['profiles']['Row'];

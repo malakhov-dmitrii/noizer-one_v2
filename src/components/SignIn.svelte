@@ -6,6 +6,7 @@
 	import { supabaseClient } from '@/lib/db';
 	import { toast } from '@/stores/toasts';
 	// import mixpanel from 'mixpanel-browser';
+	import * as amplitude from '@amplitude/analytics-browser';
 
 	$: email = '';
 	let code = '';
@@ -15,10 +16,14 @@
 
 	async function handleSubmit() {
 		codeLoading = true;
+
 		await supabaseClient.auth.signInWithOtp({
 			email,
 			options: { emailRedirectTo: window.location.href }
 		});
+
+		amplitude.track('signin_code_send', { email });
+
 		codeSentFor = email;
 		codeLoading = false;
 
@@ -55,7 +60,7 @@
 <div class="modal">
 	<div class="modal-box">
 		<div class="flex flex-col space-y-6">
-			<h3 class="text-xl font-medium text-neutral-content p-0">Sign in to the platform</h3>
+			<h3 class="text-xl font-medium  p-0">Sign in to the platform</h3>
 			<label class="space-y-2 flex flex-col">
 				<p>Email</p>
 				<input

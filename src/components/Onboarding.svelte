@@ -1,6 +1,7 @@
 <script>
 	import { onboardingStep } from '@/stores/onboarding';
 	import { onMount } from 'svelte';
+	import * as amplitude from '@amplitude/analytics-browser';
 
 	let loaded = false;
 	let hide = true;
@@ -20,6 +21,7 @@
 			<button
 				class="btn btn-xs btn-primary btn-outline"
 				on:click={() => {
+					amplitude.track('onboarding_dismiss');
 					onboardingStep.set(4);
 					localStorage.setItem('onboarding-guide', 'hidden');
 					hide = true;
