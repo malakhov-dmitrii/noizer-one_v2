@@ -7,6 +7,10 @@
 		{
 			"source": "/stats/api/event",
 			"destination": "https://plausible.io/api/event"
+		},
+		{
+			"source": "/v1/vitals",
+			"destination": "https://vitals.vercel-analytics.com/v1/vitals"
 		}
 	]
 }

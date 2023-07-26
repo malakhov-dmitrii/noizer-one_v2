@@ -18,15 +18,18 @@
 	import { playlists } from '@/stores/playlists';
 	import initialPlaylists from '@/lib/playlists';
 	import { dev } from '$app/environment';
-	import { inject } from '@vercel/analytics';
 	import * as amplitude from '@amplitude/analytics-browser';
 	import { PUBLIC_AMPLITUDE_API_KEY } from '$env/static/public';
 
-	inject({ mode: dev ? 'development' : 'production' });
 	// TODO: toggle animation
 	let animateBackground = false;
 
-	onMount(() => {
+	onMount(async () => {
+		if (!dev) {
+			const Anal = (await import('@vercel/analytics')).default;
+			Anal.inject({ mode: 'production' });
+		}
+
 		console.log($page.data.session?.user);
 
 		amplitude.init(PUBLIC_AMPLITUDE_API_KEY);
@@ -82,7 +85,9 @@
 		<PlaybackControls />
 	</div>
 
-	<div class="flex items-center flex-1 justify-end">
+	<div class="flex items-center flex-1 space-x-2 justify-end">
+		<ThemeChanger />
+
 		<button
 			on:click={() => {
 				animateBackground = !animateBackground;
@@ -92,7 +97,6 @@
 		>
 			<i class="fa-solid fa-wand-magic-sparkles" />
 		</button>
-		<ThemeChanger />
 		{#if $page.data.session?.user}
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<div class="dropdown dropdown-end">
@@ -134,7 +138,7 @@
 	</div>
 </div>
 
-<div class="flex container m-auto flex-wrap mt-8 xl:hidden justify-center">
+<div class="flex container space-x-1 m-auto flex-wrap mt-8 xl:hidden justify-center">
 	<PlaybackControls />
 </div>
 

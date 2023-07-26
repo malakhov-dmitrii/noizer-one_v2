@@ -21,13 +21,21 @@
 		{ title: '🧚‍♀️  fantasy', theme: 'fantasy' },
 		{ title: '🏴  black', theme: 'black' },
 		{ title: '💎  luxury', theme: 'luxury' },
-		{ title: '🧛‍♂️  dracula', theme: 'dracula' }
+		{ title: '🧛‍♂️  dracula', theme: 'dracula' },
+		{ title: 'cmyk', theme: 'cmyk' },
+		{ title: 'autumn', theme: 'autumn' },
+		{ title: 'business', theme: 'business' },
+		{ title: 'acid', theme: 'acid' },
+		{ title: 'lemonade', theme: 'lemonade' },
+		{ title: 'night', theme: 'night' },
+		{ title: 'coffee', theme: 'coffee' },
+		{ title: 'winter', theme: 'winter' }
 	];
 </script>
 
 <div class="dropdown dropdown-end">
-	<div tabIndex={0} class="m-1 capitalize btn btn-ghost bg-opacity-80">
-		<i class="fa-solid text-xl fa-palette" />
+	<div tabIndex={0} class="capitalize btn btn-outline py-0 px-2 bg-opacity-80">
+		<i class="fa-solid fa-palette" />
 		<!-- {!compact && <span class="hidden ml-2 md:block">Change theme</span>} -->
 	</div>
 	<ul

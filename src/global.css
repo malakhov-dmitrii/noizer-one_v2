@@ -45,3 +45,9 @@ html {
         background-position: 0% 50%;
     }
 }
+
+.btn {
+    height: unset;
+    min-height: unset;
+    @apply py-3 px-4
+}
