@@ -20,6 +20,7 @@
 	import { dev } from '$app/environment';
 	import * as amplitude from '@amplitude/analytics-browser';
 	import { PUBLIC_AMPLITUDE_API_KEY } from '$env/static/public';
+	import SubscriptionModal from '@/components/SubscriptionModal.svelte';
 
 	// TODO: toggle animation
 	let animateBackground = false;
@@ -58,6 +59,10 @@
 			amplitude.identify(identify);
 		}
 	}
+
+	const billingPortalHref = dev
+		? 'https://billing.stripe.com/p/login/test_00g8zl8se6j2fMQ144'
+		: 'https://billing.stripe.com/p/login/cN201qfwNdLwaeAfYY';
 
 	$: {
 		console.log($page.data);
@@ -115,14 +120,30 @@
 						<span class="text hidden md:block">
 							{$page.data.session?.user?.email?.split('@')[0] ?? 'User'}
 						</span>
+
+						<span class="text-xs font-light text-gray-400">
+							{$page.data.subscription?.status === 'active' ? 'Premium' : 'Free'}
+						</span>
 					</div>
 				</label>
 				<ul
 					tabindex="0"
 					class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 				>
+					<li>
+						<a href={billingPortalHref}>
+							<i class="fa-solid fa-credit-card" />
+							<span>Billing</span>
+						</a>
+					</li>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<li on:click={() => supabaseClient.auth.signOut()}><a>Logout</a></li>
+					<li on:click={() => supabaseClient.auth.signOut()}>
+						<!-- svelte-ignore a11y-missing-attribute -->
+						<a>
+							<i class="fa-solid fa-sign-out" />
+							<span>Sign Out</span>
+						</a>
+					</li>
 				</ul>
 			</div>
 		{:else}
@@ -147,5 +168,9 @@
 </main>
 
 <SignIn />
+
+{#if $auth.subscriptionModal}
+	<SubscriptionModal />
+{/if}
 
 <Toasts />

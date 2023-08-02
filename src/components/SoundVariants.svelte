@@ -52,11 +52,17 @@
 							on:click|stopPropagation={() => {
 								amplitude.track('variant_change', {
 									variant: variant.variantName,
-									sound: variant.path
+									sound: variant.path,
+									subscriptionActive
 								});
-								toggleSound(variant.path, true);
-								const onboarding = get(onboardingStep);
-								if (onboarding === 3) incrementOnboardingStep();
+
+								if (subscriptionActive) {
+									toggleSound(variant.path, true);
+									const onboarding = get(onboardingStep);
+									if (onboarding === 3) incrementOnboardingStep();
+								} else {
+									$auth.subscriptionModal = true;
+								}
 							}}
 						>
 							{#if !variant.free}

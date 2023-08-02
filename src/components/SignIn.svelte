@@ -28,30 +28,6 @@
 		codeLoading = false;
 
 		toast('Code sent to ' + email, 'success');
-
-		// Send request to /api/auth/send-code
-		// If code is sent, show input for code
-		// If code is correct, close modal
-		// if (!codeSentFor || codeSentFor !== email) {
-		// 	codeLoading = true;
-		// 	await axios.post('/api/auth/send-code', { email });
-
-		// 	codeLoading = false;
-		// 	codeSentFor = email;
-		// } else {
-		// 	codeLoading = false;
-		// 	const r = await signIn('credentials', { email, password: code, redirect: false });
-		// 	const data = await r?.json();
-		// 	if (data?.url?.includes('error')) {
-		// 		codeSentFor = '';
-		// 		error = data.url.split('error=')[1];
-		// 	} else {
-		// 		// mixpanel.identify(email);
-		// 		// mixpanel.people.set({ email, last_login: new Date().toISOString() });
-		// 		$auth.modal = false;
-		// 		email = '';
-		// 	}
-		// }
 	}
 </script>
 
