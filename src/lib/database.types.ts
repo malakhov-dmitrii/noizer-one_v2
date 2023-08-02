@@ -3,7 +3,7 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
 export interface Database {
@@ -34,6 +34,14 @@ export interface Database {
           title?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "playlists_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       profiles: {
         Row: {
@@ -66,6 +74,14 @@ export interface Database {
           stripe_subscription_id?: string | null
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       subscriptions: {
         Row: {
@@ -76,7 +92,7 @@ export interface Database {
           id: number
           metadata: Json | null
           status: string | null
-          stripe_subsription_id: string | null
+          stripe_subscription_id: string | null
           updated_at: string | null
           user_email: string
           user_id: string
@@ -89,7 +105,7 @@ export interface Database {
           id?: number
           metadata?: Json | null
           status?: string | null
-          stripe_subsription_id?: string | null
+          stripe_subscription_id?: string | null
           updated_at?: string | null
           user_email: string
           user_id: string
@@ -102,11 +118,19 @@ export interface Database {
           id?: number
           metadata?: Json | null
           status?: string | null
-          stripe_subsription_id?: string | null
+          stripe_subscription_id?: string | null
           updated_at?: string | null
           user_email?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {

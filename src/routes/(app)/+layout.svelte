@@ -64,9 +64,9 @@
 		? 'https://billing.stripe.com/p/login/test_00g8zl8se6j2fMQ144'
 		: 'https://billing.stripe.com/p/login/cN201qfwNdLwaeAfYY';
 
-	$: {
-		console.log($page.data);
-	}
+	// $: {
+	// 	console.log($page.data);
+	// }
 </script>
 
 {#if animateBackground}

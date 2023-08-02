@@ -20,11 +20,13 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2022-11-15', typescr
 
 const subscriptionCreated = async (subscription: Stripe.Subscription) => {
 	const customer = await stripe.customers.retrieve(subscription.customer as string);
+	console.log('🚀 ~ file: +server.ts:23 ~ subscriptionCreated ~ customer:', customer);
 
 	if (customer.deleted) return jsonError('Customer is deleted', 400);
 	if (!customer.email) return jsonError('Customer has no email', 400);
 
 	const user = await supabaseClient.from('profiles').select().eq('email', customer.email).single();
+	console.log('🚀 ~ file: +server.ts:29 ~ subscriptionCreated ~ user:', user);
 
 	let newUser;
 	if (!user.data?.email) {
@@ -37,15 +39,20 @@ const subscriptionCreated = async (subscription: Stripe.Subscription) => {
 
 	if (!userData) return jsonError('User not found', 400);
 
-	await supabaseClient.from('subscriptions').insert({
-		user_email: userData.email ?? customer.email,
-		user_id: userData.id,
-		stripe_subsription_id: subscription.id,
-		status: subscription.status,
-		customer_id: subscription.customer as string,
-		current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-		current_period_start: new Date(subscription.current_period_start * 1000).toISOString()
-	});
+	const newSub = await supabaseClient
+		.from('subscriptions')
+		.insert({
+			user_email: userData.email ?? customer.email,
+			user_id: userData.id,
+			stripe_subscription_id: subscription.id,
+			status: subscription.status,
+			customer_id: subscription.customer as string,
+			current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+			current_period_start: new Date(subscription.current_period_start * 1000).toISOString()
+		})
+		.select();
+
+	console.log('🚀 ~ file: +server.ts:51 ~ newSub ~ newSub:', newSub);
 
 	return json({ status: 'success' });
 };
@@ -62,7 +69,13 @@ const subscriptionUpdated = async (subscription: Stripe.Subscription) => {
 		.eq('stripe_subscription_id', subscription.id)
 		.single();
 
-	if (!sub) return subscriptionCreated(subscription);
+	console.log('🚀 ~ file: +server.ts:64 ~ subscriptionUpdated ~ sub:', sub);
+	console.log(
+		'🚀 ~ file: +server.ts:64 ~ subscriptionUpdated ~ stripe subscription:',
+		subscription
+	);
+
+	if (!sub.data) return subscriptionCreated(subscription);
 
 	await supabaseClient
 		.from('subscriptions')
@@ -94,11 +107,24 @@ export const POST = (async ({ request }) => {
 		// if (event.type === 'customer.subscription.created')
 		// 	return subscriptionCreated(event.data.object as Stripe.Subscription);
 
-		if (event.type === 'customer.subscription.deleted')
-			return subscriptionDeleted(event.data.object as Stripe.Subscription);
+		// if (event.type === 'payment_intent.succeeded') {
+		// 	const data = event.data.object as Stripe.PaymentIntent;
+		// 	console.log(data);
+		// }
 
-		if (event.type === 'customer.subscription.updated')
+		if (event.type === 'customer.subscription.deleted') {
+			console.log('handle subscription delete');
+
+			return subscriptionDeleted(event.data.object as Stripe.Subscription);
+		}
+
+		if (event.type === 'customer.subscription.updated') {
+			console.log('handle subscription update');
+
 			return subscriptionUpdated(event.data.object as Stripe.Subscription);
+		}
+
+		return json({ status: 'ok' });
 	} catch (err) {
 		console.log(err);
 

@@ -2,6 +2,7 @@
 	import { dev } from '$app/environment';
 	import { auth } from '@/stores/auth';
 
+	const table_id = dev ? 'prctbl_1MMMrFHM4ixiixxgpvO2HeTu' : 'prctbl_1NaenVHM4ixiixxgOAaJsfhG';
 	const key = dev
 		? 'pk_test_51MKGVMHM4ixiixxgJOKAgByR2KNZVBCdhECdPrlS69jouagsS8AKyTGnivSGppFSTprb6gBoT8ONyYDbxupfhwAX000h8i0LD0'
 		: 'pk_live_51MKGVMHM4ixiixxg0etPQAqJ7UU4ICUH5UwJZJhSwOHg6DE7DglVxGQcZJnAnkKOfCTxEUrojZ11YfEai9bpEnWg00ZwZIyHLx';
@@ -16,7 +17,7 @@
 	type="checkbox"
 	bind:checked={$auth.subscriptionModal}
 	id="subs-modal"
-	class="modal-toggle"
+	class="modal-toggle rows"
 />
 <div class="modal">
 	<div class="modal-box">
@@ -36,10 +37,7 @@
 				</button>
 			</div>
 			<h4>Subscribe to get the access to listen all sounds and features</h4>
-			<stripe-pricing-table
-				pricing-table-id="prctbl_1NaenVHM4ixiixxgOAaJsfhG"
-				publishable-key={key}
-			/>
+			<stripe-pricing-table pricing-table-id={table_id} publishable-key={key} />
 		</div>
 	</div>
 </div>
