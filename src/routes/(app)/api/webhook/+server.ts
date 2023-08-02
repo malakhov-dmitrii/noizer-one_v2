@@ -11,7 +11,7 @@ const supabaseClient = createClient<Database>(PUBLIC_SUPABASE_URL, PRIVATE_SUPAB
 });
 
 // This is your Stripe CLI webhook secret for testing your endpoint locally.
-const endpointSecret = STRIPE_SECRET_SIGNER ?? 'whsec_vJhKyMgk6IZltBUSO43hZVEJGilKqDiG';
+const endpointSecret = STRIPE_SECRET_SIGNER;
 
 const jsonError = (message: string, status: number) =>
 	json({ error: message }, { status, headers: { 'content-type': 'application/json' } });
@@ -91,6 +91,9 @@ const subscriptionUpdated = async (subscription: Stripe.Subscription) => {
 
 export const POST = (async ({ request }) => {
 	const sig = request.headers.get('stripe-signature');
+	console.log('🚀 ~ file: +server.ts:94 ~ POST ~ sig:', sig);
+	console.log('🚀 ~ file: +server.ts:15 ~ endpointSecret:', endpointSecret);
+
 	const rawBody = await request.text();
 
 	let event;

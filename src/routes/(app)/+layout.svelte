@@ -137,9 +137,9 @@
 						</a>
 					</li>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<li on:click={() => supabaseClient.auth.signOut()}>
+					<li>
 						<!-- svelte-ignore a11y-missing-attribute -->
-						<a>
+						<a on:click|preventDefault={() => supabaseClient.auth.signOut()}>
 							<i class="fa-solid fa-sign-out" />
 							<span>Sign Out</span>
 						</a>
