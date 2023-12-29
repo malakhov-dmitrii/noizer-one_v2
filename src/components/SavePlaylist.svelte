@@ -8,11 +8,8 @@
 	import { selectedVariantPerSound } from '@/stores/playback';
 	import { playlists } from '@/stores/playlists';
 	import { toast } from '@/stores/toasts';
-	import type { Playlist } from '@prisma/client';
-	import axios from 'axios';
 
 	import _ from 'lodash';
-	import { createEventDispatcher } from 'svelte';
 	import { get } from 'svelte/store';
 	import * as amplitude from '@amplitude/analytics-browser';
 
@@ -93,7 +90,7 @@
 		<p class="text-2xl mb-4 font-bold">Save new preset</p>
 		<div class="form-control w-full">
 			<label class="label">
-				<span class="label-text  font-medium">Title</span>
+				<span class="label-text font-medium">Title</span>
 			</label>
 			<input
 				name="savePlaylistTitle"

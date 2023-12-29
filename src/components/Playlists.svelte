@@ -1,13 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { navigating, page } from '$app/stores';
 	import { supabaseClient } from '@/lib/db';
-	import initialPlaylists from '@/lib/playlists';
 	import { playback, playPlaylist } from '@/stores/playback';
 	import { playlists } from '@/stores/playlists';
 	import { toast } from '@/stores/toasts';
-	import type { Playlist, User } from '@prisma/client';
-	import axios from 'axios';
 	import _ from 'lodash';
 
 	// let userPlaylists = [
@@ -131,7 +127,7 @@
 				{#if playlist.user_id !== 'admin' && playlist.user_id && !belongsToOtherUser}
 					<button
 						title="Delete playlist"
-						class="absolute top-0 right-0 p-2 opacity-20 hover:opacity-100 transition-opacity rounded-md "
+						class="absolute top-0 right-0 p-2 opacity-20 hover:opacity-100 transition-opacity rounded-md"
 						on:click|stopPropagation={() => handleDelete(playlist.id)}
 					>
 						<i class="fa-solid fa-trash" />
@@ -141,7 +137,7 @@
 				{#if playlist.user_id !== 'admin' && playlist.user_id}
 					<button
 						title="Copy link to clipboard"
-						class="absolute top-0 left-0 p-2 text-accent opacity-40 hover:opacity-100 transition-opacity rounded-md "
+						class="absolute top-0 left-0 p-2 text-accent opacity-40 hover:opacity-100 transition-opacity rounded-md"
 						on:click|stopPropagation={() => {
 							navigator.clipboard.writeText(`https://noizer.one/?playlist=${playlist.id}`);
 							toast('Link to the preset copied to clipboard', 'success');

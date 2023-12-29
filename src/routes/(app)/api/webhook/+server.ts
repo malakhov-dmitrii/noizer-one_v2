@@ -1,7 +1,6 @@
 import { PRIVATE_SUPABASE_KEY, STRIPE_SECRET_KEY, STRIPE_SECRET_SIGNER } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '@/lib/database.types';
-import { prisma } from '@/lib/prisma';
 import { createClient } from '@supabase/supabase-js';
 import { fail, json, type RequestHandler } from '@sveltejs/kit';
 import Stripe from 'stripe';

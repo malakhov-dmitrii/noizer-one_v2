@@ -9,7 +9,6 @@
 // }
 
 import type { Database } from '@/lib/database.types';
-// import type { Playlist } from '@prisma/client';
 
 export interface PlaylistSound {
 	path: string;
