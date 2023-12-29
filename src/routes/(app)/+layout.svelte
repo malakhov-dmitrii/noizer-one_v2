@@ -11,7 +11,6 @@
 	import ThemeChanger from '@/components/ThemeChanger.svelte';
 	import PlaybackControls from '@/components/PlaybackControls.svelte';
 	import { cx } from '@/lib/utils';
-	import { signOut } from '@auth/sveltekit/client';
 	import { auth } from '@/stores/auth';
 	import { supabaseClient } from '@/lib/db';
 	import { invalidate } from '$app/navigation';
@@ -63,10 +62,6 @@
 	const billingPortalHref = dev
 		? 'https://billing.stripe.com/p/login/test_00g8zl8se6j2fMQ144'
 		: 'https://billing.stripe.com/p/login/cN201qfwNdLwaeAfYY';
-
-	// $: {
-	// 	console.log($page.data);
-	// }
 </script>
 
 {#if animateBackground}
@@ -158,6 +153,15 @@
 		{/if}
 	</div>
 </div>
+
+{#if $page.data.subscription?.status !== 'active'}
+	<a
+		href="https://buy.stripe.com/14k4gB3oc8vS6v6288"
+		class="w-full block text-center py-4 cursor-pointer bg-primary text-primary-content font-bold"
+	>
+		Subscribe to Premium to unlock more 200 more sounds and features!
+	</a>
+{/if}
 
 <div class="flex container space-x-1 m-auto flex-wrap mt-8 xl:hidden justify-center">
 	<PlaybackControls />

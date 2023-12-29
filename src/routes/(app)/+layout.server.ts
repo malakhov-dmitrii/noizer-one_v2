@@ -6,6 +6,10 @@ export const load: LayoutServerLoad = async (event) => {
 	const { session, supabaseClient } = await getSupabase(event);
 	console.log({ dev });
 
+	if (!session) {
+		return { session };
+	}
+
 	const subscription = await supabaseClient
 		.from('subscriptions')
 		.select('*')
