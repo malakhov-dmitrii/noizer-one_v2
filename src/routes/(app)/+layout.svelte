@@ -60,8 +60,14 @@
 	}
 
 	const billingPortalHref = dev
-		? 'https://billing.stripe.com/p/login/test_00g8zl8se6j2fMQ144'
-		: 'https://billing.stripe.com/p/login/cN201qfwNdLwaeAfYY';
+		? 'https://noizer-one.lemonsqueezy.com/billing'
+		: 'https://noizer-one.lemonsqueezy.com/billing';
+
+	const lemonsqueezyHref = dev
+		? 'https://noizer-one.lemonsqueezy.com/buy/5da8b314-8f3c-4818-a14b-828b0fde9164?embed=1'
+		: 'https://noizer-one.lemonsqueezy.com/buy/b2212d7ded4d24e002e841cb1145c4ed957ba33c?embed=1&enabled=332926';
+
+	$: ({ session, subscription, lemonSqueezySubscription, customerPortalUrl } = $page.data);
 </script>
 
 {#if animateBackground}
@@ -156,11 +162,16 @@
 
 {#if $page.data.subscription?.status !== 'active'}
 	<a
+		href={lemonsqueezyHref}
+		class="lemonsqueezy-button w-full block text-center py-4 cursor-pointer bg-primary text-primary-content font-bold"
+		>Subscribe to Premium to unlock more 200 more sounds and features!</a
+	><script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
+	<!-- <a
 		href="https://buy.stripe.com/14k4gB3oc8vS6v6288"
 		class="w-full block text-center py-4 cursor-pointer bg-primary text-primary-content font-bold"
 	>
 		Subscribe to Premium to unlock more 200 more sounds and features!
-	</a>
+	</a> -->
 {/if}
 
 <div class="flex container space-x-1 m-auto flex-wrap mt-8 xl:hidden justify-center">
@@ -178,3 +189,14 @@
 {/if}
 
 <Toasts />
+
+{#if session}
+	{#if subscription}
+		<p>Subscription status: {lemonSqueezySubscription?.attributes.status}</p>
+		{#if customerPortalUrl}
+			<a href={customerPortalUrl} target="_blank" rel="noopener noreferrer">Manage Subscription</a>
+		{/if}
+	{:else}
+		<p>No active subscription</p>
+	{/if}
+{/if}

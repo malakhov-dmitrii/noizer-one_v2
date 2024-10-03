@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { auth } from '@/stores/auth';
-	import axios from 'axios';
-	import { signIn } from '@auth/sveltekit/client';
 	import { cx } from '@/lib/utils';
 	import { supabaseClient } from '@/lib/db';
 	import { toast } from '@/stores/toasts';
@@ -36,7 +34,7 @@
 <div class="modal">
 	<div class="modal-box">
 		<div class="flex flex-col space-y-6">
-			<h3 class="text-xl font-medium  p-0">Sign in to the platform</h3>
+			<h3 class="text-xl font-medium p-0">Sign in to the platform</h3>
 			<label class="space-y-2 flex flex-col">
 				<p>Email</p>
 				<input

@@ -1,6 +1,11 @@
 import { supabaseClient } from '@/lib/db';
 import { getServerSession } from '@supabase/auth-helpers-sveltekit';
 import type { PageServerLoad } from './$types';
+import { LEMONSQUEEZY_API_KEY } from '$env/static/private';
+import { lemonSqueezySetup } from '@lemonsqueezy/lemonsqueezy.js';
+
+const apiKey = LEMONSQUEEZY_API_KEY;
+await lemonSqueezySetup({ apiKey });
 
 export const load = (async (event) => {
 	const playlist = new URL(event.request.url).searchParams.get('playlist');
@@ -18,6 +23,10 @@ export const load = (async (event) => {
 		.single();
 
 	const playlists = playlistsRes.data ?? [];
+
+	// const customer = await lemonApi.listCustomers(session?.user.email);
+
+	// console.log('Customer:', customer);
 
 	return { playlists: selectedPlaylist?.data ? [selectedPlaylist.data, ...playlists] : playlists };
 }) satisfies PageServerLoad;
