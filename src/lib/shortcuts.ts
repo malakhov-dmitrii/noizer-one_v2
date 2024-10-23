@@ -1,6 +1,7 @@
 import { playback, playRandom, stop } from '@/stores/playback';
 import { get } from 'svelte/store';
 import * as amplitude from '@amplitude/analytics-browser';
+import posthog from 'posthog-js';
 // import mixpanel from 'mixpanel-browser';
 
 const shortcuts = [
@@ -10,6 +11,7 @@ const shortcuts = [
 		callback: (e) => {
 			e.preventDefault();
 			amplitude.track('kbd_toggle_mute');
+			posthog.capture('kbd_toggle_mute');
 			const pb = get(playback);
 			Howler.mute(!pb.muted);
 			playback.set({
@@ -29,7 +31,7 @@ const shortcuts = [
 
 				if (volume > 1) return pb;
 				amplitude.track('kbd_volume_up');
-
+				posthog.capture('kbd_volume_up');
 				Howler.volume(volume);
 				return {
 					...pb,
@@ -50,7 +52,7 @@ const shortcuts = [
 				if (volume < 0) return pb;
 
 				amplitude.track('kbd_volume_down');
-
+				posthog.capture('kbd_volume_down');
 				Howler.volume(volume);
 				return {
 					...pb,
@@ -66,6 +68,7 @@ const shortcuts = [
 		callback: () => {
 			stop();
 			amplitude.track('kbd_stop');
+			posthog.capture('kbd_stop');
 			// mixpanel.track('kbd_stop');
 		}
 	},
@@ -75,6 +78,7 @@ const shortcuts = [
 		callback: () => {
 			playRandom();
 			amplitude.track('kbd_play_random');
+			posthog.capture('kbd_play_random');
 			// mixpanel.track('kbd_play_random');
 		}
 	}

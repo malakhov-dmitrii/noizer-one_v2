@@ -8,6 +8,7 @@ import { goto } from '$app/navigation';
 import { tweened, type Tweened } from 'svelte/motion';
 import { cubicInOut } from 'svelte/easing';
 import * as amplitude from '@amplitude/analytics-browser';
+import posthog from 'posthog-js';
 // import mixpanel from 'mixpanel-browser';
 
 export const randomSlice = <T>(arr: T[], n: number): T[] =>
@@ -159,6 +160,12 @@ export const toggleSound = (path: string, play?: boolean) => {
 		group: sound?.group,
 		free: sound?.free
 	});
+	posthog.capture('toggle_sound', {
+		sound: sound?.sound,
+		variant: sound?.variantName,
+		group: sound?.group,
+		free: sound?.free
+	});
 	// mixpanel.track('toggle_sound', {
 	// 	sound: sound?.sound,
 	// 	variant: sound?.variantName,
@@ -191,6 +198,7 @@ export const stop = () => {
 	selectedVariantPerSound.set({});
 	playback.set({ ...get(playback), playlist: null });
 	amplitude.track('stop');
+	posthog.capture('stop');
 
 	goto('/');
 
@@ -217,6 +225,7 @@ export const playRandom = () => {
 	}
 
 	amplitude.track('play_random');
+	posthog.capture('play_random');
 };
 
 interface SoundVariantItem {
@@ -247,6 +256,7 @@ export const playPlaylist = (playlist: Playlist) => {
 	playback.set({ ...get(playback), playlist: playlist.id });
 	goto('/?playlist=' + playlist.id);
 	amplitude.track('play_playlist', { playlist: playlist.id, playlist_name: playlist.title });
+	posthog.capture('play_playlist', { playlist: playlist.id, playlist_name: playlist.title });
 };
 
 const stopAllTweens = () => {
@@ -299,4 +309,5 @@ export const toggleTweenVolume = () => {
 	}
 
 	amplitude.track('toggle_tween_volume', { tween_volume: !state.tweenVolume });
+	posthog.capture('toggle_tween_volume', { tween_volume: !state.tweenVolume });
 };

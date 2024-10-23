@@ -22,6 +22,8 @@
 
 		amplitude.track('signin_code_send', { email });
 
+		posthog.capture('signin_code_send', { email });
+
 		codeSentFor = email;
 		codeLoading = false;
 

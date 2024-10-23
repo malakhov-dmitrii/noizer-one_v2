@@ -56,6 +56,12 @@
 									subscriptionActive
 								});
 
+								posthog.capture('variant_change', {
+									variant: variant.variantName,
+									sound: variant.path,
+									subscriptionActive
+								});
+
 								if (subscriptionActive) {
 									toggleSound(variant.path, true);
 									const onboarding = get(onboardingStep);

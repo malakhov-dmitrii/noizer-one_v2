@@ -37,6 +37,12 @@
 			sounds: data
 		});
 
+		posthog.capture('save_playlist', {
+			title: savePlaylistTitle,
+			group: savePlaylistGroup,
+			sounds: data
+		});
+
 		const res = await supabaseClient
 			.from('playlists')
 			.insert({
