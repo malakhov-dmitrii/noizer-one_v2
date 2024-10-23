@@ -4,7 +4,8 @@ import { browser } from '$app/environment';
 export const load = async () => {
 	if (browser) {
 		posthog.init('phc_wnxpq76WlBx9sJ1rsF411RfLifcb2j2pZmACjrTXGug', {
-			api_host: 'https://eu.i.posthog.com',
+			ui_host: 'https://eu.i.posthog.com',
+			api_host: 'https://noizer.one/ingest',
 			person_profiles: 'identified_only',
 			capture_pageview: false,
 			capture_pageleave: false
