@@ -21,8 +21,9 @@ export const load: LayoutServerLoad = async (event) => {
 	});
 
 	const c = (await lemonApi.listCustomers(session?.user.email))?.[0];
-	const customerPortalUrl = (await getCustomer(c?.id ?? '')).data?.data.attributes.urls
-		.customer_portal;
+	const customerPortalUrl = c
+		? (await getCustomer(c.id)).data?.data.attributes.urls.customer_portal
+		: null;
 
 	return {
 		session,

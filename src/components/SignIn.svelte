@@ -5,7 +5,7 @@
 	import { toast } from '@/stores/toasts';
 	// import mixpanel from 'mixpanel-browser';
 	import * as amplitude from '@amplitude/analytics-browser';
-
+	import posthog from 'posthog-js';
 	$: email = '';
 	let code = '';
 	let codeSentFor = '';
@@ -15,14 +15,20 @@
 	async function handleSubmit() {
 		codeLoading = true;
 
+		console.log(window.location.href);
+
 		await supabaseClient.auth.signInWithOtp({
 			email,
 			options: { emailRedirectTo: window.location.href }
 		});
 
 		amplitude.track('signin_code_send', { email });
-
 		posthog.capture('signin_code_send', { email });
+		// await loops.createContact(email);
+		fetch('https://hljlpuipsmbrognugxmp.supabase.co/functions/v1/create-contact', {
+			method: 'POST',
+			body: JSON.stringify({ email })
+		});
 
 		codeSentFor = email;
 		codeLoading = false;
