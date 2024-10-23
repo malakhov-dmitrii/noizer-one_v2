@@ -3,10 +3,10 @@
 	<div
 		class="flex space-x-2 items-center xl:items-start mt-4 w-full flex-row xl:flex-col flex-wrap xl:space-x-0 xl:space-y-2"
 	>
-		<a class="underline" href="https://mlh.one/noizer" rel="noopener noreferrer" target="_blank"
+		<!-- <a class="underline" href="https://mlh.one/noizer" rel="noopener noreferrer" target="_blank"
 			>iOS & Android Beta
 			<i class="fa-solid fa-arrow-up-right-from-square" />
-		</a>
+		</a> -->
 		<a
 			class="underline"
 			href="https://www.youtube.com/channel/UConHj2LF39cQ_rrnvNWi4lw"
