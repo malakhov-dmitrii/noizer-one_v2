@@ -20,6 +20,14 @@
 	import * as amplitude from '@amplitude/analytics-browser';
 	import { PUBLIC_AMPLITUDE_API_KEY } from '$env/static/public';
 	import SubscriptionModal from '@/components/SubscriptionModal.svelte';
+	import posthog from 'posthog-js';
+	import { browser } from '$app/environment';
+	import { beforeNavigate, afterNavigate } from '$app/navigation';
+
+	if (browser) {
+		beforeNavigate(() => posthog.capture('$pageleave'));
+		afterNavigate(() => posthog.capture('$pageview'));
+	}
 
 	// TODO: toggle animation
 	let animateBackground = false;
@@ -56,12 +64,14 @@
 			identify.set('name', $page.data.session?.user.email?.split('@')[0] ?? 'User');
 			identify.set('userId', $page.data.session?.user.id);
 			amplitude.identify(identify);
+
+			posthog.identify($page.data.session?.user.id, {
+				email: $page.data.session?.user.email
+			});
 		}
 	}
 
-	const billingPortalHref = dev
-		? 'https://noizer-one.lemonsqueezy.com/billing'
-		: 'https://noizer-one.lemonsqueezy.com/billing';
+	const billingPortalHref = $page.data.customerPortalUrl;
 
 	const lemonsqueezyHref = dev
 		? 'https://noizer-one.lemonsqueezy.com/buy/5da8b314-8f3c-4818-a14b-828b0fde9164?embed=1'
@@ -132,7 +142,7 @@
 					class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 				>
 					<li>
-						<a href={billingPortalHref}>
+						<a href={billingPortalHref} target="_blank" rel="noopener noreferrer">
 							<i class="fa-solid fa-credit-card" />
 							<span>Billing</span>
 						</a>
@@ -166,12 +176,6 @@
 		class="lemonsqueezy-button w-full block text-center py-4 cursor-pointer bg-primary text-primary-content font-bold"
 		>Subscribe to Premium to unlock more 200 more sounds and features!</a
 	><script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
-	<!-- <a
-		href="https://buy.stripe.com/14k4gB3oc8vS6v6288"
-		class="w-full block text-center py-4 cursor-pointer bg-primary text-primary-content font-bold"
-	>
-		Subscribe to Premium to unlock more 200 more sounds and features!
-	</a> -->
 {/if}
 
 <div class="flex container space-x-1 m-auto flex-wrap mt-8 xl:hidden justify-center">

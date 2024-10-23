@@ -1,43 +1,69 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import { auth } from '@/stores/auth';
-
-	const table_id = dev ? 'prctbl_1MMMrFHM4ixiixxgpvO2HeTu' : 'prctbl_1NaenVHM4ixiixxgOAaJsfhG';
-	const key = dev
-		? 'pk_test_51MKGVMHM4ixiixxgJOKAgByR2KNZVBCdhECdPrlS69jouagsS8AKyTGnivSGppFSTprb6gBoT8ONyYDbxupfhwAX000h8i0LD0'
-		: 'pk_live_51MKGVMHM4ixiixxg0etPQAqJ7UU4ICUH5UwJZJhSwOHg6DE7DglVxGQcZJnAnkKOfCTxEUrojZ11YfEai9bpEnWg00ZwZIyHLx';
 </script>
 
-<svelte:head>
-	<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
-</svelte:head>
+<div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+	<div class="bg-white rounded-lg max-w-md w-full relative animate-in fade-in zoom-in duration-300">
+		<button
+			on:click={() => {
+				$auth.subscriptionModal = !$auth.subscriptionModal;
+			}}
+			class="absolute right-4 top-4 p-1 rounded-full hover:bg-gray-100 transition-colors"
+		>
+			<i class="fa-solid fa-close text-xl" />
+		</button>
 
-<!-- Put this part before </body> tag -->
-<input
-	type="checkbox"
-	bind:checked={$auth.subscriptionModal}
-	id="subs-modal"
-	class="modal-toggle rows"
-/>
-<div class="modal">
-	<div class="modal-box">
-		<div class="flex flex-col space-y-6">
-			<div class="flex justify-between items-center">
-				<h3 class="text-xl font-medium text-gray-900 dark:text-white p-0">
-					This is the PRO feature
-				</h3>
+		<div
+			class="bg-indigo-600 text-white text-sm font-medium px-3 py-1 rounded-full absolute -top-3 left-1/2 -translate-x-1/2"
+		>
+			PRO Feature
+		</div>
 
-				<button
-					class="btn btn-circle btn-ghost"
-					on:click={() => {
-						$auth.subscriptionModal = !$auth.subscriptionModal;
-					}}
-				>
-					<i class="fa-solid fa-close text-xl" />
-				</button>
+		<div class="p-6 pt-8">
+			<h2 class="text-2xl font-bold text-center mb-2">Unlock the Full Experience</h2>
+
+			<p class="text-gray-600 text-center mb-6">
+				Subscribe to get access to all sounds and features
+			</p>
+
+			<div class="space-y-3 mb-6">
+				<div class="flex items-center gap-3">
+					<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
+						<span class="text-indigo-600 text-lg">🎵</span>
+					</div>
+					<p class="text-gray-700">200+ premium soundscapes</p>
+				</div>
+				<div class="flex items-center gap-3">
+					<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
+						<span class="text-indigo-600 text-lg">💾</span>
+					</div>
+					<p class="text-gray-700">Save unlimited mixes</p>
+				</div>
+				<div class="flex items-center gap-3">
+					<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
+						<span class="text-indigo-600 text-lg">🎚️</span>
+					</div>
+					<p class="text-gray-700">Advanced mixing controls</p>
+				</div>
 			</div>
-			<h4>Subscribe to get the access to listen all sounds and features</h4>
-			<stripe-pricing-table pricing-table-id={table_id} publishable-key={key} />
+
+			<div class="text-center mb-6">
+				<div class="inline-block">
+					<span class="text-3xl font-bold text-gray-900">$8.18</span>
+					<span class="text-gray-500">/month</span>
+				</div>
+			</div>
+
+			<button
+				class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+			>
+				Get Premium Access
+			</button>
+
+			<p class="text-sm text-gray-500 text-center mt-4">
+				30-day money-back guarantee. Cancel anytime.
+			</p>
 		</div>
 	</div>
 </div>

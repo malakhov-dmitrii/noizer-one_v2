@@ -25,6 +25,7 @@
 		"@tailwindcss/line-clamp": "^0.4.2",
 		"@tailwindcss/typography": "^0.5.8",
 		"@types/cookie": "^0.5.1",
+		"@types/got": "^9.6.12",
 		"@types/howler": "^2.2.7",
 		"@types/lodash": "^4.14.191",
 		"@types/mixpanel-browser": "^2.38.0",
@@ -63,11 +64,14 @@
 		"@vercel/analytics": "^0.1.11",
 		"axios": "^1.2.2",
 		"daisyui": "latest",
+		"got": "^14.4.3",
 		"howler": "^2.2.3",
 		"ky": "^1.7.2",
 		"lodash": "^4.17.21",
 		"mixpanel-browser": "^2.45.0",
 		"mousetrap": "^1.6.5",
+		"posthog-js": "^1.174.3",
+		"posthog-node": "^4.2.1",
 		"stripe": "^11.6.0",
 		"theme-change": "^2.3.0"
 	}

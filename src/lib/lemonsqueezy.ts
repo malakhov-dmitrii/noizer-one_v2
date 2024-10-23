@@ -1,5 +1,11 @@
 import { LEMONSQUEEZY_API_KEY, LEMONSQUEEZY_STORE_ID } from '$env/static/private';
-import { lemonSqueezySetup } from '@lemonsqueezy/lemonsqueezy.js';
+import {
+	getCustomer,
+	getSubscription,
+	lemonSqueezySetup,
+	listCustomers
+} from '@lemonsqueezy/lemonsqueezy.js';
+import got from 'got';
 import ky from 'ky';
 
 /**
@@ -13,7 +19,9 @@ export function configureLemonSqueezy() {
 	});
 }
 
-export const lemonClient = ky.create({
+const storeId = LEMONSQUEEZY_STORE_ID;
+
+export const lemonClient = ky.extend({
 	prefixUrl: 'https://api.lemonsqueezy.com/v1',
 	headers: {
 		Accept: 'application/vnd.api+json',
@@ -25,8 +33,47 @@ export const lemonClient = ky.create({
 export const lemonApi = {
 	listCustomers: (email?: string) => {
 		if (!email) return [];
-		return lemonClient
-			.get(`customers?filter[email]=${email}&filter[store_id]=${LEMONSQUEEZY_STORE_ID}`)
-			.json();
+		return listCustomers({
+			filter: {
+				email,
+				storeId
+			},
+			include: ['subscriptions']
+		}).then((res) => res.data?.data);
+	},
+	getActiveSubscription: async (input: { customerId: string } | { email?: string }) => {
+		let customerSubscriptions:
+			| {
+					id: string;
+					type: string;
+			  }[]
+			| undefined;
+
+		if ('customerId' in input) {
+			customerSubscriptions = await getCustomer(input.customerId, {
+				include: ['subscriptions']
+			}).then((r) => r.data?.data.relationships.subscriptions.data);
+		} else {
+			if (!input.email) return [];
+
+			customerSubscriptions = await listCustomers({
+				filter: { email: input.email },
+				include: ['subscriptions']
+			}).then(
+				(r) =>
+					r.data?.data.find((c) => c.attributes.email === input.email)?.relationships.subscriptions
+						.data
+			);
+		}
+
+		const subscriptions = await Promise.all(
+			customerSubscriptions?.map((subscription) =>
+				getSubscription(subscription.id).then((r) => r.data?.data)
+			) ?? []
+		);
+
+		const activeSubscription = subscriptions.find((s) => s?.attributes.status === 'active');
+
+		return activeSubscription;
 	}
 };

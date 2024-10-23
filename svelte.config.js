@@ -11,7 +11,8 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			'@': './src'
-		}
+		},
+		paths: { relative: true }
 	}
 };
 

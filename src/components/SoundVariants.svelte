@@ -24,7 +24,7 @@
 		{/each}
 	</div>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-	<div class="dropdown">
+	<div class="dropdown z-50">
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label
@@ -48,7 +48,7 @@
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a
-							class="flex items-center gap-2 px-2 py-1.5 text-xs  transition-all rounded-md "
+							class="flex items-center gap-2 px-2 py-1.5 text-xs transition-all rounded-md"
 							on:click|stopPropagation={() => {
 								amplitude.track('variant_change', {
 									variant: variant.variantName,

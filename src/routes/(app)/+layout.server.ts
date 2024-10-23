@@ -1,5 +1,7 @@
+import { lemonApi } from '@/lib/lemonsqueezy';
 import type { LayoutServerLoad } from './$types';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
+import { getCustomer } from '@lemonsqueezy/lemonsqueezy.js';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { session, supabaseClient } = await getSupabase(event);
@@ -14,10 +16,18 @@ export const load: LayoutServerLoad = async (event) => {
 		.eq('user_id', session?.user.id)
 		.single();
 
+	const lemonSqueezySubscription = await lemonApi.getActiveSubscription({
+		email: session?.user.email
+	});
+
+	const c = (await lemonApi.listCustomers(session?.user.email))?.[0];
+	const customerPortalUrl = (await getCustomer(c?.id ?? '')).data?.data.attributes.urls
+		.customer_portal;
+
 	return {
 		session,
-		subscription: subscription?.data
-		// lemonSqueezySubscription,
-		// customerPortalUrl
+		subscription: subscription?.data,
+		lemonSqueezySubscription,
+		customerPortalUrl
 	};
 };
