@@ -7,6 +7,7 @@
 	// import mixpanel from 'mixpanel-browser';
 	import { get } from 'svelte/store';
 	import * as amplitude from '@amplitude/analytics-browser';
+	import posthog from 'posthog-js';
 
 	export let variants: FileItem[];
 	export let selectedVariantPath: string;
@@ -24,7 +25,8 @@
 		{/each}
 	</div>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-	<div class="dropdown z-50">
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div class="dropdown z-50" on:click|stopPropagation>
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label
@@ -49,7 +51,7 @@
 						<!-- svelte-ignore a11y-missing-attribute -->
 						<a
 							class="flex items-center gap-2 px-2 py-1.5 text-xs transition-all rounded-md"
-							on:click|stopPropagation={() => {
+							on:click|stopPropagation={(e) => {
 								amplitude.track('variant_change', {
 									variant: variant.variantName,
 									sound: variant.path,

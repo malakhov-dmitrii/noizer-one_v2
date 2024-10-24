@@ -75,7 +75,7 @@
 
 	const lemonsqueezyHref = dev
 		? 'https://noizer-one.lemonsqueezy.com/buy/5da8b314-8f3c-4818-a14b-828b0fde9164?embed=1'
-		: 'https://noizer-one.lemonsqueezy.com/buy/b2212d7ded4d24e002e841cb1145c4ed957ba33c?embed=1&enabled=332926';
+		: 'https://noizer-one.lemonsqueezy.com/buy/ba8aa9fe-b088-44e7-a9de-2478e1c95ade?embed=1&enabled=335134';
 
 	$: ({ session, subscription, lemonSqueezySubscription, customerPortalUrl } = $page.data);
 </script>
@@ -89,10 +89,10 @@
 
 <div class="container py-2 flex items-center m-auto">
 	<div class="flex items-center flex-1 cursor-pointer">
-		<img src={img} class="h-10 mr-3 sm:h-14" alt="Logo" />
-		<div>
-			<h3 class="text-lg md:text-3xl leading-4 font-bold">Noizer One</h3>
-			<p class="hidden md:block">Live soundscapes right for you</p>
+		<img src={img} class="h-10 mr-3 sm:h-12" alt="Logo" />
+		<div class="">
+			<h3 class="text-lg md:text-2xl leading-4 font-semibold">Noizer One</h3>
+			<p class="hidden text-xs md:block">Live soundscapes right for you</p>
 		</div>
 		<!-- <a class="btn btn-ghost normal-case text-xl">Noizer One</a> -->
 	</div>
@@ -174,7 +174,11 @@
 	<a
 		href={lemonsqueezyHref}
 		class="lemonsqueezy-button w-full block text-center py-4 cursor-pointer bg-primary text-primary-content font-bold"
-		>Subscribe to Premium to unlock more 200 more sounds and features!</a
+	>
+		<span class="line-through">8.18$/month</span>
+		<span class="py-1 bg-primary-content rounded-md px-2 text-primary">LIFETIME DEAL: 24$ </span>
+
+		Unlock 200+ sounds and advanced features!</a
 	><script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
 {/if}
 

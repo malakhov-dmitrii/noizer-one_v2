@@ -24,7 +24,7 @@
 			<h2 class="text-2xl font-bold text-center mb-2">Unlock the Full Experience</h2>
 
 			<p class="text-gray-600 text-center mb-6">
-				Subscribe to get access to all sounds and features
+				Lifetime deal: Get access to all sounds and features
 			</p>
 
 			<div class="space-y-3 mb-6">
@@ -48,22 +48,22 @@
 				</div>
 			</div>
 
-			<div class="text-center mb-6">
+			<!-- <div class="text-center mb-6">
 				<div class="inline-block">
-					<span class="text-3xl font-bold text-gray-900">$8.18</span>
-					<span class="text-gray-500">/month</span>
+					<span class="text-3xl font-bold text-gray-900">$24</span>
 				</div>
-			</div>
+			</div> -->
 
-			<button
-				class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+			<a
+				href="https://noizer-one.lemonsqueezy.com/buy/ba8aa9fe-b088-44e7-a9de-2478e1c95ade?embed=1&enabled=335134"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors block text-center"
 			>
-				Get Premium Access
-			</button>
+				Unlock everything for $24
+			</a>
 
-			<p class="text-sm text-gray-500 text-center mt-4">
-				30-day money-back guarantee. Cancel anytime.
-			</p>
+			<p class="text-sm text-gray-500 text-center mt-4">30-day money-back guarantee.</p>
 		</div>
 	</div>
 </div>

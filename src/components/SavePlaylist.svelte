@@ -12,6 +12,7 @@
 	import _ from 'lodash';
 	import { get } from 'svelte/store';
 	import * as amplitude from '@amplitude/analytics-browser';
+	import posthog from 'posthog-js';
 
 	let savePlaylistModal = false;
 	let savePlaylistTitle = '';
