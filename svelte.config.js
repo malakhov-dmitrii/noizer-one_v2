@@ -12,7 +12,7 @@ const config = {
 		alias: {
 			'@': './src'
 		},
-		paths: { relative: true }
+		paths: { relative: false }
 	}
 };
 
