@@ -17,10 +17,17 @@
 
 		console.log(window.location.href);
 
-		await supabaseClient.auth.signInWithOtp({
-			email,
-			options: { emailRedirectTo: window.location.href }
-		});
+		await supabaseClient.auth
+			.signInWithOtp({
+				email,
+				options: { emailRedirectTo: window.location.href }
+			})
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((err) => {
+				console.log('err', err);
+			});
 
 		amplitude.track('signin_code_send', { email });
 		posthog.capture('signin_code_send', { email });
@@ -35,6 +42,10 @@
 
 		toast('Code sent to ' + email, 'success');
 	}
+
+	async function handleGoogleSignIn() {
+		await supabaseClient.auth.signInWithOAuth({ provider: 'google' });
+	}
 </script>
 
 <!-- Put this part before </body> tag -->
@@ -43,7 +54,7 @@
 	<div class="modal-box">
 		<div class="flex flex-col space-y-6">
 			<h3 class="text-xl font-medium p-0">Sign in to the platform</h3>
-			<label class="space-y-2 flex flex-col">
+			<!-- <label class="space-y-2 flex flex-col">
 				<p>Email</p>
 				<input
 					bind:value={email}
@@ -67,7 +78,9 @@
 				{/if}
 
 				Send magic link
-			</button>
+			</button> -->
+
+			<button class="btn btn-primary" on:click={handleGoogleSignIn}> With Google </button>
 
 			<button
 				class="btn btn-ghost btn-sm"

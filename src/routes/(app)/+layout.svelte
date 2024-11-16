@@ -46,7 +46,8 @@
 
 		const {
 			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
+		} = supabaseClient.auth.onAuthStateChange((event, session) => {
+			console.log('auth state changed', event, session);
 			invalidate('supabase:auth');
 		});
 
@@ -150,7 +151,12 @@
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<li>
 						<!-- svelte-ignore a11y-missing-attribute -->
-						<a on:click|preventDefault={() => supabaseClient.auth.signOut()}>
+						<a
+							on:click|preventDefault={() => {
+								supabaseClient.auth.signOut();
+								window.location.reload();
+							}}
+						>
 							<i class="fa-solid fa-sign-out" />
 							<span>Sign Out</span>
 						</a>
