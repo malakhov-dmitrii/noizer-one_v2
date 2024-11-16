@@ -54,7 +54,7 @@
 	<div class="modal-box">
 		<div class="flex flex-col space-y-6">
 			<h3 class="text-xl font-medium p-0">Sign in to the platform</h3>
-			<!-- <label class="space-y-2 flex flex-col">
+			<label class="space-y-2 flex flex-col">
 				<p>Email</p>
 				<input
 					bind:value={email}
@@ -78,7 +78,7 @@
 				{/if}
 
 				Send magic link
-			</button> -->
+			</button>
 
 			<button class="btn btn-primary" on:click={handleGoogleSignIn}> With Google </button>
 
