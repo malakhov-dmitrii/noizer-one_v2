@@ -154,7 +154,9 @@
 						<a
 							on:click|preventDefault={() => {
 								supabaseClient.auth.signOut();
-								window.location.reload();
+								setTimeout(() => {
+									window.location.reload();
+								}, 1000);
 							}}
 						>
 							<i class="fa-solid fa-sign-out" />
