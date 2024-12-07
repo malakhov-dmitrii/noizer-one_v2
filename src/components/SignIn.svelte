@@ -42,12 +42,6 @@
 		toast('Code sent to ' + email, 'success');
 	}
 
-	onMount(() => {
-		setTimeout(() => {
-			if (!$auth.modal) $auth.modal = true;
-		}, 60 * 1000);
-	});
-
 	async function handleGoogleSignIn() {
 		await supabaseClient.auth.signInWithOAuth({ provider: 'google' });
 	}

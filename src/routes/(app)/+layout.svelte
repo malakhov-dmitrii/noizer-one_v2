@@ -53,6 +53,11 @@
 
 		playlists.set([...initialPlaylists, ...$page.data.playlists]);
 
+		setTimeout(() => {
+			if (!$auth.subscriptionModal && $page.data.subscription?.status !== 'active')
+				$auth.subscriptionModal = true;
+		}, 5 * 60 * 1000);
+
 		return () => {
 			subscription.unsubscribe();
 		};
