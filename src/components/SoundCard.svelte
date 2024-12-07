@@ -5,11 +5,13 @@
 	import { paidSounds } from '@/lib/sounds';
 	import { auth } from '@/stores/auth';
 	import { P } from 'flowbite-svelte';
+	import { page } from '$app/stores';
 
 	export let title: string;
 	export let variants: FileItem[];
 
 	const isPaidSound = paidSounds.includes(title.toLowerCase());
+	$: showLock = isPaidSound && $page.data.subscription?.status !== 'active';
 
 	$: selectedVariant =
 		variants.find((variant) => !!$selectedVariantPerSound[variant.path]) ?? variants[0];
@@ -34,10 +36,10 @@
 		`card card-compact group relative bg-base-200 glass transition cursor-pointer`,
 		!!playingVariant ? 'outline-2 outline-offset-4 outline-primary bg-opacity-100 outline' : '',
 		playingVariant?.loading ? 'animate-pulse outline-dashed' : '',
-		isPaidSound ? 'opacity-50' : ''
+		showLock ? 'opacity-50' : ''
 	)}
 	on:click={() => {
-		if (isPaidSound) {
+		if (showLock) {
 			$auth.subscriptionModal = true;
 			return;
 		}
@@ -91,7 +93,7 @@
 			/>
 		</div>
 
-		{#if !tween && !isPaidSound}
+		{#if !tween && !showLock}
 			<div class="mt-0" on:click={(e) => e.stopPropagation()}>
 				<input
 					type="range"
@@ -109,13 +111,13 @@
 			</div>
 		{/if}
 
-		{#if isPaidSound}
+		{#if showLock}
 			<p class="text-xs mt-6 opacity-0 group-hover:opacity-100 transition-all duration-300">
 				Unlock more sounds
 			</p>
 		{/if}
 	</div>
-	{#if isPaidSound}
+	{#if showLock}
 		<div
 			class="flex absolute pointer-events-none top-0 left-0 h-full w-full text-slate-400 flex-col justify-center items-center px-2 py-1 text-xs z-10"
 		>
