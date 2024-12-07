@@ -6,6 +6,7 @@
 	// import mixpanel from 'mixpanel-browser';
 	import * as amplitude from '@amplitude/analytics-browser';
 	import posthog from 'posthog-js';
+	import { onMount } from 'svelte';
 	$: email = '';
 	let code = '';
 	let codeSentFor = '';
@@ -14,8 +15,6 @@
 
 	async function handleSubmit() {
 		codeLoading = true;
-
-		console.log(window.location.href);
 
 		await supabaseClient.auth
 			.signInWithOtp({
@@ -43,6 +42,12 @@
 		toast('Code sent to ' + email, 'success');
 	}
 
+	onMount(() => {
+		setTimeout(() => {
+			if (!$auth.modal) $auth.modal = true;
+		}, 60 * 1000);
+	});
+
 	async function handleGoogleSignIn() {
 		await supabaseClient.auth.signInWithOAuth({ provider: 'google' });
 	}
@@ -53,7 +58,7 @@
 <div class="modal">
 	<div class="modal-box">
 		<div class="flex flex-col space-y-6">
-			<h3 class="text-xl font-medium p-0">Sign in to the platform</h3>
+			<h3 class="text-xl font-medium p-0">Sign in</h3>
 			<label class="space-y-2 flex flex-col">
 				<p>Email</p>
 				<input

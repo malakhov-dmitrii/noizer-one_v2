@@ -1950,3 +1950,42 @@ const sounds = [
 ];
 
 export default sounds;
+
+export const paidSounds = [
+	'street, city',
+	'underground',
+	'supermarket',
+	'chicken coop',
+	'bells',
+	'chants',
+	'farm',
+	'playground',
+	'mosque',
+	'basketball court',
+	'stream',
+	'country life',
+	'wind',
+	'forest',
+	'frog',
+	'night',
+	'rain',
+	'thunder',
+	'waterfall',
+	'clocks',
+	'deep sea',
+	'fireworks',
+	'hair dryer',
+	'printer',
+	'keyboard',
+	'space',
+	'table fan',
+	'vacuum cleaner',
+	'wind chimes',
+	'pink noise',
+	'white noise',
+	'boat',
+	'swim',
+	'whale',
+	'barbershop',
+	'whisper'
+];

@@ -11,6 +11,7 @@
 
 	export let variants: FileItem[];
 	export let selectedVariantPath: string;
+	export let isPaidSound = false;
 
 	let open = false;
 	$: subscriptionActive = $page.data?.subscription?.status === 'active';
@@ -18,10 +19,10 @@
 
 {#if variants.length > 1}
 	<div
-		class="absolute top-0 left-0 flex w-full gap-1 px-3 py-3 transition-all group-hover:opacity-0"
+		class="absolute top-0 left-0 flex w-full gap-1 px-3 z-10 py-3 transition-all group-hover:opacity-0"
 	>
 		{#each variants as dot}
-			<div class="w-1 h-1 bg-neutral-focus rounded-full" />
+			<div class="w-1 h-1 bg-neutral-focus rounded-full bg-slate-400" />
 		{/each}
 	</div>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -40,47 +41,49 @@
 			</div>
 		</label>
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<ul
-			tabindex="0"
-			class="dropdown-content max-h-40 overflow-auto menu p-2 shadow bg-base-100 w-full rounded-box max-w-52 flex flex-col flex-nowrap"
-		>
-			{#each variants as variant}
-				{#if variant.path !== selectedVariantPath}
-					<li>
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<!-- svelte-ignore a11y-missing-attribute -->
-						<a
-							class="flex items-center gap-2 px-2 py-1.5 text-xs transition-all rounded-md"
-							on:click|stopPropagation={(e) => {
-								amplitude.track('variant_change', {
-									variant: variant.variantName,
-									sound: variant.path,
-									subscriptionActive
-								});
+		{#if !isPaidSound}
+			<ul
+				tabindex="0"
+				class="dropdown-content max-h-40 overflow-auto menu p-2 shadow bg-base-100 w-full rounded-box max-w-52 flex flex-col flex-nowrap"
+			>
+				{#each variants as variant}
+					{#if variant.path !== selectedVariantPath}
+						<li>
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-missing-attribute -->
+							<a
+								class="flex items-center gap-2 px-2 py-1.5 text-xs transition-all rounded-md"
+								on:click|stopPropagation={(e) => {
+									amplitude.track('variant_change', {
+										variant: variant.variantName,
+										sound: variant.path,
+										subscriptionActive
+									});
 
-								posthog.capture('variant_change', {
-									variant: variant.variantName,
-									sound: variant.path,
-									subscriptionActive
-								});
+									posthog.capture('variant_change', {
+										variant: variant.variantName,
+										sound: variant.path,
+										subscriptionActive
+									});
 
-								if (subscriptionActive) {
-									toggleSound(variant.path, true);
-									const onboarding = get(onboardingStep);
-									if (onboarding === 3) incrementOnboardingStep();
-								} else {
-									$auth.subscriptionModal = true;
-								}
-							}}
-						>
-							{#if !variant.free}
-								<i class="fa-solid fa-crown" />
-							{/if}
-							<p>{variant.variantName}</p>
-						</a>
-					</li>
-				{/if}
-			{/each}
-		</ul>
+									if (subscriptionActive) {
+										toggleSound(variant.path, true);
+										const onboarding = get(onboardingStep);
+										if (onboarding === 3) incrementOnboardingStep();
+									} else {
+										$auth.subscriptionModal = true;
+									}
+								}}
+							>
+								{#if !variant.free}
+									<i class="fa-solid fa-crown" />
+								{/if}
+								<p>{variant.variantName}</p>
+							</a>
+						</li>
+					{/if}
+				{/each}
+			</ul>
+		{/if}
 	</div>
 {/if}

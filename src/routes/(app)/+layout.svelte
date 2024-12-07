@@ -183,7 +183,7 @@
 		href={lemonsqueezyHref}
 		class="lemonsqueezy-button w-full block text-center py-4 cursor-pointer bg-primary text-primary-content font-bold"
 	>
-		<span class="line-through">8.18$/month</span>
+		<!-- <span class="line-through">8.18$/month</span> -->
 		<span class="py-1 bg-primary-content rounded-md px-2 text-primary">LIFETIME DEAL: 24$ </span>
 
 		Unlock 200+ sounds and advanced features!</a
