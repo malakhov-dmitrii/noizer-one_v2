@@ -10,8 +10,10 @@
 	export let title: string;
 	export let variants: FileItem[];
 
-	const isPaidSound = paidSounds.includes(title.toLowerCase());
-	$: showLock = isPaidSound && $page.data.subscription?.status !== 'active';
+	// const isPaidSound = paidSounds.includes(title.toLowerCase());
+	const isPaidSound = false;
+	// $: showLock = isPaidSound && $page.data.subscription?.status !== 'active';
+	$: showLock = false;
 
 	$: selectedVariant =
 		variants.find((variant) => !!$selectedVariantPerSound[variant.path]) ?? variants[0];
