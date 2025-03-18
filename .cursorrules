@@ -1,0 +1,64 @@
+{
+  "project": {
+    "name": "Noizer One",
+    "description": "A web application for ambient sound playback with various sound categories",
+    "structure": {
+      "src": "Main source code directory",
+      "src/components": "Reusable Svelte components",
+      "src/routes": "SvelteKit routes and pages",
+      "src/stores": "Svelte stores for state management",
+      "src/lib": "Utility functions and shared code",
+      "static/audio": "Sound files organized by category"
+    }
+  },
+  "bestPractices": {
+    "general": [
+      "Use TypeScript with strict typing",
+      "Handle all Promises with try/catch blocks",
+      "Use Svelte stores for application-wide state management",
+      "Follow component-based architecture",
+      "Implement proper error handling and user feedback"
+    ],
+    "formatting": {
+      "indent": "tab",
+      "quotes": "single",
+      "lineWidth": 100,
+      "semicolons": true,
+      "trailingCommas": "es5"
+    },
+    "naming": {
+      "components": "PascalCase (e.g., SoundCard)",
+      "variables": "camelCase (e.g., audioPlayer)",
+      "functions": "camelCase (e.g., playSoundFile)",
+      "stores": "camelCase (e.g., playbackStore)"
+    },
+    "imports": "Use '@/' alias for src imports (e.g., '@/lib/utils')",
+    "components": [
+      "Keep components small and focused on a single responsibility",
+      "Use proper TypeScript typing for props and events",
+      "Leverage Svelte's reactive declarations for derived values",
+      "Use CSS utility classes from Tailwind when possible"
+    ],
+    "refactoring": [
+      "Extract reusable logic into separate functions or components",
+      "Check existing component patterns before creating new ones",
+      "Ensure backward compatibility when modifying APIs",
+      "Add proper comments for complex logic",
+      "Run tests after refactoring to ensure functionality"
+    ]
+  },
+  "tools": {
+    "build": "npm run build",
+    "dev": "npm run dev",
+    "test": "npm run test",
+    "typeCheck": "npm run check",
+    "lint": "npm run lint",
+    "format": "npm run format"
+  },
+  "include": ["**/*.{ts,js,svelte,json,css,md}"],
+  "exclude": ["node_modules", ".git", "build", ".svelte-kit", "static"],
+  "formatOnSave": true,
+  "telemetry": false,
+  "typeCheckingMode": "strict",
+  "framework": "svelte"
+}
