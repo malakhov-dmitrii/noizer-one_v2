@@ -1,65 +1,109 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/img/logo.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Noizer One</title>
+		<meta
+			name="description"
+			content="Introducing Noizer One, the ultimate soundscape app for relaxation, concentration, and more. With a vast library of nature, city, and other sounds, you can easily create custom ambient sound environments to fit your needs. Whether you're looking to relax, focus, or calm your baby, Noizer One has the perfect soundscape for you. Try it now and experience the benefits of personalized sound therapy."
+		/>
 
-<head>
-	<meta charset="utf-8" />
-	<link rel="icon" href="%sveltekit.assets%/img/logo.ico" />
-	<meta name="viewport" content="width=device-width" />
-	<title>
-		Noizer One
-	</title>
-	<meta name="description"
-		content="Introducing Noizer One, the ultimate soundscape app for relaxation, concentration, and more. With a vast library of nature, city, and other sounds, you can easily create custom ambient sound environments to fit your needs. Whether you're looking to relax, focus, or calm your baby, Noizer One has the perfect soundscape for you. Try it now and experience the benefits of personalized sound therapy.">
+		<meta property="og:title" content="Noizer One - The ultimate soundscape app" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://www.noizer.one/" />
+		<meta property="og:image" content="https://www.noizer.one/img/logo-2.png" />
+		<meta
+			property="og:description"
+			content="Introducing Noizer One, the ultimate soundscape app for relaxation, concentration, and more. With a vast library of nature, city, and other sounds, you can easily create custom ambient sound environments to fit your needs."
+		/>
+		<meta property="og:site_name" content="Noizer One" />
 
-	<meta property="og:title" content="Noizer One - The ultimate soundscape app">
-	<meta property="og:type" content="website">
-	<meta property="og:url" content="https://www.noizer.one/">
-	<meta property="og:image" content="https://www.noizer.one/img/logo-2.png">
-	<meta property="og:description"
-		content="Introducing Noizer One, the ultimate soundscape app for relaxation, concentration, and more. With a vast library of nature, city, and other sounds, you can easily create custom ambient sound environments to fit your needs.">
-	<meta property="og:site_name" content="Noizer One">
+		<link preload href="%sveltekit.assets%/icons/css/fontawesome.css" rel="stylesheet" />
+		<link preload href="%sveltekit.assets%/icons/css/brands.css" rel="stylesheet" />
+		<link preload href="%sveltekit.assets%/icons/css/solid.css" rel="stylesheet" />
+		<script
+			defer
+			src="/stats/js/script.js"
+			data-api="/stats/api/event"
+			data-domain="noizer.one"
+		></script>
 
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11082027995"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
 
-	<link preload href="%sveltekit.assets%/icons/css/fontawesome.css" rel="stylesheet">
-	<link preload href="%sveltekit.assets%/icons/css/brands.css" rel="stylesheet">
-	<link preload href="%sveltekit.assets%/icons/css/solid.css" rel="stylesheet">
-	<script defer src="/stats/js/script.js" data-api="/stats/api/event" data-domain="noizer.one"></script>
+			gtag('config', 'AW-11082027995');
+		</script>
+		<!-- Event snippet for Website traffic conversion page -->
+		<script>
+			gtag('event', 'conversion', { send_to: 'AW-11082027995/0h7PCIry85MYENunqaQp' });
+		</script>
 
+		<!-- Facebook Pixel Code -->
+		<script>
+			!(function (f, b, e, v, n, t, s) {
+				if (f.fbq) return;
+				n = f.fbq = function () {
+					n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+				};
+				if (!f._fbq) f._fbq = n;
+				n.push = n;
+				n.loaded = !0;
+				n.version = '2.0';
+				n.queue = [];
+				t = b.createElement(e);
+				t.async = !0;
+				t.src = v;
+				s = b.getElementsByTagName(e)[0];
+				s.parentNode.insertBefore(t, s);
+			})(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+			fbq('init', '1206528917775586');
+			fbq('track', 'PageView');
+		</script>
+		<noscript>
+			<img
+				height="1"
+				width="1"
+				src="https://www.facebook.com/tr?id=1206528917775586&ev=PageView&noscript=1"
+		/></noscript>
+		<!-- End Facebook Pixel Code -->
+
+		<script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
+
+		%sveltekit.head%
+	</head>
+
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+
+	<script async type="text/javascript">
+		window.$crisp = [];
+		window.CRISP_WEBSITE_ID = '493378a1-12a5-4312-9b87-c934a8f14604';
+		(function () {
+			d = document;
+			s = d.createElement('script');
+			s.src = 'https://client.crisp.chat/l.js';
+			s.async = 1;
+			d.getElementsByTagName('head')[0].appendChild(s);
+		})();
+	</script>
 	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11082027995"></script>
+	<script async defer src="https://www.googletagmanager.com/gtag/js?id=G-22DHHHREW4"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
+		function gtag() {
+			dataLayer.push(arguments);
+		}
 		gtag('js', new Date());
 
-		gtag('config', 'AW-11082027995');
+		gtag('config', 'G-22DHHHREW4');
 	</script>
-	<!-- Event snippet for Website traffic conversion page -->
-	<script>
-		gtag('event', 'conversion', { 'send_to': 'AW-11082027995/0h7PCIry85MYENunqaQp' });
-	</script>
-
-	<script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
-
-
-
-	%sveltekit.head%
-</head>
-
-<body data-sveltekit-preload-data="hover">
-	<div style="display: contents">%sveltekit.body%</div>
-</body>
-
-<script async type="text/javascript">window.$crisp = []; window.CRISP_WEBSITE_ID = "493378a1-12a5-4312-9b87-c934a8f14604"; (function () { d = document; s = d.createElement("script"); s.src = "https://client.crisp.chat/l.js"; s.async = 1; d.getElementsByTagName("head")[0].appendChild(s); })();
-</script>
-<!-- Google tag (gtag.js) -->
-<script async defer src="https://www.googletagmanager.com/gtag/js?id=G-22DHHHREW4"></script>
-<script>
-	window.dataLayer = window.dataLayer || [];
-	function gtag() { dataLayer.push(arguments); }
-	gtag('js', new Date());
-
-	gtag('config', 'G-22DHHHREW4');
-</script>
-
 </html>
