@@ -19,144 +19,202 @@ const verifyWebhookSignature = (payload: string, signature: string): boolean => 
 	return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest));
 };
 
-// Function to handle subscription creation
-const subscriptionCreated = async (data: any) => {
-	const { attributes } = data;
-	const userEmail = attributes.user_email;
+// Define types for LemonSqueezy webhook data
+type LemonSqueezyEventAttributes = {
+	user_email: string;
+	subscription_id?: string;
+	order_id?: number;
+	customer_id: string;
+	status: string;
+	renews_at?: string;
+	ends_at?: string;
+	created_at: string;
+};
 
-	// First check if user exists in profiles
-	const user = await supabaseClient.from('profiles').select().eq('email', userEmail).single();
+type LemonSqueezyEventData = {
+	attributes: LemonSqueezyEventAttributes;
+};
 
-	let userData = user.data;
-	if (!userData?.email) {
+type LemonSqueezyEvent = {
+	meta: {
+		event_name: string;
+	};
+	data: LemonSqueezyEventData;
+};
+
+// Helper function to get or create a user
+const getOrCreateUser = async (userEmail: string) => {
+	// Check if user exists in profiles
+	const { data: userData, error: userError } = await supabaseClient
+		.from('profiles')
+		.select()
+		.eq('email', userEmail)
+		.single();
+
+	if (userError || !userData?.email) {
 		// Create new user if doesn't exist
-		const newUser = await supabaseClient.auth.admin.createUser({
+		const { data: newUserData, error: newUserError } = await supabaseClient.auth.admin.createUser({
 			email: userEmail
 		});
-		if (!newUser.data.user) return jsonError('User not found', 400);
+
+		if (newUserError || !newUserData.user) {
+			throw new Error(`Failed to create user: ${newUserError?.message || 'Unknown error'}`);
+		}
 
 		// Create profile entry for new user
 		const { data: profileData, error: profileError } = await supabaseClient
 			.from('profiles')
 			.insert({
-				id: newUser.data.user.id,
+				id: newUserData.user.id,
 				email: userEmail,
-				user_id: newUser.data.user.id
+				user_id: newUserData.user.id
 			})
 			.select()
 			.single();
 
-		if (profileError) return jsonError('Failed to create profile', 400);
-		userData = profileData;
+		if (profileError || !profileData) {
+			throw new Error(`Failed to create profile: ${profileError?.message || 'Unknown error'}`);
+		}
+
+		return profileData;
 	}
 
-	if (!userData?.email) return jsonError('User not found', 400);
+	return userData;
+};
 
-	// Check if it's a one-time payment (no renewal date)
-	const isOneTime = !attributes.renews_at;
+// Function to handle subscription creation
+const subscriptionCreated = async (data: LemonSqueezyEventData) => {
+	const { attributes } = data;
 
-	const newSub = await supabaseClient
-		.from('subscriptions')
-		.insert({
-			user_email: userData.email,
+	try {
+		const userData = await getOrCreateUser(attributes.user_email);
+
+		// Check if it's a one-time payment (no renewal date)
+		const isOneTime = !attributes.renews_at;
+		const subscriptionId = attributes.subscription_id?.toString() || '';
+
+		if (!subscriptionId) {
+			return jsonError('Missing subscription ID', 400);
+		}
+
+		const { error } = await supabaseClient.from('subscriptions').insert({
+			user_email: attributes.user_email,
 			user_id: userData.id,
-			lemonsqueezy_subscription_id: attributes.subscription_id,
+			stripe_subscription_id: subscriptionId,
 			status: attributes.status,
 			customer_id: attributes.customer_id,
-			// For one-time payments, set a far future date (year 2099)
+			// For one-time payments, use a far future date
 			current_period_end: isOneTime ? '2099-12-31T23:59:59Z' : attributes.ends_at,
-			current_period_start: attributes.created_at || new Date().toISOString(),
-			is_lifetime: isOneTime
-		})
-		.select();
+			current_period_start: attributes.created_at,
+			metadata: { is_lifetime: isOneTime, source: 'lemonsqueezy' }
+		});
 
-	console.log('New subscription created:', newSub);
+		if (error) {
+			return jsonError(`Failed to create subscription: ${error.message}`, 400);
+		}
 
-	return json({ status: 'success' });
+		console.log('New subscription created for:', userData.email);
+		return json({ status: 'success' });
+	} catch (err) {
+		return jsonError(`Subscription creation failed: ${(err as Error).message}`, 400);
+	}
 };
 
 // Function to handle subscription deletion
-const subscriptionDeleted = async (data: any) => {
-	await supabaseClient
-		.from('subscriptions')
-		.delete()
-		.eq('lemonsqueezy_subscription_id', data.attributes.subscription_id);
-	return json({ status: 'success' });
+const subscriptionDeleted = async (data: LemonSqueezyEventData) => {
+	try {
+		const subscriptionId = data.attributes.subscription_id?.toString();
+
+		if (!subscriptionId) {
+			return jsonError('Missing subscription ID', 400);
+		}
+
+		const { error } = await supabaseClient
+			.from('subscriptions')
+			.delete()
+			.eq('stripe_subscription_id', subscriptionId);
+
+		if (error) {
+			return jsonError(`Failed to delete subscription: ${error.message}`, 400);
+		}
+
+		return json({ status: 'success' });
+	} catch (err) {
+		return jsonError(`Subscription deletion failed: ${(err as Error).message}`, 400);
+	}
 };
 
 // Function to handle subscription updates
-const subscriptionUpdated = async (data: any) => {
+const subscriptionUpdated = async (data: LemonSqueezyEventData) => {
 	const { attributes } = data;
-	const sub = await supabaseClient
-		.from('subscriptions')
-		.select()
-		.eq('lemonsqueezy_subscription_id', attributes.subscription_id)
-		.single();
+	const subscriptionId = attributes.subscription_id?.toString();
 
-	if (!sub.data) return subscriptionCreated(data);
+	if (!subscriptionId) {
+		return jsonError('Missing subscription ID', 400);
+	}
 
-	await supabaseClient
-		.from('subscriptions')
-		.update({
-			current_period_end: attributes.ends_at,
-			current_period_start: attributes.renews_at,
-			status: attributes.status
-		})
-		.eq('lemonsqueezy_subscription_id', attributes.subscription_id);
+	try {
+		const { data: existingSub } = await supabaseClient
+			.from('subscriptions')
+			.select()
+			.eq('stripe_subscription_id', subscriptionId)
+			.single();
 
-	return json({ status: 'success' });
+		if (!existingSub) {
+			// If subscription doesn't exist, create it
+			return subscriptionCreated(data);
+		}
+
+		const { error } = await supabaseClient
+			.from('subscriptions')
+			.update({
+				current_period_end: attributes.ends_at,
+				status: attributes.status
+			})
+			.eq('stripe_subscription_id', subscriptionId);
+
+		if (error) {
+			return jsonError(`Failed to update subscription: ${error.message}`, 400);
+		}
+
+		return json({ status: 'success' });
+	} catch (err) {
+		return jsonError(`Subscription update failed: ${(err as Error).message}`, 400);
+	}
 };
 
 // Function to handle one-time purchase
-const orderCreated = async (data: any) => {
+const orderCreated = async (data: LemonSqueezyEventData) => {
 	const { attributes } = data;
-	const userEmail = attributes.user_email;
 
-	// First check if user exists in profiles
-	const user = await supabaseClient.from('profiles').select().eq('email', userEmail).single();
+	try {
+		const userData = await getOrCreateUser(attributes.user_email);
+		const orderId = attributes.order_id?.toString();
 
-	let userData = user.data;
-	if (!userData?.email) {
-		// Create new user if doesn't exist
-		const newUser = await supabaseClient.auth.admin.createUser({
-			email: userEmail
-		});
-		if (!newUser.data.user) return jsonError('User not found', 400);
+		if (!orderId) {
+			return jsonError('Missing order ID', 400);
+		}
 
-		// Create profile entry for new user
-		const { data: profileData, error: profileError } = await supabaseClient
-			.from('profiles')
-			.insert({
-				id: newUser.data.user.id,
-				email: userEmail,
-				user_id: newUser.data.user.id
-			})
-			.select()
-			.single();
-
-		if (profileError) return jsonError('Failed to create profile', 400);
-		userData = profileData;
-	}
-
-	if (!userData?.email) return jsonError('User not found', 400);
-
-	const newSub = await supabaseClient
-		.from('subscriptions')
-		.insert({
-			user_email: userData.email,
+		const { error } = await supabaseClient.from('subscriptions').insert({
+			user_email: attributes.user_email,
 			user_id: userData.id,
-			lemonsqueezy_subscription_id: attributes.order_id.toString(),
+			stripe_subscription_id: orderId,
 			status: 'active',
 			customer_id: attributes.customer_id,
 			current_period_end: '2099-12-31T23:59:59Z',
 			current_period_start: attributes.created_at,
-			is_lifetime: true
-		})
-		.select();
+			metadata: { is_lifetime: true, source: 'lemonsqueezy' }
+		});
 
-	console.log('New lifetime subscription created:', newSub);
+		if (error) {
+			return jsonError(`Failed to create lifetime subscription: ${error.message}`, 400);
+		}
 
-	return json({ status: 'success' });
+		console.log('New lifetime subscription created for:', userData.email);
+		return json({ status: 'success' });
+	} catch (err) {
+		return jsonError(`Order processing failed: ${(err as Error).message}`, 400);
+	}
 };
 
 export const POST = (async ({ request }) => {
@@ -171,9 +229,9 @@ export const POST = (async ({ request }) => {
 		return jsonError('Invalid signature', 401);
 	}
 
-	const event = JSON.parse(rawBody);
-
 	try {
+		const event = JSON.parse(rawBody) as LemonSqueezyEvent;
+
 		switch (event.meta.event_name) {
 			case 'order_created':
 				return orderCreated(event.data);
@@ -184,10 +242,11 @@ export const POST = (async ({ request }) => {
 			case 'subscription_cancelled':
 				return subscriptionDeleted(event.data);
 			default:
+				console.log(`Ignored webhook event: ${event.meta.event_name}`);
 				return json({ status: 'ok' });
 		}
 	} catch (err) {
-		console.error(err);
+		console.error('Webhook Error:', err);
 		return jsonError(`Webhook Error: ${(err as Error).message}`, 400);
 	}
 }) satisfies RequestHandler;

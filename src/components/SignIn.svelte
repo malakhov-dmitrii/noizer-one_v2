@@ -8,12 +8,26 @@
 	import posthog from 'posthog-js';
 	import { onMount } from 'svelte';
 	$: email = '';
+	$: isEmailValid = validateEmail(email);
 	let code = '';
 	let codeSentFor = '';
 	let codeLoading = false;
 	let error = '';
+	let emailTouched = false;
+
+	function validateEmail(email: string): boolean {
+		if (!email) return false;
+		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return regex.test(email);
+	}
 
 	async function handleSubmit() {
+		emailTouched = true;
+
+		if (!isEmailValid) {
+			return;
+		}
+
 		codeLoading = true;
 
 		await supabaseClient.auth
@@ -50,47 +64,79 @@
 <!-- Put this part before </body> tag -->
 <input bind:checked={$auth.modal} type="checkbox" id="auth-modal" class="modal-toggle" />
 <div class="modal">
-	<div class="modal-box">
-		<div class="flex flex-col space-y-6">
-			<h3 class="text-xl font-medium p-0">Sign in</h3>
-			<label class="space-y-2 flex flex-col">
-				<p>Email</p>
+	<div class="modal-box max-w-md p-6 rounded-xl">
+		<!-- Header -->
+		<div class="flex justify-between items-center mb-6">
+			<h3 class="text-2xl font-bold">Sign In</h3>
+			<button
+				class="btn btn-circle btn-ghost btn-sm"
+				on:click={() => {
+					$auth.modal = false;
+				}}
+			>
+				<i class="fa-solid fa-close" />
+			</button>
+		</div>
+
+		<!-- Form -->
+		<div class="space-y-5">
+			<div class="form-control">
+				<label class="label">
+					<span class="label-text font-medium">Email</span>
+				</label>
 				<input
 					bind:value={email}
-					class="input input-bordered"
+					class={cx(
+						'input input-bordered w-full rounded-lg focus:ring-2 focus:ring-primary',
+						emailTouched && !isEmailValid ? 'input-error' : ''
+					)}
 					type="email"
 					name="email"
 					placeholder="name@company.com"
+					on:blur={() => (emailTouched = true)}
 				/>
-			</label>
+				{#if emailTouched && !isEmailValid}
+					<label class="label">
+						<span class="label-text-alt text-error">Please enter a valid email address</span>
+					</label>
+				{/if}
+			</div>
 
 			{#if error}
-				<p class="text-red-500 text-xs">Provided code is invalid. Please try again.</p>
+				<div class="alert alert-error text-sm py-2 px-3 rounded-lg">
+					Provided code is invalid. Please try again.
+				</div>
 			{/if}
 
 			<button
-				class={cx('btn btn-primary', !email || codeLoading ? 'btn-disabled' : '')}
+				class={cx(
+					'btn btn-primary w-full rounded-lg',
+					!isEmailValid || codeLoading ? 'btn-disabled' : ''
+				)}
 				on:click={handleSubmit}
 			>
 				{#if codeLoading}
 					<i class="fa fa-spinner fa-spin mr-2" />
 				{/if}
-
-				Send magic link
+				Send Magic Link
 			</button>
 
-			<button class="btn btn-primary" on:click={handleGoogleSignIn}> With Google </button>
+			<!-- Divider -->
+			<div class="divider text-xs text-opacity-60">OR</div>
 
+			<!-- Social Login -->
 			<button
-				class="btn btn-ghost btn-sm"
-				on:click={() => {
-					$auth.modal = false;
-				}}
+				class="btn btn-outline w-full rounded-lg flex items-center justify-center gap-2"
+				on:click={handleGoogleSignIn}
 			>
-				<i class="fa-solid fa-close mr-2" />
-
-				close
+				<i class="fa-brands fa-google" />
+				Continue with Google
 			</button>
 		</div>
+
+		<!-- Privacy note -->
+		<p class="mt-6 text-xs text-center text-opacity-70">
+			By signing in, you agree to our Terms of Service and Privacy Policy
+		</p>
 	</div>
 </div>
