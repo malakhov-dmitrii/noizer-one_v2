@@ -5,31 +5,44 @@
 	>
 		<!-- <a class="underline" href="https://mlh.one/noizer" rel="noopener noreferrer" target="_blank"
 			>iOS & Android Beta
-			<i class="fa-solid fa-arrow-up-right-from-square" />
+			<i class="fa-solid text-xs fa-arrow-up-right-from-square" />
 		</a> -->
 		<a
 			class="underline"
 			href="https://www.youtube.com/channel/UConHj2LF39cQ_rrnvNWi4lw"
 			rel="noopener noreferrer"
 			target="_blank"
-			>YouTube playlists
-			<i class="fa-solid fa-arrow-up-right-from-square" />
+		>
+			YouTube playlists
+			<i class="fa-solid text-xs fa-arrow-up-right-from-square" />
 		</a>
 		<a
 			class="underline"
 			href="https://noizer-one.canny.io/feature-requests"
 			rel="noopener noreferrer"
 			target="_blank"
-			>Vote for new features
-			<i class="fa-solid fa-arrow-up-right-from-square" />
+		>
+			Vote for new features
+			<i class="fa-solid text-xs fa-arrow-up-right-from-square" />
 		</a>
 		<a
 			class="underline"
 			href="https://discord.gg/mZdxNGp8GW"
 			rel="noopener noreferrer"
 			target="_blank"
-			>Join community
-			<i class="fa-solid fa-arrow-up-right-from-square" />
+		>
+			Join community
+			<i class="fa-solid text-xs fa-arrow-up-right-from-square" />
+		</a>
+		<a
+			class="underline"
+			href="/noizerone-prealpha.aab"
+			rel="noopener noreferrer"
+			target="_blank"
+			download="noizerone-prealpha.aab"
+		>
+			Android app (pre-alpha)
+			<i class="fa-solid text-xs fa-arrow-up-right-from-square" />
 		</a>
 	</div>
 </div>
