@@ -3,6 +3,7 @@
 	import ThemeChanger from '@/components/ThemeChanger.svelte';
 	import sounds from '@/lib/sounds';
 	import { playback, selectedVariantPerSound } from '@/stores/playback';
+	import { auth } from '@/stores/auth';
 	import { onMount } from 'svelte';
 	import { fade, slide } from 'svelte/transition';
 	import { themeChange } from 'theme-change';
@@ -41,7 +42,7 @@
 			icon: 'fa-album-collection'
 		},
 		{
-			title: 'Variant swtich',
+			title: 'Variant switch',
 			description:
 				'If you want to adjust some sound to your mood - you have number of variations for almost each one',
 			icon: 'fa-dice'
@@ -124,7 +125,12 @@
 				</div>
 			</div>
 			<div>
-				<button class="btn btn-sm btn-primary">Sign In</button>
+				<button
+					class="btn btn-sm btn-primary"
+					on:click={() => {
+						$auth.modal = true;
+					}}>Sign In</button
+				>
 			</div>
 		</div>
 	</div>
@@ -480,8 +486,10 @@
 
 		<div class="space-y-6">
 			<div class="collapse collapse-arrow border-2 border-black rounded-lg">
-				<input type="checkbox" class="peer" />
-				<div class="collapse-title text-xl font-medium">Is it really just $24 one-time?</div>
+				<input type="checkbox" id="faq-1" class="peer" />
+				<label for="faq-1" class="collapse-title text-xl font-medium cursor-pointer"
+					>Is it really just $24 one-time?</label
+				>
 				<div class="collapse-content">
 					<p>
 						Absolutely. You pay <strong>once</strong> and unlock every feature—no monthly subscription.
@@ -490,19 +498,23 @@
 			</div>
 
 			<div class="collapse collapse-arrow border-2 border-black rounded-lg">
-				<input type="checkbox" class="peer" />
-				<div class="collapse-title text-xl font-medium">Which devices can I use it on?</div>
+				<input type="checkbox" id="faq-2" class="peer" />
+				<label for="faq-2" class="collapse-title text-xl font-medium cursor-pointer"
+					>Which devices can I use it on?</label
+				>
 				<div class="collapse-content">
 					<p>
-						Noizer One works on <strong>web, iOS, and Android</strong>, so you can seamlessly switch
-						between desktop and mobile devices.
+						Noizer One currently works on <strong>web</strong>, iOS, and Android apps will be coming
+						soon.
 					</p>
 				</div>
 			</div>
 
 			<div class="collapse collapse-arrow border-2 border-black rounded-lg">
-				<input type="checkbox" class="peer" />
-				<div class="collapse-title text-xl font-medium">How do I get new sounds or updates?</div>
+				<input type="checkbox" id="faq-3" class="peer" />
+				<label for="faq-3" class="collapse-title text-xl font-medium cursor-pointer"
+					>How do I get new sounds or updates?</label
+				>
 				<div class="collapse-content">
 					<p>
 						All future feature upgrades and new sounds are <strong>included</strong> once you unlock
@@ -512,8 +524,10 @@
 			</div>
 
 			<div class="collapse collapse-arrow border-2 border-black rounded-lg">
-				<input type="checkbox" class="peer" />
-				<div class="collapse-title text-xl font-medium">Can I share my presets?</div>
+				<input type="checkbox" id="faq-4" class="peer" />
+				<label for="faq-4" class="collapse-title text-xl font-medium cursor-pointer"
+					>Can I share my presets?</label
+				>
 				<div class="collapse-content">
 					<p>
 						Yes! You can copy a link and share your custom soundscape with friends or coworkers
@@ -523,14 +537,22 @@
 			</div>
 
 			<div class="collapse collapse-arrow border-2 border-black rounded-lg">
-				<input type="checkbox" class="peer" />
-				<div class="collapse-title text-xl font-medium">What if I have more questions?</div>
+				<input type="checkbox" id="faq-5" class="peer" />
+				<label for="faq-5" class="collapse-title text-xl font-medium cursor-pointer"
+					>What if I have more questions?</label
+				>
 				<div class="collapse-content">
 					<p>
 						Reach out to our friendly support team at <a
-							href="mailto:support@NoizerOne.com"
-							class="link">support@NoizerOne.com</a
-						>. We're here to help.
+							href="mailto:mitia2022@gmail.com"
+							class="link">email</a
+						>,
+						<a
+							href="https://discord.gg/mZdxNGp8GW"
+							class="link"
+							rel="noopener noreferrer"
+							target="_blank">Discord</a
+						> or chat with us on the website. We're here to help.
 					</p>
 				</div>
 			</div>
@@ -571,8 +593,8 @@
 		<h3 class="text-3xl font-bold">Noizer One</h3>
 		<p>Live soundscapes right for you</p>
 		<p class="mt-4">
-			<a href="/privacy" class="link">Privacy Policy</a> &bull;
-			<a href="/terms" class="link">Terms of Service</a>
+			<a href="/docs/privacy.pdf" class="link">Privacy Policy</a> &bull;
+			<a href="/docs/tos.pdf" class="link">Terms of Service</a>
 		</p>
 	</div>
 	<div>

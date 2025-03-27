@@ -7,6 +7,7 @@
 	import * as amplitude from '@amplitude/analytics-browser';
 	import posthog from 'posthog-js';
 	import { onMount } from 'svelte';
+	import { trackLoginAttempt, trackPixelCustomEvent, trackSignUp } from '@/lib/analytics';
 	$: email = '';
 	$: isEmailValid = validateEmail(email);
 	let code = '';
@@ -44,6 +45,8 @@
 
 		amplitude.track('signin_code_send', { email });
 		posthog.capture('signin_code_send', { email });
+		trackLoginAttempt('email');
+		trackPixelCustomEvent('signin_code_send', { email_domain: email.split('@')[1] });
 		// await loops.createContact(email);
 		fetch('https://hljlpuipsmbrognugxmp.supabase.co/functions/v1/create-contact', {
 			method: 'POST',
@@ -57,6 +60,8 @@
 	}
 
 	async function handleGoogleSignIn() {
+		trackLoginAttempt('google');
+		trackPixelCustomEvent('signin_with_google');
 		await supabaseClient.auth.signInWithOAuth({ provider: 'google' });
 	}
 </script>

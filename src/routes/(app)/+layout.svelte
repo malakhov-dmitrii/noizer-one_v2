@@ -14,6 +14,7 @@
 	import SubscriptionBanner from '@/components/SubscriptionBanner.svelte';
 	import AnalyticsProvider from '@/components/AnalyticsProvider.svelte';
 	import AuthHandler from '@/components/AuthHandler.svelte';
+	import MetaPixelDebug from '@/components/MetaPixelDebug.svelte';
 
 	onMount(() => {
 		themeChange(false);
@@ -48,6 +49,9 @@
 {/if}
 
 <Toasts />
+
+<!-- Debug components -->
+<MetaPixelDebug />
 
 <!-- Debug subscription info (could be moved to a dedicated component) -->
 {#if session && import.meta.env.DEV}
