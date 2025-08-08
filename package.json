@@ -10,8 +10,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write .",
-		"supabase:typegen": "supabase gen types typescript --project-id hljlpuipsmbrognugxmp > src/lib/database.types.ts"
+		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
@@ -55,12 +54,6 @@
 	"type": "module",
 	"dependencies": {
 		"@amplitude/analytics-browser": "^1.10.3",
-		"@auth/core": "^0.2.5",
-		"@auth/sveltekit": "^0.1.12",
-		"@lemonsqueezy/lemonsqueezy.js": "^3.3.1",
-		"@sendgrid/mail": "^7.7.0",
-		"@supabase/auth-helpers-sveltekit": "^0.8.7",
-		"@supabase/supabase-js": "^2.8.0",
 		"@vercel/analytics": "^0.1.11",
 		"axios": "^1.2.2",
 		"daisyui": "latest",
@@ -73,7 +66,6 @@
 		"mousetrap": "^1.6.5",
 		"posthog-js": "^1.174.3",
 		"posthog-node": "^4.2.1",
-		"stripe": "^11.6.0",
 		"theme-change": "^2.3.0"
 	}
 }

@@ -1,14 +1,7 @@
 <script lang="ts">
 	import img from '$lib/images/logo-2.png';
-	import { auth } from '@/stores/auth';
 	import ThemeChanger from '@/components/ThemeChanger.svelte';
-	import UserProfileMenu from '@/components/UserProfileMenu.svelte';
 	import BackgroundAnimation from '@/components/BackgroundAnimation.svelte';
-	import type { Session } from '@supabase/supabase-js';
-
-	export let session: Session | null = null;
-	export let subscription: any = null;
-	export let customerPortalUrl: string = '';
 
 	let animateBackground = false;
 </script>
@@ -30,16 +23,5 @@
 		<ThemeChanger />
 
 		<BackgroundAnimation bind:animateBackground />
-
-		<UserProfileMenu {session} {subscription} {customerPortalUrl}>
-			<button
-				class="btn btn-primary"
-				on:click={() => {
-					$auth.modal = true;
-				}}
-			>
-				Sign In
-			</button>
-		</UserProfileMenu>
 	</div>
 </div>

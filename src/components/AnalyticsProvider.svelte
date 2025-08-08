@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as amplitude from '@amplitude/analytics-browser';
-	import { PUBLIC_AMPLITUDE_API_KEY } from '$env/static/public';
+	// import { PUBLIC_AMPLITUDE_API_KEY } from '$env/static/public';
+	const PUBLIC_AMPLITUDE_API_KEY = '';
 	import { dev } from '$app/environment';
 	import posthog from 'posthog-js';
 	import { browser } from '$app/environment';
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
-	import type { Session } from '@supabase/supabase-js';
 	import { trackPixelEvent, trackFeatureEngagement } from '@/lib/analytics';
 
-	export let session: Session | null = null;
+	export let session: any = null;
 
 	// Store current path to prevent duplicate PageView events
 	let currentPath = '';

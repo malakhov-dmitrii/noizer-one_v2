@@ -11,7 +11,7 @@
 
 	export let variants: FileItem[];
 	export let selectedVariantPath: string;
-	export let isPaidSound = false;
+	export let isPaidSound = false; // No longer used but kept for compatibility
 
 	let open = false;
 	$: subscriptionActive = $page.data?.subscription?.status === 'active';
@@ -41,49 +41,41 @@
 			</div>
 		</label>
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		{#if !isPaidSound}
-			<ul
-				tabindex="0"
-				class="dropdown-content max-h-40 overflow-auto menu p-2 shadow bg-base-100 w-full rounded-box max-w-52 flex flex-col flex-nowrap"
-			>
-				{#each variants as variant}
-					{#if variant.path !== selectedVariantPath}
-						<li>
-							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<!-- svelte-ignore a11y-missing-attribute -->
-							<a
-								class="flex items-center gap-2 px-2 py-1.5 text-xs transition-all rounded-md"
-								on:click|stopPropagation={(e) => {
-									amplitude.track('variant_change', {
-										variant: variant.variantName,
-										sound: variant.path,
-										subscriptionActive
-									});
+		<ul
+			tabindex="0"
+			class="dropdown-content max-h-40 overflow-auto menu p-2 shadow bg-base-100 w-full rounded-box max-w-52 flex flex-col flex-nowrap"
+		>
+			{#each variants as variant}
+				{#if variant.path !== selectedVariantPath}
+					<li>
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y-missing-attribute -->
+						<a
+							class="flex items-center gap-2 px-2 py-1.5 text-xs transition-all rounded-md"
+							on:click|stopPropagation={(e) => {
+								amplitude.track('variant_change', {
+									variant: variant.variantName,
+									sound: variant.path,
+									subscriptionActive
+								});
 
-									posthog.capture('variant_change', {
-										variant: variant.variantName,
-										sound: variant.path,
-										subscriptionActive
-									});
+								posthog.capture('variant_change', {
+									variant: variant.variantName,
+									sound: variant.path,
+									subscriptionActive
+								});
 
-									if (subscriptionActive) {
-										toggleSound(variant.path, true);
-										const onboarding = get(onboardingStep);
-										if (onboarding === 3) incrementOnboardingStep();
-									} else {
-										$auth.subscriptionModal = true;
-									}
-								}}
-							>
-								{#if !variant.free}
-									<i class="fa-solid fa-crown" />
-								{/if}
-								<p>{variant.variantName}</p>
-							</a>
-						</li>
-					{/if}
-				{/each}
-			</ul>
-		{/if}
+								// All variants are now free and available
+								toggleSound(variant.path, true);
+								const onboarding = get(onboardingStep);
+								if (onboarding === 3) incrementOnboardingStep();
+							}}
+						>
+							<p>{variant.variantName}</p>
+						</a>
+					</li>
+				{/if}
+			{/each}
+		</ul>
 	</div>
 {/if}

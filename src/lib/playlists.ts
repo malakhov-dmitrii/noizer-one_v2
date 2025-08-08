@@ -8,14 +8,19 @@
 // 	}[];
 // }
 
-import type { Database } from '@/lib/database.types';
-
 export interface PlaylistSound {
 	path: string;
 	volume: number;
 }
 
-export type Playlist = Database['public']['Tables']['playlists']['Row'];
+export interface Playlist {
+	id: number;
+	title: string;
+	group?: string;
+	user_id: string;
+	created_at: string;
+	sounds: PlaylistSound[];
+}
 
 const initialPlaylists: Playlist[] = [
 	{

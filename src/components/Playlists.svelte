@@ -1,34 +1,15 @@
 <script lang="ts">
 	import { navigating, page } from '$app/stores';
-	import { supabaseClient } from '@/lib/db';
 	import { playback, playPlaylist } from '@/stores/playback';
 	import { playlists } from '@/stores/playlists';
 	import { toast } from '@/stores/toasts';
 	import _ from 'lodash';
 
-	// let userPlaylists = [
-	// 	...initialPlaylists,
-	// 	...(_.uniqBy($page.data.playlists ?? [], 'id') ?? [])
-	// ] as (Playlist & {
-	// 	user: User;
-	// })[];
 	let deletePlaylistModal = false;
 	let deletePlaylistId = null as number | null;
 
 	/**
-	 * Handle delete playlist
-	 *
-	 * If deletePlaylistId is set, we are in the process of deleting a playlist
-	 * and we should not allow the user to delete another playlist until the
-	 * first one is deleted.
-	 *
-	 * If deletePlaylistModal is set, we know that user confirmed the deletion
-	 * and we should delete the playlist.
-	 *
-	 * If deletePlaylistId is not set, we should set it to the id of the playlist
-	 * and show the modal.
-	 *
-	 * @param id - Playlist id
+	 * Handle delete playlist (local only)
 	 */
 	async function handleDelete(id = deletePlaylistId) {
 		if (!deletePlaylistId) {
@@ -37,18 +18,23 @@
 			return;
 		}
 
-		const res = await supabaseClient.from('playlists').delete().eq('id', id);
-		if (res.error) {
-			toast('Failed to delete playlist', 'error');
-			return;
-		} else {
-			toast('Playlist deleted', 'success');
-			playlists.update((list) => {
-				return list.filter((playlist) => playlist.id !== id);
-			});
-			deletePlaylistModal = false;
-			deletePlaylistId = null;
+		// Remove from store
+		playlists.update((list) => {
+			return list.filter((playlist) => playlist.id !== id);
+		});
+
+		// Remove from localStorage
+		try {
+			const existingPlaylists = JSON.parse(localStorage.getItem('noizer_playlists') || '[]');
+			const updatedPlaylists = existingPlaylists.filter((playlist: any) => playlist.id !== id);
+			localStorage.setItem('noizer_playlists', JSON.stringify(updatedPlaylists));
+		} catch (error) {
+			console.warn('Failed to remove playlist from localStorage:', error);
 		}
+
+		toast('Playlist deleted', 'success');
+		deletePlaylistModal = false;
+		deletePlaylistId = null;
 	}
 </script>
 
@@ -63,10 +49,7 @@
 
 <div class="flex gap-4 px-1 pt-2 pb-3 -mx-1 overflow-x-auto overflow-y-visible flex-nowrap">
 	{#each $playlists as playlist}
-		{@const belongsToOtherUser =
-			playlist.user_id !== 'admin' &&
-			!!playlist.user_id &&
-			playlist.user_id !== $page.data.session?.user.id}
+		{@const belongsToOtherUser = false}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
 			class="relative group"
@@ -90,31 +73,6 @@
 				${!!playlist.user_id ? 'bg-base-200' : 'bg-base-100'}
 				`}
 			>
-				{#if belongsToOtherUser}
-					<div
-						on:click|stopPropagation={async () => {
-							if (!$page.data.session?.user.id) {
-								toast('You must be logged in to save playlists', 'error');
-								return;
-							}
-
-							const { id, ...data } = playlist;
-							const res = await supabaseClient.from('playlists').insert({
-								...data,
-								user_id: $page.data.session?.user.id
-							});
-							if (res.error) {
-								toast('Failed to save playlist', 'error');
-								return;
-							} else {
-								toast('Playlist copied to your library', 'success');
-							}
-						}}
-						class="absolute bottom-0 opacity-50 hover:opacity-100 transition w-full py-0.5 rounded-md -left-0 bg-primary text-primary-content text-xs transform px-2"
-					>
-						save to library
-					</div>
-				{/if}
 				<!-- ${playlist.userId !== $page.data.session?.user.} -->
 				<p class="line-clamp-1">{playlist.group || playlist.title}</p>
 				{#if playlist.group}
@@ -124,7 +82,7 @@
 				{/if}
 
 				<!-- DELETE PLAYLIST -->
-				{#if playlist.user_id !== 'admin' && playlist.user_id && !belongsToOtherUser}
+				{#if playlist.user_id === 'local'}
 					<button
 						title="Delete playlist"
 						class="absolute top-0 right-0 p-2 opacity-20 hover:opacity-100 transition-opacity rounded-md"
@@ -134,7 +92,7 @@
 					</button>
 				{/if}
 				<!-- CREATE SHAREABLE LINK TO THE PLAYLIST -->
-				{#if playlist.user_id !== 'admin' && playlist.user_id}
+				{#if playlist.user_id === 'local'}
 					<button
 						title="Copy link to clipboard"
 						class="absolute top-0 left-0 p-2 text-accent opacity-40 hover:opacity-100 transition-opacity rounded-md"

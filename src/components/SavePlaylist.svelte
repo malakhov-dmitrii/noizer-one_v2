@@ -1,9 +1,5 @@
 <script lang="ts">
-	import { goto, invalidate } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { supabaseClient } from '@/lib/db';
 	import { cx } from '@/lib/utils';
-	import { auth } from '@/stores/auth';
 	import { incrementOnboardingStep, onboardingStep } from '@/stores/onboarding';
 	import { selectedVariantPerSound } from '@/stores/playback';
 	import { playlists } from '@/stores/playlists';
@@ -19,7 +15,6 @@
 	let savePlaylistGroup = '';
 
 	async function handleSavePlaylist() {
-		if (!$page.data.session?.user.id) return;
 		const data = _.entries($selectedVariantPerSound).map(([key, value]) => {
 			return {
 				volume: value?.howler?.volume() ?? 1,
@@ -44,31 +39,34 @@
 			sounds: data
 		});
 
-		const res = await supabaseClient
-			.from('playlists')
-			.insert({
-				title: savePlaylistTitle,
-				group: savePlaylistGroup,
-				sounds: data,
-				user_id: $page.data.session.user.id
-			})
-			.select();
+		// Create a local playlist object (no database save)
+		const newPlaylist = {
+			id: Date.now(), // Simple ID generation
+			title: savePlaylistTitle,
+			group: savePlaylistGroup,
+			sounds: data,
+			user_id: 'local'
+		};
 
-		if (!res.error && res.data) {
-			toast('Playlist saved', 'success');
+		toast('Playlist saved locally', 'success');
 
-			savePlaylistModal = false;
-			savePlaylistTitle = '';
-			savePlaylistGroup = '';
+		savePlaylistModal = false;
+		savePlaylistTitle = '';
+		savePlaylistGroup = '';
 
-			const onboarding = get(onboardingStep);
-			if (onboarding === 2) incrementOnboardingStep();
+		const onboarding = get(onboardingStep);
+		if (onboarding === 2) incrementOnboardingStep();
 
-			goto(`/?playlist=${res.data[0].id}`);
+		playlists.update((list) => {
+			return [...list, newPlaylist];
+		});
 
-			playlists.update((list) => {
-				return [...list, res.data[0]];
-			});
+		// Save to localStorage for persistence
+		try {
+			const existingPlaylists = JSON.parse(localStorage.getItem('noizer_playlists') || '[]');
+			localStorage.setItem('noizer_playlists', JSON.stringify([...existingPlaylists, newPlaylist]));
+		} catch (error) {
+			console.warn('Failed to save playlist to localStorage:', error);
 		}
 	}
 </script>
@@ -79,10 +77,6 @@
 		!_.keys($selectedVariantPerSound).length ? 'btn-disabled' : ''
 	)}
 	on:click={() => {
-		if (!$page.data.session) {
-			$auth.modal = true;
-			return;
-		}
 		savePlaylistModal = true;
 	}}
 >
