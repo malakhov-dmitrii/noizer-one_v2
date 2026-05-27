@@ -1,3 +1,5 @@
+const daisyui = require('daisyui');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: [
@@ -27,7 +29,7 @@ module.exports = {
 		require('@tailwindcss/forms'),
 		require('@tailwindcss/aspect-ratio'),
 		require('flowbite/plugin'),
-		require('daisyui')
+		daisyui.default ?? daisyui
 	],
 	darkMode: 'class',
 	daisyui: {
